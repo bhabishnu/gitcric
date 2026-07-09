@@ -30,30 +30,55 @@ export interface OvrResult {
   ovr: number;
 }
 
+// ── ALLROUNDER bars ──────────────────────────────────────────────────────────
+// A genuine all-rounder is MATERIALLY good at BOTH disciplines. These bars are
+// deliberately HIGH: a batsman who turns his arm over (Root's off-spin, Smith's
+// leg-spin) does NOT clear the bowling bar (too few wickets/match), and a
+// tail-ender who can bat a bit (Warne) does NOT clear the batting bar (average
+// too low). Only players who are a real threat with both — Kallis, Stokes,
+// Jadeja, Shakib, Pollock — qualify.
+const AR_BAT_PCT = 0.4; // batting average must be a real contribution
+const AR_BAT_BALLS_PER_M = 18; // front/middle-order batting volume
+const AR_BAT_INN_PER_M = 0.5; // actually bats in most matches
+const AR_BOWL_WKTS_PER_M = 0.9; // a frontline wicket-taker, not a part-timer
+const AR_BOWL_QUAL_PCT = 0.4; // and genuinely effective (SR or economy)
+const AR_BOWL_BALLS_PER_M = 18; // bowls a real spell (~3+ overs / match)
+
 /**
- * §7 role from career involvement AND effectiveness. Keeper wins on the stumping
- * signal. A discipline must be both high-VOLUME and EFFECTIVE to count toward the
- * role, so a genuine tail-ender who faces many balls is still a pure bowler.
+ * §7 role from career involvement AND effectiveness, judged on the player's
+ * DOMINANT discipline by career weight (not their debut role). Keeper wins on the
+ * stumping signal. ALLROUNDER is reserved for players materially good at both;
+ * everyone else is the discipline they actually make their living from — so a
+ * part-time bowler stays a batter and a batting tail-ender stays a bowler.
  */
 export function classifyRole(c: Calibrated): Role {
   const a = c.agg;
   const m = Math.max(a.matches, 1);
-  const isKeeper = a.stumpings >= ROLE.keeperStumpings || a.stumpings / m >= ROLE.keeperStumpingsPerMatch;
-  if (isKeeper) return "keeper";
+  if (a.stumpings >= ROLE.keeperStumpings || a.stumpings / m >= ROLE.keeperStumpingsPerMatch) return "keeper";
 
-  const primaryBatter =
-    c.hasBat && a.ballsFaced / m >= ROLE.batsPerMatch && c.batAvgPct >= ROLE.batQualityPct;
-  const primaryBowler =
-    c.hasBowl &&
-    a.ballsBowled / m >= ROLE.bowlsPerMatch &&
-    (c.bowlSRPct >= ROLE.bowlQualityPct || c.economyPct >= ROLE.bowlQualityPct);
+  const batBalls = a.ballsFaced / m;
+  const bowlBalls = a.ballsBowled / m;
+  const wktsPerM = a.wickets / m;
+  const bowlQual = Math.max(c.bowlSRPct, c.economyPct);
 
-  if (primaryBatter && primaryBowler) return "allrounder";
-  if (primaryBowler) return "bowler";
-  if (primaryBatter) return "batter";
-  // fallback: whichever discipline the player actually turns up for by volume
-  if (c.hasBowl && a.ballsBowled / m >= ROLE.bowlsPerMatch && a.ballsBowled >= a.ballsFaced) return "bowler";
-  return "batter";
+  // Material contribution to each discipline (the high bar → grants ALLROUNDER).
+  const batAllround =
+    c.hasBat && c.batAvgPct >= AR_BAT_PCT && batBalls >= AR_BAT_BALLS_PER_M && a.batInnings / m >= AR_BAT_INN_PER_M;
+  const bowlAllround =
+    c.hasBowl && wktsPerM >= AR_BOWL_WKTS_PER_M && bowlQual >= AR_BOWL_QUAL_PCT && bowlBalls >= AR_BOWL_BALLS_PER_M;
+  if (batAllround && bowlAllround) return "allrounder";
+
+  // Not a true all-rounder → classify by dominant discipline. The "primary" bars
+  // are the lower involvement bars; a player may clear both (a batsman who bowls
+  // part-time) — resolve to whichever discipline they are MORE elite at.
+  const batsPrimarily = c.hasBat && batBalls >= ROLE.batsPerMatch && c.batAvgPct >= ROLE.batQualityPct;
+  const bowlsPrimarily = c.hasBowl && bowlBalls >= ROLE.bowlsPerMatch && bowlQual >= ROLE.bowlQualityPct;
+
+  if (batsPrimarily && bowlsPrimarily) return c.batAvgPct >= bowlQual ? "batter" : "bowler";
+  if (bowlsPrimarily) return "bowler";
+  if (batsPrimarily) return "batter";
+  // neither clears a primary bar → go with career-weight volume
+  return a.ballsBowled > a.ballsFaced ? "bowler" : "batter";
 }
 
 function buildStats(c: Calibrated): CardStats {

@@ -18,6 +18,12 @@ npm run ingest    # download → parse → aggregate → join → calibrate → 
 npm run verify    # prints each test player's cards and asserts the acceptance tests
 ```
 
+Look a player up (fuzzy name match, one lookup per quoted argument):
+
+```bash
+npm run card "Jasprit Bumrah" "Joe Root"   # cards across all formats, per player
+```
+
 `ingest` downloads the Cricsheet zips + people register into `data/raw/` (cached;
 re-runs skip re-download), parses every match once, and writes `data/gitcric.db`.
 A full men's international + IPL run aggregates in a few minutes; **re-runs are
