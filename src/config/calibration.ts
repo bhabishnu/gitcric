@@ -138,6 +138,9 @@ export const ROLE = {
   keeperStumpingsPerMatch: 0.04,
   /** Balls bowled per match above which the bowling discipline "counts" (volume). */
   bowlsPerMatch: 12,
+  /** Wickets per match a "primary bowler" must take — keeps tidy part-time
+   * bowlers (who bowl overs but take few wickets) classified as batters. */
+  bowlerWktsPerMatch: 0.5,
   /** Balls faced per match above which the batting discipline "counts" (volume). */
   batsPerMatch: 12,
   /**

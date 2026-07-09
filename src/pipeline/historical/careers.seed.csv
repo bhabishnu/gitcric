@@ -1,0 +1,48 @@
+# GitCric curated historical career totals (pre-2000 / era-spanning greats).
+# Public full-career figures — VERIFY / EXTEND freely, or drop a fuller Kaggle
+# export at data/historical/careers.csv (see src/config/historical.ts).
+# Only the PRE-Cricsheet portion is merged in (career_total - cricsheet); modern
+# players and stale rows change nothing. Blank = not tracked (estimated/kept).
+name,cricinfoId,bucket,spanStart,spanEnd,matches,innings,notOuts,runs,ballsFaced,hundreds,fifties,ballsBowled,runsConceded,wickets,fourFers,fiveFers,catches,stumpings
+Sachin Tendulkar,,test,1989,2013,200,329,33,15921,,51,68,4240,2492,46,,,115,
+Sachin Tendulkar,,odi,1989,2012,463,452,41,18426,,49,96,8054,6850,154,,,140,
+Brian Lara,,test,1990,2006,131,232,6,11953,,34,48,,,,,,164,
+Brian Lara,,odi,1990,2007,299,289,32,10405,,19,63,,,,,,120,
+Shivnarine Chanderpaul,,test,1994,2015,164,280,49,11867,,30,66,1625,883,9,,,66,
+Shivnarine Chanderpaul,,odi,1994,2011,268,251,40,8778,,11,59,,,,,,74,
+Rahul Dravid,,test,1996,2012,164,286,32,13288,,36,63,,,1,,,210,
+Rahul Dravid,,odi,1996,2011,344,318,40,10889,,12,83,,,4,,,196,
+Ricky Ponting,,test,1995,2012,168,287,29,13378,,41,62,587,276,5,,,196,
+Ricky Ponting,,odi,1995,2012,375,365,39,13704,,30,82,,,3,,,160,
+Jacques Kallis,,test,1995,2013,166,280,40,13289,,45,58,20232,9535,292,,,200,
+Jacques Kallis,,odi,1996,2014,328,314,53,11579,,17,86,10750,8672,273,,,131,
+Kumar Sangakkara,,test,2000,2015,134,233,17,12400,,38,52,,,,,,182,20
+Kumar Sangakkara,,odi,2000,2015,404,380,41,14234,,25,93,,,,,,402,99
+Mahela Jayawardene,,test,1997,2014,149,252,15,11814,,34,50,,,,,,205,
+Mahela Jayawardene,,odi,1998,2015,448,418,39,12650,,19,77,,,,,,218,
+Steve Waugh,,test,1985,2004,168,260,46,10927,,32,50,7805,3445,92,,,112,
+Sanath Jayasuriya,,odi,1989,2011,445,433,18,13430,,28,68,14874,11871,323,,,123,
+Adam Gilchrist,,test,1999,2008,96,137,20,5570,,17,26,,,,,,379,37
+Adam Gilchrist,,odi,1996,2008,287,279,11,9619,,16,55,,,,,,417,55
+Sunil Gavaskar,,test,1971,1987,125,214,16,10122,,34,45,380,206,1,,,108,
+Allan Border,,test,1978,1994,156,265,44,11174,,27,63,4009,1525,39,,,156,
+Javed Miandad,,test,1976,1993,124,189,21,8832,,23,43,,,,,,93,
+Viv Richards,,test,1974,1991,121,182,12,8540,,24,45,5170,1964,32,,,122,
+Viv Richards,,odi,1975,1991,187,167,24,6721,,11,45,5644,4228,118,,,100,
+Shane Warne,,test,1992,2007,145,199,17,3154,,0,12,40705,17995,708,,37,125,
+Glenn McGrath,,test,1993,2007,124,138,51,641,,0,0,29248,12186,563,,29,38,
+Muttiah Muralitharan,,test,1992,2010,133,164,56,1261,,0,1,44039,18180,800,,67,72,
+Muttiah Muralitharan,,odi,1993,2011,350,162,74,674,,0,0,18811,12326,534,,10,130,
+Anil Kumble,,test,1990,2008,132,173,32,2506,,0,5,40850,18355,619,,35,60,
+Wasim Akram,,test,1985,2002,104,147,19,2898,,3,7,22627,9779,414,,25,44,
+Wasim Akram,,odi,1984,2003,356,280,55,3717,,0,6,18186,11812,502,,6,88,
+Waqar Younis,,odi,1989,2003,262,139,45,969,,0,0,12698,9919,416,,13,34,
+Curtly Ambrose,,test,1988,2000,98,145,56,1439,,0,1,22103,8501,405,,22,18,
+Courtney Walsh,,test,1984,2001,132,185,61,936,,0,0,30019,12688,519,,22,29,
+Dennis Lillee,,test,1971,1984,70,90,24,905,,0,1,18467,8493,355,,23,23,
+Malcolm Marshall,,test,1978,1991,81,107,11,1810,,0,10,17584,7876,376,,22,25,
+Richard Hadlee,,test,1973,1990,86,134,19,3124,,2,15,21918,9611,431,,36,39,
+Imran Khan,,test,1971,1992,88,126,25,3807,,6,18,19458,8258,362,,23,28,
+Kapil Dev,,test,1978,1994,131,184,15,5248,,8,27,27740,12867,434,,23,64,
+Kapil Dev,,odi,1978,1994,225,198,39,3783,,1,14,11202,6945,253,,1,71,
+Ian Botham,,test,1977,1992,102,161,6,5200,,14,22,21815,10878,383,,27,120,

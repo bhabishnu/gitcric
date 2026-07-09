@@ -5,6 +5,7 @@ import { download } from "./download.js";
 import { aggregate, type AggMap } from "./aggregate.js";
 import { loadRegister, type Person } from "./register.js";
 import { calibrate, type Calibrated, type Distribution } from "./calibrate.js";
+import { mergeHistorical } from "./historical/merge.js";
 import { computeOvr, type OvrResult } from "./ovr.js";
 import { equate, type EquateResult } from "./equate.js";
 
@@ -112,6 +113,15 @@ export async function run(): Promise<void> {
   console.log("── Stage 4: register join ──");
   const register = loadRegister(peopleCsv);
   console.log(`  register: ${register.size} people`);
+
+  console.log("── Stage 4b: merge pre-2000 historical layer ──");
+  const mergeReport = mergeHistorical(map, register);
+  const merged = mergeReport.filter((r) => r.action === "spanning-merge").length;
+  const created = mergeReport.filter((r) => r.action === "new-pre2000").length;
+  const skipped = mergeReport.filter((r) => r.action.startsWith("skip") || r.action === "unmatched");
+  console.log(`  merged ${merged} spanning careers, added ${created} pre-2000 players, skipped ${skipped.length}`);
+  for (const s of skipped) console.log(`    · ${s.action}: ${s.name} (${s.bucket})${s.note ? " — " + s.note : ""}`);
+
   persistPlayers(db, map, register);
 
   console.log("── Stage 5: calibrate ──");

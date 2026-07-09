@@ -72,7 +72,11 @@ export function classifyRole(c: Calibrated): Role {
   // are the lower involvement bars; a player may clear both (a batsman who bowls
   // part-time) — resolve to whichever discipline they are MORE elite at.
   const batsPrimarily = c.hasBat && batBalls >= ROLE.batsPerMatch && c.batAvgPct >= ROLE.batQualityPct;
-  const bowlsPrimarily = c.hasBowl && bowlBalls >= ROLE.bowlsPerMatch && bowlQual >= ROLE.bowlQualityPct;
+  // A "primary bowler" must actually take wickets, not just bowl tidy part-time
+  // overs — otherwise an old-school batsman who rolled his arm over economically
+  // (Border, Viv Richards) reads as a bowler off a high economy percentile alone.
+  const bowlsPrimarily =
+    c.hasBowl && bowlBalls >= ROLE.bowlsPerMatch && bowlQual >= ROLE.bowlQualityPct && wktsPerM >= ROLE.bowlerWktsPerMatch;
 
   if (batsPrimarily && bowlsPrimarily) return c.batAvgPct >= bowlQual ? "batter" : "bowler";
   if (bowlsPrimarily) return "bowler";

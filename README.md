@@ -122,6 +122,37 @@ percentile population and its own cards — a player with both a T20I and a BBL
 history gets a distinct card for each, because buckets are keyed on the **source
 competition**, not `match_type`.
 
+## Pre-2000 historical layer
+
+Cricsheet ball-by-ball starts ~2000, so era-spanning greats were scored on only
+the tail of their careers. A second data source (`src/pipeline/historical/`)
+supplies full-career totals and merges the **pre-Cricsheet portion** in, without
+double-counting the overlap years:
+
+```
+pre2000 = max(0, career_total − cricsheet_aggregate)
+merged  = cricsheet_aggregate + pre2000            # = career total, each match once
+```
+
+- **Spanning** players (Tendulkar Test 82→200, ODI 146→463) keep Cricsheet's rich
+  post-2000 ball-by-ball and gain the pre-2000 remainder — greatness/longevity
+  finally opens (Tendulkar ODI 97→99, Lara Test 83→98, Gilchrist Test 82→94).
+- **Post-2000-only** players are untouched: `max(0, …)` + a debut-year gate mean
+  Kohli / SKY / Bumrah keep identical match counts (small OVR drift is only the
+  re-percentiling against the now-stronger population).
+- **Fully pre-2000** players (Gavaskar, Viv, Marshall) enter as new `hist:` ids.
+- Missing pre-2000 balls (older records don't track strike rate) are estimated
+  from the player's **own** post-2000 rate so the merge preserves their tempo.
+- Identity is matched on Cricinfo id / surname+initial, with a **namesake guard**
+  (a career that ended before a Cricsheet record began is a different person, so
+  1990s Imran Khan never merges onto a modern "Imran Khan (2)").
+
+Source is a curated CSV (`src/pipeline/historical/careers.seed.csv`, public career
+totals — verify/extend freely). Drop a fuller Kaggle export at
+`data/historical/careers.csv` with a column map (`src/config/historical.ts`) to
+supersede it. The merged aggregates flow through the **same** calibration / OVR /
+role / equate pipeline, with percentiles recomputed on the combined population.
+
 ## Pipeline stages
 
 `download` → `parse` (delivery attribution on stable registry IDs, incremental)
