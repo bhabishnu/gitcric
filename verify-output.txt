@@ -1,0 +1,36 @@
+GitCric - verification table (era-relative SR + bowling-axis symmetry)
+
+player              format    M  BAT POW BWL ECO FLD IMP  OVR  equated legend
+--------------------------------------------------------------------------------
+Suryakumar Yadav    test      -  (no card - below gate)     -
+Suryakumar Yadav    odi      37   66  93  15  15  86  47   69  Viv Richards
+Suryakumar Yadav    t20i    110   96  97  15  15  82  91   98  DA Warner
+Suryakumar Yadav    ipl     179   89  92  15  15  73  95   97  DA Warner
+--------------------------------------------------------------------------------
+Vaibhav Suryavanshi test      -  (no card - below gate)     -
+Vaibhav Suryavanshi odi       -  (no card - below gate)     -
+Vaibhav Suryavanshi t20i      -  (no card - below gate)     -
+Vaibhav Suryavanshi ipl      23   95  97  15  15  29  45   82  SA Yadav
+--------------------------------------------------------------------------------
+AB de Villiers      test    106   95  80  44  67  92  95   92  BB McCullum
+AB de Villiers      odi     222   97  96  89  34  92  95   98  JC Buttler
+AB de Villiers      t20i     75   81  81  15  15  95  92   89  BB McCullum
+AB de Villiers      ipl     183   95  95  15  15  93  95   98  MS Dhoni
+--------------------------------------------------------------------------------
+Ricky Ponting       test     89   92  85  37  52  82  91   94  GC Smith
+Ricky Ponting       odi     198   91  80  15  15  85  93   93  DA Warner
+Ricky Ponting       t20i      -  (no card - below gate)     -
+Ricky Ponting       ipl       -  (no card - below gate)     -
+--------------------------------------------------------------------------------
+Jasprit Bumrah      test     52   29  41  96  92  43  82   95  JR Hazlewood
+Jasprit Bumrah      odi      87   36  36  87  90  41  78   89  Saeed Ajmal
+Jasprit Bumrah      t20i     92   15  15  77  83  33  84   86  H Ssenyondo
+Jasprit Bumrah      ipl     158   43  32  78  95  32  88   95  A Mishra
+--------------------------------------------------------------------------------
+MS Dhoni            test     86   83  85  54  43  95  88   88  KC Sangakkara
+MS Dhoni            odi     331   96  84  15  15  96  97   98  Q de Kock
+MS Dhoni            t20i     95   95  70  15  15  96  90   89  Mohammad Rizwan
+MS Dhoni            ipl     277   94  85  15  15  96  96   97  AB de Villiers
+--------------------------------------------------------------------------------
+
+Vaibhav Suryavanshi - IPL OVR: 82
