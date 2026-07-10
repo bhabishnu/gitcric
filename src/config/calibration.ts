@@ -159,7 +159,7 @@ export const ROLE = {
    * catch-heavy slip fielder never qualifies. Part-time glovemen (KL Rahul) clear
    * neither. */
   keeperStumpingsPerMatch: 0.1,
-  keeperDismissalsPerMatch: 1.05,
+  keeperDismissalsPerMatch: 1.0,
   keeperMinStumpRate: 0.03,
   /** Balls bowled per match above which the bowling discipline "counts" (volume). */
   bowlsPerMatch: 12,
