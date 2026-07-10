@@ -54,7 +54,18 @@ const AR_BOWL_BALLS_PER_M = 18; // bowls a real spell (~3+ overs / match)
 export function classifyRole(c: Calibrated): Role {
   const a = c.agg;
   const m = Math.max(a.matches, 1);
-  if (a.stumpings >= ROLE.keeperStumpings || a.stumpings / m >= ROLE.keeperStumpingsPerMatch) return "keeper";
+  // KEEPER requires a SUSTAINED keeping share, not occasional gloves — either a
+  // real stumping rate (spin-era keepers) OR heavy dismissal involvement behind
+  // the stumps with a minimum stumping floor (pace-era keepers like Rizwan, who
+  // stump rarely but keep every match). A part-time gloveman (KL Rahul) clears
+  // neither and stays a batter.
+  const stumpRate = a.stumpings / m;
+  const dismissalRate = (a.stumpings + a.catches) / m;
+  if (
+    stumpRate >= ROLE.keeperStumpingsPerMatch ||
+    (dismissalRate >= ROLE.keeperDismissalsPerMatch && stumpRate >= ROLE.keeperMinStumpRate)
+  )
+    return "keeper";
 
   const batBalls = a.ballsFaced / m;
   const bowlBalls = a.ballsBowled / m;
@@ -96,10 +107,57 @@ function buildStats(c: Calibrated): CardStats {
   };
 }
 
-function peakOvr(stats: CardStats, role: Role, bucket: Calibrated["agg"]["bucket"]): number {
-  const w = PEAK_WEIGHTS[role][bucket];
-  const raw = (Object.keys(stats) as StatKey[]).reduce((s, k) => s + stats[k] * w[k], 0);
+const STAT_KEYS: StatKey[] = ["BAT", "POW", "BWL", "ECO", "FLD", "IMP"];
+
+// ── graded secondary-contribution blend (fixes the binary role cliff) ─────────
+// A batter/bowler who narrowly MISSES the allrounder bar but has a MATERIAL
+// secondary skill (a real lower-order batting record, or genuine part-time
+// wickets) shouldn't have it weighted away — blend their role weights toward the
+// allrounder vector, graded by how strong the secondary is. Pure specialists
+// (no secondary volume, or a weak secondary) get λ=0 and are untouched.
+const BLEND_MAX = 0.6;
+const BLEND_PCT_LO = 0.32; // secondary percentile where credit starts
+const BLEND_PCT_HI = 0.8; //  ...and where it saturates
+const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
+
+/** How much to blend a primary role toward allrounder (0 = pure specialist). */
+function secondaryBlend(c: Calibrated, role: Role): number {
+  const a = c.agg;
+  const m = Math.max(a.matches, 1);
+  let strength = 0;
+  if (role === "bowler" && c.hasBat && a.ballsFaced / m >= ROLE.batsPerMatch) {
+    // a bowler's genuine lower-order batting (volume gated, graded by average)
+    strength = clamp01((c.batAvgPct - BLEND_PCT_LO) / (BLEND_PCT_HI - BLEND_PCT_LO));
+  } else if (role === "batter" && c.hasBowl && a.ballsBowled / m >= ROLE.bowlsPerMatch && a.wickets / m >= ROLE.bowlerWktsPerMatch) {
+    // a batter's genuine part-time wickets (volume + wicket-rate gated)
+    strength = clamp01((Math.max(c.bowlSRPct, c.economyPct) - BLEND_PCT_LO) / (BLEND_PCT_HI - BLEND_PCT_LO));
+  }
+  return BLEND_MAX * strength;
+}
+
+function weightedPeak(stats: CardStats, weights: Record<StatKey, number>): number {
+  const raw = STAT_KEYS.reduce((s, k) => s + stats[k] * weights[k], 0);
   return Math.min(PEAK_CAP, Math.round(raw));
+}
+
+/**
+ * Peak OVR crediting a graded secondary contribution: the higher of the pure
+ * role weighting and a partial-allrounder blend. Taking the MAX means the blend
+ * only ever ADDS a genuine secondary skill (Jadeja's batting) — it can never
+ * dilute a specialist whose secondary is weaker than their primary (a batsman
+ * who bowls a bit keeps his batting weighting). Pure specialists (λ=0) are
+ * unchanged.
+ */
+function peakOvr(stats: CardStats, c: Calibrated, role: Role, bucket: Calibrated["agg"]["bucket"]): number {
+  const base = PEAK_WEIGHTS[role][bucket];
+  const basePeak = weightedPeak(stats, base);
+  if (role !== "batter" && role !== "bowler") return basePeak;
+  const lambda = secondaryBlend(c, role);
+  if (lambda <= 0) return basePeak;
+  const allr = PEAK_WEIGHTS.allrounder[bucket];
+  const blended = {} as Record<StatKey, number>;
+  for (const k of STAT_KEYS) blended[k] = base[k] * (1 - lambda) + allr[k] * lambda;
+  return Math.max(basePeak, weightedPeak(stats, blended));
 }
 
 /** Player's peak-eliteness signal: mean of their TOP-2 rate-stat percentiles. */
@@ -151,7 +209,7 @@ export function computeOvr(calibrated: Map<string, Calibrated>): Map<string, Ovr
     for (const [k, c] of gated) {
       const role = classifyRole(c);
       const stats = buildStats(c);
-      const peak = peakOvr(stats, role, bucket);
+      const peak = peakOvr(stats, c, role, bucket);
 
       const longevityZ = zLongevity(longevityScalar(c));
       const peakElitenessZ = zPeakElite(peakElitenessRaw(c));

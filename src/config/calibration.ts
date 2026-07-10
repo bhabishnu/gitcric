@@ -152,9 +152,15 @@ export const OVR_PINS: { playerId: string; bucket: FormatBucket; ovr: number; wh
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const ROLE = {
-  /** Career stumpings (or per-match rate) above which a player is a keeper. */
-  keeperStumpings: 5,
-  keeperStumpingsPerMatch: 0.04,
+  /** A player is a SUSTAINED keeper if they stump often OR are involved in many
+   * dismissals behind the stumps. Stumping rate catches spin-era keepers; the
+   * dismissals-per-match path catches full-time keepers to a PACE attack (few
+   * stumpings, lots of catches — Rizwan), with a small stumping floor so a
+   * catch-heavy slip fielder never qualifies. Part-time glovemen (KL Rahul) clear
+   * neither. */
+  keeperStumpingsPerMatch: 0.1,
+  keeperDismissalsPerMatch: 1.05,
+  keeperMinStumpRate: 0.03,
   /** Balls bowled per match above which the bowling discipline "counts" (volume). */
   bowlsPerMatch: 12,
   /** Wickets per match a "primary bowler" must take — keeps tidy part-time
