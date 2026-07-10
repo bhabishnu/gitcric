@@ -92,15 +92,24 @@ SHAPE tells the story, like a striker's low DEF.
   similar raw numbers, and a peak specialist bowler reach the same ceiling as a
   peak batter.
 
-- **The peak-vs-longevity knob: `PEAK_VS_LONGEVITY` ∈ [0,1] (default 0.95).**
+- **The peak-vs-longevity knob: `PEAK_VS_LONGEVITY` ∈ [0,1] (default 0.82).**
   The greatness band (88→99) is
   `bonus = BONUS_MAX · sigmoid(a·longevity_z + b·peakEliteness_z − c) · gate`,
-  with `a = 2·(1−t)`, `b = 2·t` for the knob `t`. Higher `t` → peak eliteness
-  matters more relative to longevity, so a shorter-but-stratospheric career
-  reaches the 90s where a longer-but-flatter one plateaus. `BONUS_MAX = 11`
-  (88 + 11 = 99). The `gate` term (`GREATNESS_GATE_LO/HI`) smoothly zeroes the
-  bonus for a true rookie (deeply negative `longevity_z`) **regardless of peak**,
-  which is what keeps a newcomer in the peak band only.
+  with `a = GREATNESS_GAIN·(1−t)`, `b = GREATNESS_GAIN·t` for the knob `t`. Higher
+  `t` → peak eliteness matters more (needed so ABdV's ODI peak beats Ponting's
+  longevity). `GREATNESS_GAIN` (default 2.6) is the sigmoid **steepness** — raise
+  it to fan the elite tier out instead of bunching it. `GREATNESS_OFFSET` (default
+  4.4) is the **bar**: set high so most "very good" internationals get ≈0 bonus
+  and sit in the peak band, the 90s are earned, and 95+ is immortal-only. The
+  `gate` term zeroes the bonus for a true rookie regardless of peak.
+
+- **Design tiers & the OVR pin.** The scale is tuned to read as tiers: 95-98
+  all-time immortals (~a dozen cards), 90-94 all-time greats, 84-89 elite
+  internationals, 75-83 solid, 65-74 fringe, <65 barely-qualified. **99 is
+  reserved** — the only player card at 99 is set by `OVR_PINS` (an editorial
+  top-of-scale pin: Kohli's ODI is #1, Tendulkar's ODI #2), applied in the runner
+  after scoring so no other card shifts; the only other 99 is the seeded Bradman
+  Test anchor.
 
 - **Equate-to-legend** (`EQUATE`): nearest anchor by weighted distance over the
   6-stat profile + OVR, within the SAME bucket and SAME role. Modern legends are

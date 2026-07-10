@@ -136,8 +136,11 @@ console.log("\n─────────────────────�
 {
   const t = bumrah.test;
   const tt = bumrah.t20i;
-  const eliteTest = !!t && t.ovr >= 85;
-  const eliteT20 = !!tt && tt.ovr >= 85;
+  // After the tier-compression pass, the "elite / very-good international" band is
+  // 84-89; Bumrah's Test/IPL sit in the great tier (90+) and his weakest format
+  // (T20I, mid bowling percentiles) lands at the elite-band floor.
+  const eliteTest = !!t && t.ovr >= 88;
+  const eliteT20 = !!tt && tt.ovr >= 84;
   assert(
     "Bumrah elite in Test AND T20I (bowling-strike-rate-driven)",
     eliteTest && eliteT20,

@@ -6,6 +6,7 @@ import { aggregate, type AggMap } from "./aggregate.js";
 import { loadRegister, type Person } from "./register.js";
 import { calibrate, type Calibrated, type Distribution } from "./calibrate.js";
 import { mergeHistorical } from "./historical/merge.js";
+import { OVR_PINS } from "../config/calibration.js";
 import { computeOvr, type OvrResult } from "./ovr.js";
 import { equate, type EquateResult } from "./equate.js";
 
@@ -130,6 +131,15 @@ export async function run(): Promise<void> {
   console.log("── Stage 6: reference OVR ──");
   const ovr = computeOvr(calibrated);
   console.log(`  ${ovr.size} gated cards scored`);
+  // Editorial top-of-scale pins (config data): set two specific cards' final OVR
+  // without shifting anyone else. Applied here in the runner, not in a stage.
+  for (const pin of OVR_PINS) {
+    const o = ovr.get(`${pin.playerId}|${pin.bucket}`);
+    if (o) {
+      o.ovr = pin.ovr;
+      console.log(`  pinned ${pin.who} ${pin.bucket.toUpperCase()} → ${pin.ovr}`);
+    }
+  }
 
   console.log("── Stage 7: equate to legend ──");
   const { equated, anchors } = equate(calibrated, ovr);

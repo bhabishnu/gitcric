@@ -36,8 +36,8 @@ export const ABSENT_AXIS_STAT = 15;
  * clustering at the top — the six stats now spread across a wide range, and only
  * the greatness band can carry a card into the high 90s.
  */
-export const STAT_FLOOR = 28;
-export const STAT_CEIL = 97;
+export const STAT_FLOOR = 40;
+export const STAT_CEIL = 96;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PEAK BAND — position-weighted six stats, capped at 88.
@@ -59,8 +59,8 @@ export const PEAK_WEIGHTS: Record<Role, Record<FormatBucket, WeightVec>> = {
   batter: {
     test: { BAT: 0.44, POW: 0.22, BWL: 0.03, ECO: 0.03, FLD: 0.12, IMP: 0.16 },
     odi: { BAT: 0.4, POW: 0.28, BWL: 0.02, ECO: 0.02, FLD: 0.08, IMP: 0.2 },
-    t20i: { BAT: 0.22, POW: 0.52, BWL: 0.005, ECO: 0.005, FLD: 0.07, IMP: 0.18 },
-    ipl: { BAT: 0.22, POW: 0.52, BWL: 0.005, ECO: 0.005, FLD: 0.07, IMP: 0.18 },
+    t20i: { BAT: 0.22, POW: 0.48, BWL: 0.005, ECO: 0.005, FLD: 0.07, IMP: 0.22 },
+    ipl: { BAT: 0.22, POW: 0.48, BWL: 0.005, ECO: 0.005, FLD: 0.07, IMP: 0.22 },
   },
   // A bowler's card is almost purely BWL/ECO (+ a little longevity). FLD is
   // negligible — like a striker's low DEF — so a pure specialist bowler can reach
@@ -104,16 +104,24 @@ export const BONUS_MAX = 11; // 88 + 11 = 99
  * THE single peak-vs-longevity knob, in [0,1]. Higher → peak eliteness matters
  * more relative to longevity in the greatness band. a = 2·(1−t), b = 2·t.
  */
-export const PEAK_VS_LONGEVITY = 0.8;
+export const PEAK_VS_LONGEVITY = 0.82;
 
 /**
- * Sigmoid offset c: raises the bar so the 88→99 band only opens for genuinely
- * exceptional careers. Tightened hard — most elite players now sit in the low 90s
- * off a small bonus, and only a handful of true legends clear +7. A live player
- * reaching 99 is nearly impossible; 99 is effectively reserved for a Bradman-tier
- * anchor.
+ * GAIN on the greatness argument (the a/b coefficient magnitude). Higher = a
+ * STEEPER sigmoid = wider separation between the tiers, so the crowd of elite
+ * cards fans out (immortal 95+, great 90-94, very-good 84-89) instead of all
+ * bunching in the mid-90s. a = GAIN·(1−t), b = GAIN·t.
  */
-export const GREATNESS_OFFSET = 1.62;
+export const GREATNESS_GAIN = 2.6;
+
+/**
+ * Sigmoid offset c: the bar the 88→99 band must clear. Set HIGH — only all-time
+ * longevity+peak clears it. Most "very good" internationals now get ~0 bonus and
+ * sit in the peak band (75-89); the 90s are earned; 95+ is immortal-only; a live
+ * player reaching 99 is essentially impossible (reserved for the seeded anchor
+ * and the pinned Kohli ODI card).
+ */
+export const GREATNESS_OFFSET = 4.4;
 
 /**
  * Rookie gate on the greatness band. gate = clamp((longevity_z − LO)/(HI − LO)).
@@ -125,8 +133,19 @@ export const GREATNESS_GATE_LO = -0.5;
 export const GREATNESS_GATE_HI = 0.7;
 
 export function greatnessCoeffs(): { a: number; b: number } {
-  return { a: 2 * (1 - PEAK_VS_LONGEVITY), b: 2 * PEAK_VS_LONGEVITY };
+  return { a: GREATNESS_GAIN * (1 - PEAK_VS_LONGEVITY), b: GREATNESS_GAIN * PEAK_VS_LONGEVITY };
 }
+
+/**
+ * PINNED top-of-scale ordering — an EDITORIAL design decision applied to two
+ * specific cards' final OVR only (no other player shifts). Kohli's ODI card is
+ * the #1 card in the DB; Tendulkar's ODI sits directly behind it. Applied in the
+ * runner after OVRs are computed (config data, not a scoring formula).
+ */
+export const OVR_PINS: { playerId: string; bucket: FormatBucket; ovr: number; who: string }[] = [
+  { playerId: "ba607b88", bucket: "odi", ovr: 99, who: "V Kohli" },
+  { playerId: "d2c2b2d5", bucket: "odi", ovr: 98, who: "SR Tendulkar" },
+];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ROLE classification thresholds (per-match involvement).
