@@ -1,0 +1,12 @@
+# dependencies
+/node_modules
+# next
+/.next
+/out
+# env — never commit tokens
+.env
+.env.local
+.env*.local
+# misc
+*.tsbuildinfo
+next-env.d.ts
