@@ -64,8 +64,9 @@ body {
   font-feature-settings: "tnum";
 }
 
-/* Focus rings are the accent — nothing else on the page is crimson. */
-:where(a, button, input, [tabindex]):focus-visible {
+/* Focus rings are the accent — nothing else on the page is crimson. Text inputs
+   are excluded: they show focus as a crimson-token border on their field. */
+:where(a, button, [tabindex]):focus-visible {
   outline: 2px solid var(--color-crimson);
   outline-offset: 2px;
   border-radius: 2px;
@@ -122,17 +123,17 @@ body {
    is the sanctioned exception to the page's no-gradient rule.
    ═══════════════════════════════════════════════════════════════════════════ */
 .gc-card {
-  --chamfer: 26px;
+  --chamfer: 7cqw;
   --trim: var(--color-crimson);
   --finish-a: #17181c;
   --finish-b: #101115;
   --tier-line: var(--color-hairline-strong);
   --ink: #f4f5f7;
   width: 100%;
-  max-width: 340px;
+  max-width: 500px; /* ~700px tall on desktop; shrinks proportionally on mobile */
   aspect-ratio: 320 / 452;
-  container-type: inline-size; /* lets the surname scale to the card width */
-  padding: 1.5px; /* becomes the tier hairline that follows the chamfer */
+  container-type: inline-size; /* the whole interior scales in cqw with the card */
+  padding: 0.3cqw; /* becomes the tier hairline that follows the chamfer */
   background: var(--tier-line);
   clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer), 100% 100%, 0 100%);
 }
@@ -140,7 +141,7 @@ body {
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 20px 20px 22px;
+  padding: 5.8cqw 5.8cqw 6.4cqw;
   display: flex;
   flex-direction: column;
   color: var(--ink);
@@ -154,7 +155,7 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 4px;
+  width: 1.2cqw;
   background: var(--trim);
 }
 
@@ -181,29 +182,60 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  /* keep the eyebrow clear of the clipped top-right corner */
+  padding-right: 5cqw;
 }
 .gc-ovr-block { display: flex; flex-direction: column; line-height: 0.86; }
 .gc-ovr {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 58px;
+  font-size: 17cqw;
   letter-spacing: -0.02em;
 }
 .gc-role {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 4.1cqw;
   letter-spacing: 0.14em;
   opacity: 0.82;
-  margin-top: 2px;
+  margin-top: 0.6cqw;
+}
+.gc-idrow {
+  display: flex;
+  align-items: center;
+  gap: 2.4cqw;
+  margin-top: 2.6cqw;
+}
+.gc-flag {
+  width: 7.5cqw;
+  aspect-ratio: 3 / 2;
+  border-radius: 1px;
+  display: block;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent);
+}
+.gc-tier-badge {
+  font-size: 2.4cqw;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+.gc-team {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 2.5cqw;
+  letter-spacing: 0.06em;
+  margin-top: 1cqw;
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .gc-eyebrow {
   font-family: var(--font-mono);
-  font-size: 8.5px;
+  font-size: 2.5cqw;
   letter-spacing: 0.16em;
   text-align: right;
-  max-width: 96px;
-  padding-top: 6px;
+  max-width: 28cqw;
+  padding-top: 1.8cqw;
   opacity: 0.7;
 }
 
@@ -212,13 +244,13 @@ body {
   display: grid;
   place-items: center;
   min-height: 0;
-  padding: 8px 0;
+  padding: 2.4cqw 0;
 }
 .gc-avatar {
   width: 30cqw;
   height: 30cqw;
-  max-width: 108px;
-  max-height: 108px;
+  max-width: 152px;
+  max-height: 152px;
   border-radius: 999px;
   object-fit: cover;
   border: 1.5px solid color-mix(in srgb, var(--trim) 60%, transparent);
@@ -233,12 +265,12 @@ body {
 
 .gc-namebar {
   border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
-  padding-top: 8px;
+  padding-top: 2.4cqw;
 }
 .gc-surname {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(30px, 9cqw, 40px);
+  font-size: clamp(28px, 12cqw, 60px);
   letter-spacing: 0.01em;
   line-height: 0.94;
   display: block;
@@ -250,25 +282,25 @@ body {
 .gc-stats {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  gap: 0 16px;
-  margin-top: 12px;
+  gap: 0 4.7cqw;
+  margin-top: 3.5cqw;
 }
-.gc-stat-col { display: flex; flex-direction: column; gap: 6px; }
+.gc-stat-col { display: flex; flex-direction: column; gap: 1.9cqw; }
 .gc-stat-divider { width: 1px; background: color-mix(in srgb, var(--ink) 12%, transparent); }
 .gc-stat {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 2.4cqw;
 }
 .gc-stat-val {
   font-weight: 700;
-  font-size: 17px;
+  font-size: 5cqw;
   width: 2.2ch;
   text-align: right;
 }
 .gc-stat-key {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 2.9cqw;
   letter-spacing: 0.12em;
   opacity: 0.6;
 }

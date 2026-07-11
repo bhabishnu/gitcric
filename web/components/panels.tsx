@@ -50,14 +50,6 @@ function ordinal(n: number): string {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-function EquateLine({ text }: { text: string }) {
-  return (
-    <p className="mt-5 border-t border-[var(--color-hairline)] pt-4 font-[family-name:var(--font-display)] text-lg font-[600] tracking-wide text-[var(--color-crimson)]">
-      {text}
-    </p>
-  );
-}
-
 /* ── left panel: archetype + traits ────────────────────────────────────────── */
 
 export function TraitPanel({ segment }: { segment: Segment }) {
@@ -101,10 +93,9 @@ export function RightPanel({ segment }: { segment: Segment }) {
             </div>
           ))}
         </div>
-        <div className="mt-6">
+        <div className="mt-6 border-t border-[var(--color-hairline)] pt-5">
           <Distribution ovr={r.percentile} />
         </div>
-        <EquateLine text={r.equate} />
       </div>
     );
   }
@@ -119,10 +110,9 @@ export function RightPanel({ segment }: { segment: Segment }) {
           </div>
         ))}
       </dl>
-      <div className="mt-6">
+      <div className="mt-6 border-t border-[var(--color-hairline)] pt-5">
         <Distribution ovr={r.distribution} />
       </div>
-      <EquateLine text={r.equate} />
     </div>
   );
 }

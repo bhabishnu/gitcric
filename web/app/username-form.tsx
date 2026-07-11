@@ -16,17 +16,16 @@ export function UsernameForm() {
       }}
       className="flex items-stretch gap-2"
     >
-      <div className="flex flex-1 items-center rounded-md border border-[var(--color-hairline)] bg-[var(--color-panel)] px-3 focus-within:border-[var(--color-hairline-strong)]">
-        <span className="tabular text-[var(--color-faint)]">@</span>
+      <div className="flex flex-1 items-center rounded-md border border-[var(--color-hairline)] bg-[var(--color-panel)] px-3 transition-colors focus-within:border-[var(--color-crimson)]">
         <input
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="github-username"
+          placeholder="github username"
           autoFocus
           autoCapitalize="off"
           autoCorrect="off"
           spellCheck={false}
-          className="w-full bg-transparent px-2 py-3 text-[15px] text-[var(--color-text)] placeholder:text-[var(--color-faint)] focus:outline-none"
+          className="w-full bg-transparent px-1 py-3 text-[15px] text-[var(--color-text)] placeholder:text-[var(--color-faint)] outline-none focus:outline-none focus-visible:outline-none"
         />
       </div>
       <button

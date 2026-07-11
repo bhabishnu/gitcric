@@ -34,7 +34,7 @@ export default async function OG({ params }: { params: Promise<{ username: strin
     role = card.role.toUpperCase();
     blurb = card.archetype.blurb;
     stats = (["BAT", "POW", "BWL", "ECO", "FLD", "IMP"] as const).map((k) => [k, card.stats[k]]);
-    const twins = pickTwins(card.ovr, clean, PLAYER_INDEX);
+    const twins = pickTwins(card.ovr, card.login, PLAYER_INDEX);
     const t = twins.odi ?? twins.test ?? twins.t20i ?? twins.ipl;
     if (t) twinLine = `plays like ${t.name}`;
   } catch {

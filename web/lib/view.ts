@@ -6,8 +6,10 @@
 import { archetypeFor } from "./scoring/archetypes";
 import type { UserCard, StatKey, Tier } from "./scoring/types";
 import type { CricketerCard, IndexRow, Role } from "./data";
-import { getCricketerCard, type FormatBucket } from "./data";
+import { getCricketerCard, photoFor, type FormatBucket } from "./data";
 import type { Twin } from "./match/matcher";
+import { colorwayFor, type Colorway } from "./colorways";
+import { flagForLocation, flagForNation, type FlagCode } from "./flags";
 
 export type SegmentId = "you" | FormatBucket;
 
@@ -31,6 +33,13 @@ export interface CardFace {
   stats: { key: StatKey; label: string; value: number }[];
   tier: Tier;
   trim: SegmentId;
+  /** Team colorway for a cricketer; null on the YOU card (keeps its tier finish). */
+  colorway: Colorway | null;
+  flag: FlagCode | null;
+  /** Cricketer face path, or null → monogram. YOU uses avatarUrl instead. */
+  photoFile: string | null;
+  /** The colorway's team/nation name (small caption). */
+  teamLabel: string | null;
 }
 
 export interface Trait {
@@ -55,8 +64,8 @@ export interface Segment {
   /** Right panel is a discriminated union: the scout report (YOU) or a
    *  cricketer's real career card. */
   right:
-    | { kind: "scout"; metrics: ScoutMetric[]; percentile: number; equate: string }
-    | { kind: "career"; rows: { label: string; value: string }[]; distribution: number; equate: string };
+    | { kind: "scout"; metrics: ScoutMetric[]; percentile: number }
+    | { kind: "career"; rows: { label: string; value: string }[]; distribution: number };
 }
 
 function tierFromOvr(ovr: number): Tier {
@@ -111,7 +120,7 @@ function num(n: number, d = 1): string {
 }
 
 // ── YOU segment ──────────────────────────────────────────────────────────────
-function youSegment(card: UserCard, marquee: Twin | null): Segment {
+function youSegment(card: UserCard): Segment {
   return {
     id: "you",
     tabLabel: "YOU",
@@ -124,6 +133,10 @@ function youSegment(card: UserCard, marquee: Twin | null): Segment {
       stats: statList(card.stats),
       tier: card.tier,
       trim: "you",
+      colorway: null, // YOU keeps its tier finish
+      flag: flagForLocation(card.location),
+      photoFile: null,
+      teamLabel: null,
     },
     header: {
       handle: `@${card.login}`,
@@ -136,7 +149,6 @@ function youSegment(card: UserCard, marquee: Twin | null): Segment {
       kind: "scout",
       metrics: card.scout.map((s) => ({ label: s.label, value: s.value, fill: s.fill, axis: s.axis })),
       percentile: card.baseOVR,
-      equate: marquee ? `plays like ${marquee.name}` : "no cricket twin found",
     },
   };
 }
@@ -165,6 +177,7 @@ function careerRows(c: CricketerCard, role: Role): { label: string; value: strin
 
 function twinSegment(twin: Twin, card: CricketerCard): Segment {
   const role = twin.role;
+  const colorway = colorwayFor(twin.bucket, twin.nation, twin.lastIplTeam);
   return {
     id: twin.bucket,
     tabLabel: BUCKET_LABEL[twin.bucket],
@@ -177,6 +190,10 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
       stats: statList(twin.stats),
       tier: tierFromOvr(twin.ovr),
       trim: twin.bucket,
+      colorway,
+      flag: flagForNation(twin.nation),
+      photoFile: photoFor(twin.id),
+      teamLabel: colorway.label,
     },
     header: {
       handle: null,
@@ -189,7 +206,6 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
       kind: "career",
       rows: careerRows(card, role),
       distribution: twin.ovr,
-      equate: card.equatedLegend ? `plays like ${card.equatedLegend.name}` : `${BUCKET_LABEL[twin.bucket]} regular`,
     },
   };
 }
@@ -197,14 +213,29 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
 /** Build all five segments. YOU is always first. */
 export function buildSegments(you: UserCard, twins: Record<FormatBucket, Twin | null>): Segment[] {
   const order: FormatBucket[] = ["test", "odi", "t20i", "ipl"];
-  const marquee = twins.odi ?? twins.test ?? twins.t20i ?? twins.ipl;
-  const segments: Segment[] = [youSegment(you, marquee)];
+  const segments: Segment[] = [youSegment(you)];
   for (const b of order) {
     const t = twins[b];
     if (!t) continue;
     const card = getCricketerCard(b, t.id);
     if (!card) continue;
     segments.push(twinSegment(t, card));
+  }
+  return segments;
+}
+
+/** Segments for a specific cricketer across every format they're gated in —
+ *  powers the /player/[id] permalink (no YOU segment). */
+export function buildPlayerSegments(id: string, index: Record<FormatBucket, IndexRow[]>): Segment[] {
+  const order: FormatBucket[] = ["test", "odi", "t20i", "ipl"];
+  const segments: Segment[] = [];
+  for (const b of order) {
+    const row = index[b].find((r) => r.id === id);
+    if (!row) continue;
+    const card = getCricketerCard(b, id);
+    if (!card) continue;
+    const twin: Twin = { ...row, bucket: b, ovrGap: 0 };
+    segments.push(twinSegment(twin, card));
   }
   return segments;
 }

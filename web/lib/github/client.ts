@@ -36,11 +36,18 @@ async function graphql<T>(query: string, variables: Record<string, unknown>): Pr
   }
   if (!res.ok) throw new GitHubError(`GitHub HTTP ${res.status}`, res.status);
 
-  const json = (await res.json()) as { data?: T; errors?: { type?: string; message: string }[] };
-  if (json.errors?.length) {
-    const notFound = json.errors.some((e) => e.type === "NOT_FOUND");
-    throw new GitHubError(json.errors[0].message, notFound ? 404 : 500, notFound ? "not_found" : "unknown");
+  const json = (await res.json()) as {
+    data?: (T & { user?: unknown }) | null;
+    errors?: { type?: string; message: string }[];
+  };
+  // GitHub routinely returns partial `errors` alongside usable `data` (a nulled
+  // sub-field, a scope quirk). Tolerate those: if we still got a user object,
+  // use it. Only a genuinely absent user is fatal.
+  if (json.data?.user) return json.data;
+  if (json.errors?.some((e) => e.type === "NOT_FOUND")) {
+    throw new GitHubError("no such user", 404, "not_found");
   }
+  if (json.errors?.length) throw new GitHubError(json.errors[0].message, 502, "unknown");
   if (!json.data) throw new GitHubError("empty GitHub response", 502);
   return json.data;
 }
@@ -78,15 +85,19 @@ const PROFILE_QUERY = /* GraphQL */ `
   }
 `;
 
-const YEAR_QUERY = /* GraphQL */ `
-  query ($login: String!, $from: DateTime!, $to: DateTime!) {
-    user(login: $login) {
-      contributionsCollection(from: $from, to: $to) {
-        contributionCalendar { totalContributions }
-      }
-    }
-  }
-`;
+/** One request covering several years via aliased fields (GitFut-style), so a
+ *  20-year-old account costs ~5 requests instead of 20 — friendlier to GitHub's
+ *  concurrent/secondary rate limits. */
+function yearsBatchQuery(windows: { from: string; to: string }[]): string {
+  const fields = windows
+    .map(
+      (w, i) =>
+        `y${i}: contributionsCollection(from: "${w.from}", to: "${w.to}") { contributionCalendar { totalContributions } }`,
+    )
+    .join("\n");
+  return `query ($login: String!) { user(login: $login) { ${fields} } }`;
+}
+const LIFETIME_BATCH = 4;
 
 interface ProfileData {
   user: {
@@ -94,9 +105,9 @@ interface ProfileData {
     name: string | null;
     avatarUrl: string;
     location: string | null;
-    createdAt: string;
-    followers: { totalCount: number };
-    repositories: {
+    createdAt: string | null;
+    followers?: { totalCount: number } | null;
+    repositories?: {
       totalCount: number;
       nodes: {
         stargazerCount: number;
@@ -105,17 +116,17 @@ interface ProfileData {
         primaryLanguage: { name: string } | null;
         languages: { nodes: { name: string }[] };
       }[];
-    };
-    mergedPRs: { totalCount: number };
-    allPRs: { totalCount: number };
-    contributionsCollection: {
+    } | null;
+    mergedPRs?: { totalCount: number } | null;
+    allPRs?: { totalCount: number } | null;
+    contributionsCollection?: {
       totalCommitContributions: number;
       totalPullRequestContributions: number;
       totalPullRequestReviewContributions: number;
       totalIssueContributions: number;
       restrictedContributionsCount: number;
       contributionCalendar: { totalContributions: number };
-    };
+    } | null;
   } | null;
 }
 
@@ -136,11 +147,13 @@ export async function fetchSignals(login: string): Promise<Signals> {
   if (!user) throw new GitHubError(`No GitHub user "${login}"`, 404, "not_found");
 
   const nowISO = new Date().toISOString();
-  const repos = user.repositories.nodes;
-  const repoStars = repos.map((r) => r.stargazerCount);
+  const repos = user.repositories?.nodes ?? [];
+  const repoStars = repos.map((r) => r.stargazerCount ?? 0);
   const totalStars = repoStars.reduce((a, b) => a + b, 0);
   const maxStars = repoStars.length ? Math.max(...repoStars) : 0;
-  const accountAge = (Date.now() - new Date(user.createdAt).getTime()) / (365.25 * 864e5);
+  const accountAge = user.createdAt
+    ? Math.max(0, (Date.now() - new Date(user.createdAt).getTime()) / (365.25 * 864e5))
+    : 0;
 
   // languages: unique across owned repos (primary + declared)
   const langSet = new Set<string>();
@@ -161,22 +174,31 @@ export async function fetchSignals(login: string): Promise<Signals> {
     if (r.pushedAt) activeYearSet.add(new Date(r.pushedAt).getUTCFullYear());
   }
 
-  // lifetime contributions: sum per-year calendars (batched, best-effort).
-  const windows = yearWindows(user.createdAt, nowISO);
-  const years = await Promise.all(
-    windows.map((w) =>
-      graphql<{ user: { contributionsCollection: { contributionCalendar: { totalContributions: number } } } | null }>(
-        YEAR_QUERY,
-        { login, from: w.from, to: w.to },
-      )
-        .then((d) => d.user?.contributionsCollection.contributionCalendar.totalContributions ?? 0)
-        .catch(() => 0),
+  // lifetime contributions: sum per-year calendars, batched into few requests
+  // and best-effort (a failed batch contributes 0 rather than failing the card).
+  const windows = yearWindows(user.createdAt ?? nowISO, nowISO);
+  const batches: { from: string; to: string }[][] = [];
+  for (let i = 0; i < windows.length; i += LIFETIME_BATCH) batches.push(windows.slice(i, i + LIFETIME_BATCH));
+  // few requests (aliased years) run in parallel — fast and well within limits.
+  const batchResults = await Promise.all(
+    batches.map((batch) =>
+      graphql<{ user: Record<string, { contributionCalendar: { totalContributions: number } }> }>(yearsBatchQuery(batch), { login })
+        .then((d) => batch.map((_, j) => d.user?.[`y${j}`]?.contributionCalendar?.totalContributions ?? 0))
+        .catch(() => batch.map(() => 0)),
     ),
   );
-  const lifetime = years.reduce((a, b) => a + b, 0) || user.contributionsCollection.contributionCalendar.totalContributions;
+  const years = batchResults.flat();
+  const cc = user.contributionsCollection ?? {
+    totalCommitContributions: 0,
+    totalPullRequestContributions: 0,
+    totalPullRequestReviewContributions: 0,
+    totalIssueContributions: 0,
+    restrictedContributionsCount: 0,
+    contributionCalendar: { totalContributions: 0 },
+  };
+  const lifetime = years.reduce((a, b) => a + b, 0) || cc.contributionCalendar.totalContributions;
   const activeCalendarYears = years.filter((n) => n > 0).length;
 
-  const cc = user.contributionsCollection;
   const recentCommits = cc.totalCommitContributions + cc.restrictedContributionsCount;
   const recentContributions =
     cc.totalCommitContributions +
@@ -190,11 +212,11 @@ export async function fetchSignals(login: string): Promise<Signals> {
   return {
     login: user.login,
     name: user.name ?? user.login,
-    avatarUrl: user.avatarUrl,
+    avatarUrl: user.avatarUrl ?? "",
     location: user.location,
-    followers: user.followers.totalCount,
+    followers: user.followers?.totalCount ?? 0,
     account_age_years: accountAge,
-    public_repos: user.repositories.totalCount,
+    public_repos: user.repositories?.totalCount ?? repos.length,
     total_stars_owned: totalStars,
     max_repo_stars: maxStars,
     repo_stars: repoStars,
@@ -206,8 +228,8 @@ export async function fetchSignals(login: string): Promise<Signals> {
     active_years: Math.max(activeYearSet.size, activeCalendarYears),
     total_contributions_lifetime: lifetime,
     prs_to_others: cc.totalPullRequestContributions,
-    prs_merged_lifetime: user.mergedPRs.totalCount,
-    prs_opened_lifetime: user.allPRs.totalCount,
+    prs_merged_lifetime: user.mergedPRs?.totalCount ?? 0,
+    prs_opened_lifetime: user.allPRs?.totalCount ?? 0,
     reviews: cc.totalPullRequestReviewContributions,
     issues_closed: cc.totalIssueContributions,
     recent_commits: recentCommits,

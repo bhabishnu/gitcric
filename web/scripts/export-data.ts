@@ -15,7 +15,7 @@
  * every `data/` directory; gen/ is committed so CI has the data.
  */
 import Database from "better-sqlite3";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { GitCricStore } from "../../src/db/accessor.js";
@@ -47,6 +47,10 @@ export interface IndexRow {
   gformats: number;
   /** Is this player a legend anchor in this bucket (always recognizable). */
   isAnchor: boolean;
+  /** Nation (from raw Cricsheet intl teams) and most-recent IPL franchise —
+   *  drive flags and team colorways. Null when not derivable. */
+  nation: string | null;
+  lastIplTeam: string | null;
 }
 
 function main() {
@@ -75,6 +79,12 @@ function main() {
     (anchorIds.get(r.format_bucket) ?? anchorIds.set(r.format_bucket, new Set()).get(r.format_bucket)!).add(r.id);
   }
 
+  // nation + lastIplTeam derived from raw Cricsheet by scripts/derive-teams.ts
+  const identityPath = join(OUT_DIR, "identity.json");
+  const identity: Record<string, { nation: string | null; lastIplTeam: string | null }> = existsSync(identityPath)
+    ? JSON.parse(readFileSync(identityPath, "utf8"))
+    : {};
+
   const gated = raw
     .prepare("SELECT player_id, format_bucket FROM player_format_stats WHERE gated = 1")
     .all() as { player_id: string; format_bucket: FormatBucket }[];
@@ -99,6 +109,8 @@ function main() {
       intlCaps: n.intl,
       gformats: n.gformats,
       isAnchor: anchorIds.get(format_bucket)?.has(player_id) ?? false,
+      nation: identity[player_id]?.nation ?? null,
+      lastIplTeam: identity[player_id]?.lastIplTeam ?? null,
     });
   }
 

@@ -14,10 +14,9 @@ export const BOWL_GROUP: StatKey[] = ["BWL", "ECO"];
  * then tuned in the calibration loop to hit the target user distribution.
  */
 export const K = {
-  // §3.1 magnitude → gravity-well center the six stats sit around. De-saturated
-  // (b shifted down, range widened) so solid devs sit well below elite instead
-  // of everyone pinning at the top of the peak band.
-  magnitude: { wStars: 0.5, wFollowers: 0.4, wLifetime: 0.5, wAge: 0.08, b: -3.44, lo: 44, hi: 86 },
+  // §3.1 magnitude → gravity-well center the six stats sit around. GitFut's
+  // constants (lo 47 vs its 48 to keep a genuinely empty account under 50).
+  magnitude: { wStars: 0.5, wFollowers: 0.4, wLifetime: 0.5, wAge: 0.08, b: -2.8, lo: 40, hi: 82 },
   // §3.3 antagonist pairs — batsman vs bowler, aggression vs control.
   tension: {
     alpha: 0.7,
@@ -34,16 +33,12 @@ export const K = {
   // ECO focus: 40 + gain·focus(0..1). Kept in a fair band (never punitive) —
   // scattered work reads lower than focused work, but no card craters.
   eco: { base: 38, gain: 40, wConc: 0.4, wLang: 0.3, wMerge: 0.3, langSpan: 12 },
-  // §4 legacy gate — the 88→99 band. Rebuilt as INFLUENCE (stars/followers/reach)
-  // GATED BY real sustained work (lifetime contributions + account age). The old
-  // active_years term saturated the sigmoid for anyone tenured; lifetime is the
-  // honest "did real work over years" signal, so a high-star/low-work mascot
-  // account no longer crowns itself.
-  legacy: { wAge: 0.3, wLife: 0.35, wFoll: 0.6, wStars: 0.7, wMax: 0.4, f: 9.0, bonusMax: 11 },
-  // Peak (stats-only) band caps here; the legacy bonus rides on top. Set to 85
-  // (below the DB's 88) so even a maxed elite base + full legacy lands ~95-96 —
-  // keeping 99 unreachable and the 93-97 elite band honest.
-  ovrCap: 85,
+  // §4 legacy gate — GitFut's formula/constants verbatim (years + sustained
+  // influence), for OVR parity with GitFut. The final OVR is clamped to 98 so 99
+  // stays unreachable for users (GitFut's own top is ~97 anyway).
+  legacy: { aAge: 1.0, bActive: 0.7, cFoll: 0.3, dStars: 0.3, eMax: 0.3, f: 6.0, activeCap: 15, bonusMax: 11 },
+  ovrCap: 88,
+  ovrMax: 98,
   // Editorial: these logins are always crowned regardless of the math landing.
   iconAllowlist: ["torvalds"],
   tier: { immortalMin: 91, goldMin: 84, silverMin: 70 },

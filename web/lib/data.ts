@@ -7,6 +7,7 @@
  */
 import indexJson from "../gen/players.index.json";
 import cardsJson from "../gen/cards.json";
+import photosJson from "../gen/photos.json";
 
 export type FormatBucket = "test" | "odi" | "t20i" | "ipl";
 export type Role = "batter" | "bowler" | "allrounder" | "keeper";
@@ -24,6 +25,8 @@ export interface IndexRow {
   intlCaps: number;
   gformats: number;
   isAnchor: boolean;
+  nation: string | null;
+  lastIplTeam: string | null;
 }
 
 interface MetricCalib {
@@ -67,8 +70,14 @@ export interface CricketerCard {
 
 export const PLAYER_INDEX = indexJson as Record<FormatBucket, IndexRow[]>;
 const CARDS = cardsJson as Record<string, CricketerCard>;
+const PHOTOS = photosJson as Record<string, string>;
 
 /** Full card for a (bucket, playerId), or null. */
 export function getCricketerCard(bucket: FormatBucket, id: string): CricketerCard | null {
   return CARDS[`${bucket}:${id}`] ?? null;
+}
+
+/** Public photo path for a player, or null (→ monogram fallback). */
+export function photoFor(id: string): string | null {
+  return PHOTOS[id] ? `/players/${PHOTOS[id]}` : null;
 }

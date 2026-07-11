@@ -42,15 +42,15 @@ export function CardExperience({
         </aside>
 
         {/* center: card → share → switch */}
-        <div className="order-1 flex flex-col items-center gap-5 lg:order-2">
-          <div key={`c-${seg.id}`} className="gc-swap flex w-full max-w-[340px] justify-center">
+        <div className="order-1 flex flex-col items-center gap-5 lg:order-2 lg:min-w-[500px]">
+          <div key={`c-${seg.id}`} className="gc-swap flex w-full max-w-[500px] justify-center">
             <PlayerCard
               face={seg.card}
               avatarUrl={seg.id === "you" ? avatarUrl : null}
               captureId={CAPTURE_ID}
             />
           </div>
-          <div className="w-full max-w-[340px]">
+          <div className="w-full max-w-[500px]">
             <ShareRow
               captureId={CAPTURE_ID}
               username={you.card.surname.toLowerCase()}
@@ -58,7 +58,7 @@ export function CardExperience({
               shareUrl={shareUrl}
             />
           </div>
-          <div className="w-full max-w-[400px] pt-1">
+          <div className="w-full max-w-[500px] pt-1">
             <FormatSwitch segments={segments} active={active} onChange={setActive} />
           </div>
         </div>

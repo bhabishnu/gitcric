@@ -122,16 +122,16 @@ function weightedOVR(stats: Stats, family: Family): number {
   return Math.min(Math.round(ovr), K.ovrCap);
 }
 
-// §4 — the 88→99 range: influence (stars/followers/reach) gated by real
-// sustained work (lifetime contributions + account age).
+// §4 — the 88→99 range, bought with years + sustained influence (GitFut's
+// formula, for OVR parity).
 function legacyScore(s: Signals): number {
-  const { wAge, wLife, wFoll, wStars, wMax, f } = K.legacy;
+  const { aAge, bActive, cFoll, dStars, eMax, f, activeCap } = K.legacy;
   const z =
-    wAge * Math.log(s.account_age_years + 1) +
-    wLife * Lg(s.total_contributions_lifetime) +
-    wFoll * Lg(s.followers) +
-    wStars * Lg(s.total_stars_owned) +
-    wMax * Lg(s.max_repo_stars) -
+    aAge * Math.log(s.account_age_years + 1) +
+    bActive * Math.min(s.active_years, activeCap) +
+    cFoll * Lg(s.followers) +
+    dStars * Lg(s.total_stars_owned) +
+    eMax * Lg(s.max_repo_stars) -
     f;
   return sigmoid(z);
 }
@@ -180,7 +180,7 @@ export function trace(s: Signals) {
   const family = familyFromShape(stats);
   const baseOVR = weightedOVR(stats, family);
   const L = legacyScore(s);
-  const ovr = clamp(baseOVR + Math.round(K.legacy.bonusMax * L), 1, 99);
+  const ovr = clamp(baseOVR + Math.round(K.legacy.bonusMax * L), 1, K.ovrMax);
   return { raw, center: c, stats, family, baseOVR, L, ovr, focus: focus(s) };
 }
 
@@ -191,13 +191,14 @@ export function buildUserCard(s: Signals): UserCard {
   const family = familyFromShape(stats);
   const baseOVR = weightedOVR(stats, family);
   const L = legacyScore(s);
-  const ovr = clamp(baseOVR + Math.round(K.legacy.bonusMax * L), 1, 99);
+  const ovr = clamp(baseOVR + Math.round(K.legacy.bonusMax * L), 1, K.ovrMax);
   const role = FAMILY_ROLE[family];
   const archetype = archetypeFor(stats, role, ovr);
   return {
     login: s.login,
     name: s.name || s.login,
     avatarUrl: s.avatarUrl,
+    location: s.location,
     stats,
     role,
     family,

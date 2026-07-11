@@ -15,7 +15,9 @@ async function load(usernameRaw: string) {
   const username = usernameRaw.replace(/^@/, "").trim();
   const signals = await fetchSignals(username);
   const you = buildUserCard(signals);
-  const twins = pickTwins(you.ovr, username, PLAYER_INDEX);
+  // Seed on the CANONICAL login (GitHub logins are case-insensitive) so the same
+  // person always gets the same twins regardless of typed case.
+  const twins = pickTwins(you.ovr, you.login, PLAYER_INDEX);
   const segments = buildSegments(you, twins);
   return { you, segments };
 }

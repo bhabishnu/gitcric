@@ -56,6 +56,7 @@ export interface UserCard {
   login: string;
   name: string;
   avatarUrl: string;
+  location: string | null;
   stats: Stats;
   role: Role;
   family: Family;
