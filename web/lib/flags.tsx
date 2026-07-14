@@ -40,7 +40,7 @@ export function flagForLocation(location: string | null): FlagCode | null {
   if (has("canada", "toronto", "vancouver", "montreal")) return "CA";
   if (has("united arab emirates", " uae ", "dubai", "abu dhabi")) return "AE";
   if (has("england", "london", "manchester", "united kingdom", " uk ", "britain", "leeds", "bristol")) return "EN";
-  if (has("united states", " usa ", " u.s.", "america", "new york", "san francisco", "seattle", "boston", "austin", "california", " ca ", " ny ", " tx ", "washington")) return "US";
+  if (has("united states", " usa ", " u.s.", "america", "new york", "san francisco", "seattle", "boston", "austin", "california", " ca ", " ny ", " tx ", "washington", "portland", "oregon", "chicago", "los angeles", "denver", "atlanta")) return "US";
   return null;
 }
 

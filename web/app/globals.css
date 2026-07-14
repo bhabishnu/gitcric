@@ -117,46 +117,56 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   THE CARD — the jewel. The only saturated object in the product; tier finishes
-   and per-format trim live here and nowhere else. Original silhouette: a
-   portrait monolith with one clipped top-right corner + a trim spine. The card
-   is the sanctioned exception to the page's no-gradient rule.
+   THE CARD — the jewel. A die-cut CREST/SHIELD (our own geometry). Layered
+   depth: colorway gradient → tone-on-tone filigree → ghosted watermark → inset
+   frame → portrait → content, all cut to the crest by an SVG clip-path. Tier
+   finishes and per-format trim live here and nowhere else; the card is the
+   sanctioned exception to the page's no-gradient rule.
    ═══════════════════════════════════════════════════════════════════════════ */
 .gc-card {
-  --chamfer: 7cqw;
   --trim: var(--color-crimson);
   --finish-a: #17181c;
   --finish-b: #101115;
   --tier-line: var(--color-hairline-strong);
   --ink: #f4f5f7;
-  width: 100%;
-  max-width: 500px; /* ~700px tall on desktop; shrinks proportionally on mobile */
-  aspect-ratio: 320 / 452;
-  container-type: inline-size; /* the whole interior scales in cqw with the card */
-  padding: 0.3cqw; /* becomes the tier hairline that follows the chamfer */
-  background: var(--tier-line);
-  clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer), 100% 100%, 0 100%);
-}
-.gc-card-inner {
   position: relative;
-  height: 100%;
   width: 100%;
-  padding: 5.8cqw 5.8cqw 6.4cqw;
-  display: flex;
-  flex-direction: column;
+  max-width: 460px; /* 540:820 crest → ~698px tall on desktop; scales down clean */
+  aspect-ratio: 540 / 820;
+  container-type: inline-size; /* the whole interior scales in cqw with the card */
   color: var(--ink);
-  background: linear-gradient(157deg, var(--finish-a) 0%, var(--finish-b) 62%, var(--finish-a) 100%);
-  clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer), 100% 100%, 0 100%);
+  clip-path: url(#gc-shield-clip); /* nothing renders outside the crest */
+  isolation: isolate;
 }
-/* trim spine down the left edge, in the format colour */
-.gc-card-inner::before {
-  content: "";
+.gc-clipdef { position: absolute; width: 0; height: 0; }
+
+/* the layered crest artwork — sits behind everything, fills the whole card */
+.gc-shield {
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 1.2cqw;
-  background: var(--trim);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+}
+.gc-watermark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 150px;
+  letter-spacing: 0.12em;
+  fill: var(--ink);
+  opacity: 0.06;
+}
+.gc-frame {
+  stroke: color-mix(in srgb, var(--trim) 78%, transparent);
+  stroke-width: 1.4;
+}
+/* outer rim carries the tier metal (YOU) or the team trim (cricketers): both
+   live in --tier-line, so one rule is correct for every card. */
+.gc-rim {
+  stroke: var(--tier-line);
+  stroke-width: 2.4;
+  opacity: 0.95;
 }
 
 .gc-card[data-trim="you"] { --trim: var(--color-crimson); }
@@ -178,27 +188,81 @@ body {
   --finish-a: #0f2026; --finish-b: #0a1418; --tier-line: #4fc9e6; --ink: #e8fbff;
 }
 
-.gc-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  /* keep the eyebrow clear of the clipped top-right corner */
-  padding-right: 5cqw;
+/* ── portrait: full-bleed upper zone, dissolved into the card ────────────────
+   Head+shoulders headshots on busy backgrounds → a composited mask melts the
+   photo's rectangular edges into the crest and fades the base into the band. */
+.gc-portrait {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58%;
+  display: grid;
+  place-items: end center;
+  overflow: hidden;
 }
-.gc-ovr-block { display: flex; flex-direction: column; line-height: 0.86; }
+.gc-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 14%; /* favour the head */
+  -webkit-mask-image:
+    radial-gradient(102% 92% at 50% 30%, #000 40%, rgba(0, 0, 0, 0.5) 62%, transparent 80%),
+    linear-gradient(to bottom, #000 60%, transparent 96%);
+  mask-image:
+    radial-gradient(102% 92% at 50% 30%, #000 40%, rgba(0, 0, 0, 0.5) 62%, transparent 80%),
+    linear-gradient(to bottom, #000 60%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+/* top-left scrim keeps the OVR block legible over any photo. Tinted with the
+   card's dark shade (--finish-b) — the tone the ink was contrast-checked
+   against — so it works for both light-ink and dark-ink (CSK/whites) cards. */
+.gc-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    80% 66% at 15% 6%,
+    color-mix(in srgb, var(--finish-b) 88%, transparent) 0%,
+    color-mix(in srgb, var(--finish-b) 32%, transparent) 46%,
+    transparent 72%
+  );
+}
+.gc-monogram {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 44cqw;
+  letter-spacing: 0.02em;
+  opacity: 0.12;
+  align-self: center;
+  margin-bottom: 8cqw;
+}
+
+/* ── OVR block, over the portrait, top-left ─────────────────────────────────── */
+.gc-badges {
+  position: absolute;
+  z-index: 2;
+  top: 6.5cqw;
+  left: 8.5cqw;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.84;
+}
 .gc-ovr {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 17cqw;
+  font-size: 20cqw;
   letter-spacing: -0.02em;
 }
 .gc-role {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 4.1cqw;
+  font-size: 4.3cqw;
   letter-spacing: 0.14em;
-  opacity: 0.82;
-  margin-top: 0.6cqw;
+  opacity: 0.86;
+  margin-top: 0.4cqw;
 }
 .gc-idrow {
   display: flex;
@@ -207,103 +271,89 @@ body {
   margin-top: 2.6cqw;
 }
 .gc-flag {
-  width: 7.5cqw;
+  width: 8cqw;
   aspect-ratio: 3 / 2;
   border-radius: 1px;
   display: block;
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent);
 }
-.gc-tier-badge {
-  font-size: 2.4cqw;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-}
-.gc-team {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 2.5cqw;
-  letter-spacing: 0.06em;
-  margin-top: 1cqw;
-  color: color-mix(in srgb, var(--ink) 55%, transparent);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.gc-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 2.5cqw;
-  letter-spacing: 0.16em;
-  text-align: right;
-  max-width: 28cqw;
-  padding-top: 1.8cqw;
-  opacity: 0.7;
-}
-
-.gc-portrait {
-  flex: 1;
-  display: grid;
-  place-items: center;
-  min-height: 0;
-  padding: 2.4cqw 0;
-}
-.gc-avatar {
-  width: 30cqw;
-  height: 30cqw;
-  max-width: 152px;
-  max-height: 152px;
-  border-radius: 999px;
-  object-fit: cover;
-  border: 1.5px solid color-mix(in srgb, var(--trim) 60%, transparent);
-}
-.gc-monogram {
+/* FORMAT · MATCHES — Barlow Condensed, small, letterspaced, muted */
+.gc-format {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 19cqw;
-  letter-spacing: 0.02em;
-  opacity: 0.16;
+  font-weight: 600;
+  font-size: 3.4cqw;
+  letter-spacing: 0.11em;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
 }
 
+/* ── surname band, hairline rules top + bottom ──────────────────────────────── */
 .gc-namebar {
-  border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
-  padding-top: 2.4cqw;
+  position: absolute;
+  z-index: 2;
+  top: 56%;
+  left: 0;
+  right: 0;
+  padding: 2cqw 8cqw;
+  text-align: center;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
 }
 .gc-surname {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(28px, 12cqw, 60px);
-  letter-spacing: 0.01em;
-  line-height: 0.94;
+  font-size: clamp(26px, 13cqw, 62px);
+  letter-spacing: 0.04em;
+  line-height: 0.92;
   display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.gc-team {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 2.4cqw;
+  letter-spacing: 0.08em;
+  margin-top: 1.2cqw;
+  color: color-mix(in srgb, var(--ink) 58%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+/* ── six stats, two tight centered columns ──────────────────────────────────── */
 .gc-stats {
+  position: absolute;
+  z-index: 2;
+  top: 70%;
+  left: 0;
+  right: 0;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 0 4.7cqw;
-  margin-top: 3.5cqw;
+  grid-template-columns: auto auto auto;
+  justify-content: center;
+  gap: 1.9cqw 6cqw;
 }
 .gc-stat-col { display: flex; flex-direction: column; gap: 1.9cqw; }
-.gc-stat-divider { width: 1px; background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.gc-stat-divider { width: 1px; background: color-mix(in srgb, var(--ink) 14%, transparent); }
 .gc-stat {
   display: flex;
   align-items: baseline;
-  gap: 2.4cqw;
+  gap: 2.2cqw;
 }
 .gc-stat-val {
   font-weight: 700;
-  font-size: 5cqw;
+  font-size: 5.2cqw;
   width: 2.2ch;
   text-align: right;
 }
 .gc-stat-key {
   font-family: var(--font-mono);
   font-size: 2.9cqw;
-  letter-spacing: 0.12em;
-  opacity: 0.6;
+  letter-spacing: 0.1em;
+  opacity: 0.62;
 }
+
 
 /* ── format switch (duplicated-list clip-path tabs) ─────────────────────────── */
 .gc-switch {

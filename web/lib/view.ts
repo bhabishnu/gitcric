@@ -38,8 +38,11 @@ export interface CardFace {
   flag: FlagCode | null;
   /** Cricketer face path, or null → monogram. YOU uses avatarUrl instead. */
   photoFile: string | null;
-  /** The colorway's team/nation name (small caption). */
+  /** Franchise name — IPL cards only (colorways are ambiguous: RCB vs PBKS red).
+   *  Null on nation cards (the flag already names the country) and YOU. */
   teamLabel: string | null;
+  /** Career matches for the FORMAT · MATCHES line; 0 on the YOU card (hidden). */
+  matches: number;
 }
 
 export interface Trait {
@@ -137,6 +140,7 @@ function youSegment(card: UserCard): Segment {
       flag: flagForLocation(card.location),
       photoFile: null,
       teamLabel: null,
+      matches: 0,
     },
     header: {
       handle: `@${card.login}`,
@@ -193,7 +197,9 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
       colorway,
       flag: flagForNation(twin.nation),
       photoFile: photoFor(twin.id),
-      teamLabel: colorway.label,
+      // franchise caption on IPL only; nation cards let the flag do the naming
+      teamLabel: twin.bucket === "ipl" ? colorway.label : null,
+      matches: card.career.matches,
     },
     header: {
       handle: null,
