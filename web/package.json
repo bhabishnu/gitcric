@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
     "export-data": "tsx scripts/export-data.ts",
     "gen-flags": "tsx scripts/gen-flags.ts",
     "copy-check": "tsx scripts/copy-check.ts",

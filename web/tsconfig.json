@@ -17,5 +17,9 @@
     "paths": { "@/*": ["./*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  // scripts/ are build-time data generators that import from ../../src, which is
+  // outside the deployed root and has no node_modules on Vercel. Keeping them out
+  // of the app project is what makes `next build` self-contained; they are still
+  // type-checked locally via tsconfig.scripts.json.
+  "exclude": ["node_modules", "scripts"]
 }

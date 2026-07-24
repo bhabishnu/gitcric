@@ -1,0 +1,16 @@
+// Build-time data-generation scripts. They legitimately reach into ../../src,
+// so they are checked separately from the deployed app (see tsconfig.json).
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "noEmit": true,
+    "incremental": false
+  },
+  // next-env.d.ts pulls in Next's global type augmentations (e.g. RequestInit.next),
+  // which scripts inherit transitively through lib/.
+  "include": ["next-env.d.ts", "scripts/**/*.ts"],
+  "exclude": ["node_modules"]
+}
