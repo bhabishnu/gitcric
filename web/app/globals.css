@@ -270,21 +270,17 @@ body {
   gap: 2.4cqw;
   margin-top: 2.6cqw;
 }
+/* Flag plate. The box is 4:3 (the asset set's ratio) and every flag is drawn
+   `meet`, so rectangular flags fill the plate exactly while Nepal's pennant —
+   the one non-rectangular national flag — sits centered at its true shape on the
+   neutral backing instead of being stretched into a rectangle it doesn't own. */
 .gc-flag {
-  width: 8cqw;
-  aspect-ratio: 3 / 2;
+  width: 9cqw;
+  aspect-ratio: 4 / 3;
   border-radius: 1px;
   display: block;
+  background: color-mix(in srgb, var(--ink) 9%, transparent);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent);
-}
-/* FORMAT · MATCHES — Barlow Condensed, small, letterspaced, muted */
-.gc-format {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 3.4cqw;
-  letter-spacing: 0.11em;
-  white-space: nowrap;
-  color: color-mix(in srgb, var(--ink) 72%, transparent);
 }
 
 /* ── surname band, hairline rules top + bottom ──────────────────────────────── */
@@ -356,6 +352,25 @@ body {
 
 
 /* ── format switch (duplicated-list clip-path tabs) ─────────────────────────── */
+/* ── header tier ────────────────────────────────────────────────────────────
+   The tier moved off the card face and onto the "TEST · 168 matches · IMMORTAL"
+   line. Display family (same as the player name), a step down and letterspaced,
+   so it reads as a RANK next to plain facts. Colours are the page-level tier
+   tokens, not the card's --tier-line rim values: the rim bronze (#6d4326) is
+   tuned to sit on the card's own finish and would fail contrast as page text.
+   Bronze — the darkest of the four — measures 4.95:1 on --color-bg. */
+.gc-tierline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--color-tier-silver);
+}
+.gc-tierline[data-tier="bronze"] { color: var(--color-tier-bronze); }
+.gc-tierline[data-tier="silver"] { color: var(--color-tier-silver); }
+.gc-tierline[data-tier="gold"] { color: var(--color-tier-gold); }
+.gc-tierline[data-tier="immortal"] { color: var(--color-tier-immortal); }
+
 .gc-switch {
   position: relative;
   display: grid;

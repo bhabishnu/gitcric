@@ -4,7 +4,7 @@
  * shaping stays on the server. Segment 0 is always YOU.
  */
 import { archetypeFor } from "./scoring/archetypes";
-import type { UserCard, StatKey, Tier } from "./scoring/types";
+import type { Archetype, Trait, UserCard, StatKey, Tier } from "./scoring/types";
 import type { CricketerCard, IndexRow, Role } from "./data";
 import { getCricketerCard, photoFor, type FormatBucket } from "./data";
 import type { Twin } from "./match/matcher";
@@ -41,14 +41,9 @@ export interface CardFace {
   /** Franchise name — IPL cards only (colorways are ambiguous: RCB vs PBKS red).
    *  Null on nation cards (the flag already names the country) and YOU. */
   teamLabel: string | null;
-  /** Career matches for the FORMAT · MATCHES line; 0 on the YOU card (hidden). */
-  matches: number;
 }
 
-export interface Trait {
-  label: string;
-  note: string;
-}
+export type { Trait } from "./scoring/types";
 
 export interface ScoutMetric {
   label: string;
@@ -61,7 +56,9 @@ export interface Segment {
   id: SegmentId;
   tabLabel: string;
   card: CardFace;
-  header: { handle: string | null; sub: string | null; commentary: string };
+  /** `sub` is the "TEST · 168 matches" line; `tierLabel` is appended to it in the
+   *  page header — the card face itself names neither format, matches nor tier. */
+  header: { handle: string | null; sub: string | null; tierLabel: string; commentary: string };
   archetype: string;
   traits: Trait[];
   /** Right panel is a discriminated union: the scout report (YOU) or a
@@ -94,8 +91,13 @@ function surname(name: string): string {
 const statList = (stats: Record<StatKey, number>) =>
   STAT_ORDER.map((k) => ({ key: k, label: STAT_LABEL[k], value: stats[k] }));
 
-/** Cricket-vernacular traits from the strongest axes (top 3 above the median). */
-function traitsFor(stats: Record<StatKey, number>, role: Role): Trait[] {
+/**
+ * The archetype's own trait lines first (so two cards sharing a top axis but not
+ * an archetype don't read identically), topped up from the strongest axes. Note
+ * the stat lines stay delivery-type-neutral for the same reason the archetype
+ * copy does — we know how well someone bowls, never how.
+ */
+function traitsFor(stats: Record<StatKey, number>, archetype: Archetype): Trait[] {
   const T: Record<StatKey, Trait> = {
     BAT: { label: "Runs in the book", note: "averages heavily, rarely gives it away" },
     POW: { label: "Clears the ropes", note: "changes gears and takes the game deep" },
@@ -106,15 +108,14 @@ function traitsFor(stats: Record<StatKey, number>, role: Role): Trait[] {
   };
   const ranked = [...STAT_ORDER].sort((a, b) => stats[b] - stats[a]);
   const picks = ranked.slice(0, 3).filter((k) => stats[k] >= 55);
-  const traits = (picks.length ? picks : ranked.slice(0, 2)).map((k) => T[k]);
-  // a role flavour chip up front
-  const roleChip: Record<Role, Trait> = {
-    batter: { label: "Top-order presence", note: "the innings is built around them" },
-    bowler: { label: "Frontline operator", note: "captain throws them the ball first" },
-    allrounder: { label: "Two-in-one", note: "picks the side on either discipline" },
-    keeper: { label: "Gloves and runs", note: "keeps every ball, bats with freedom" },
-  };
-  return [roleChip[role], ...traits].slice(0, 4);
+  const statTraits = (picks.length ? picks : ranked.slice(0, 2)).map((k) => T[k]);
+
+  const out: Trait[] = [...archetype.traits];
+  for (const t of statTraits) {
+    if (out.length >= 4) break;
+    if (!out.some((x) => x.label === t.label)) out.push(t);
+  }
+  return out.slice(0, 4);
 }
 
 function num(n: number, d = 1): string {
@@ -140,15 +141,15 @@ function youSegment(card: UserCard): Segment {
       flag: flagForLocation(card.location),
       photoFile: null,
       teamLabel: null,
-      matches: 0,
     },
     header: {
       handle: `@${card.login}`,
       sub: card.topLanguage,
+      tierLabel: card.tier.toUpperCase(),
       commentary: card.archetype.blurb,
     },
     archetype: card.archetype.name,
-    traits: traitsFor(card.stats, card.role),
+    traits: traitsFor(card.stats, card.archetype),
     right: {
       kind: "scout",
       metrics: card.scout.map((s) => ({ label: s.label, value: s.value, fill: s.fill, axis: s.axis })),
@@ -182,6 +183,10 @@ function careerRows(c: CricketerCard, role: Role): { label: string; value: strin
 function twinSegment(twin: Twin, card: CricketerCard): Segment {
   const role = twin.role;
   const colorway = colorwayFor(twin.bucket, twin.nation, twin.lastIplTeam);
+  // Derived from THIS format's stats/OVR — a player's Test and IPL cards are
+  // free to land on different archetypes, and do when the numbers differ.
+  const tier = tierFromOvr(twin.ovr);
+  const archetype = archetypeFor(twin.stats, role, twin.ovr);
   return {
     id: twin.bucket,
     tabLabel: BUCKET_LABEL[twin.bucket],
@@ -192,22 +197,22 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
       roleLabel: ROLE_LABEL[role],
       eyebrow: cricketerEyebrow(twin.ovr),
       stats: statList(twin.stats),
-      tier: tierFromOvr(twin.ovr),
+      tier,
       trim: twin.bucket,
       colorway,
       flag: flagForNation(twin.nation),
       photoFile: photoFor(twin.id),
       // franchise caption on IPL only; nation cards let the flag do the naming
       teamLabel: twin.bucket === "ipl" ? colorway.label : null,
-      matches: card.career.matches,
     },
     header: {
       handle: null,
       sub: `${BUCKET_LABEL[twin.bucket]} · ${card.career.matches} matches`,
-      commentary: archetypeFor(twin.stats, role, twin.ovr).blurb,
+      tierLabel: tier.toUpperCase(),
+      commentary: archetype.blurb,
     },
-    archetype: archetypeFor(twin.stats, role, twin.ovr).name,
-    traits: traitsFor(twin.stats, role),
+    archetype: archetype.name,
+    traits: traitsFor(twin.stats, archetype),
     right: {
       kind: "career",
       rows: careerRows(card, role),

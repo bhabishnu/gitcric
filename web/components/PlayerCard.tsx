@@ -9,8 +9,9 @@ import { Flag } from "../lib/flags";
  * The shield path is drawn as a layered SVG background (colorway gradient →
  * tone-on-tone filigree → ghosted watermark → inset frame) AND used as a
  * clip-path so nothing renders outside the crest. FUT layout grammar on top:
- * huge OVR, role, flag + tier badge over a full-bleed portrait; a surname band;
- * six stats in two tight columns; a format·team caption at the point.
+ * huge OVR, role and flag over a full-bleed portrait; a surname band (plus a
+ * franchise caption on IPL); six stats in two tight columns. Format, matches and
+ * tier are NOT on the face — they're named once, in the page header.
  */
 const LEFT = ["BAT", "BWL", "FLD"] as const;
 const RIGHT = ["POW", "ECO", "IMP"] as const;
@@ -94,18 +95,13 @@ export function PlayerCard({
         <span className="gc-scrim" aria-hidden />
       </div>
 
-      {/* OVR + role + identity, stacked top-left over the portrait. Tier is NOT
-          named here — it lives in the frame/finish and the page header chip. */}
+      {/* OVR + role + flag, stacked top-left over the portrait. Tier is NOT named
+          here — it lives in the frame/finish and the page header line. */}
       <div className="gc-badges">
         <span className="gc-ovr tabular">{face.ovr}</span>
         <span className="gc-role">{face.roleLabel}</span>
         <div className="gc-idrow">
           {face.flag && <Flag code={face.flag} className="gc-flag" />}
-          {face.trim !== "you" && (
-            <span className="gc-format">
-              {face.trim.toUpperCase()} · {face.matches} MATCHES
-            </span>
-          )}
         </div>
       </div>
 
@@ -173,6 +169,17 @@ function ShieldBg({ watermark, tier }: { watermark: string; tier: string }) {
         y={612}
         textAnchor="middle"
         dominantBaseline="middle"
+        // Inline, not via the CSS class alone — same reason as the frame stroke
+        // below: html-to-image doesn't carry class-based styling on SVG children
+        // into the PNG, and the watermark was exporting at the default ~16px.
+        style={{
+          fontFamily: "var(--font-display)",
+          fontWeight: 800,
+          fontSize: 150,
+          letterSpacing: "0.12em",
+          fill: "var(--ink)",
+          opacity: 0.06,
+        }}
       >
         {watermark}
       </text>

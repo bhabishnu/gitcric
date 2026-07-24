@@ -45,11 +45,19 @@ export type Role = "batter" | "bowler" | "allrounder" | "keeper";
 
 export type Tier = "bronze" | "silver" | "gold" | "immortal";
 
+export interface Trait {
+  label: string;
+  note: string;
+}
+
 export interface Archetype {
   key: string;
   name: string;
   /** Cricket-vernacular commentary one-liner. */
   blurb: string;
+  /** Trait lines written for THIS archetype, so two cards with the same top axis
+   *  but different archetypes don't read as copy-paste. */
+  traits: Trait[];
 }
 
 export interface UserCard {

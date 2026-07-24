@@ -135,10 +135,19 @@ export function CardHeader({ segment }: { segment: Segment }) {
             {c.roleLabel}
           </span>
         </div>
-        <p className="mt-1.5 flex items-center gap-2 text-[13px] text-[var(--color-muted)]">
+        {/* TEST · 168 matches · IMMORTAL — the tier is named here and nowhere on
+            the card face. Tier picks up the display family, letterspaced and a
+            step down, so it reads as a rank rather than another fact. */}
+        <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[13px] text-[var(--color-muted)]">
           {segment.header.handle && <span>{segment.header.handle}</span>}
           {segment.header.handle && segment.header.sub && <span className="text-[var(--color-faint)]">·</span>}
           {segment.header.sub && <span>{segment.header.sub}</span>}
+          {(segment.header.handle || segment.header.sub) && (
+            <span className="text-[var(--color-faint)]">·</span>
+          )}
+          <span className="gc-tierline" data-tier={segment.card.tier}>
+            {segment.header.tierLabel}
+          </span>
         </p>
       </div>
       <p className="w-full text-[13px] italic leading-snug text-[var(--color-muted)] sm:w-auto sm:flex-1 sm:pl-4 sm:text-right sm:not-italic">

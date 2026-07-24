@@ -9,6 +9,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "export-data": "tsx scripts/export-data.ts",
+    "gen-flags": "tsx scripts/gen-flags.ts",
+    "copy-check": "tsx scripts/copy-check.ts",
     "calibrate": "tsx scripts/calibrate.ts",
     "match-check": "tsx scripts/match-check.ts"
   },
@@ -25,6 +27,7 @@
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
     "better-sqlite3": "^11.8.1",
+    "flag-icons": "^7.5.0",
     "playwright-core": "^1.61.1",
     "tailwindcss": "^4.0.0",
     "tsx": "^4.19.2",
