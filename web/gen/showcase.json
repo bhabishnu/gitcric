@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-26T08:58:47.050Z",
+  "generatedAt": "2026-07-26T14:17:39.751Z",
   "cards": [
     {
       "login": "torvalds",
@@ -7,7 +7,7 @@
       "face": {
         "surname": "TORVALDS",
         "fullName": "Linus Torvalds",
-        "ovr": 98,
+        "ovr": 96,
         "roleLabel": "BATTER",
         "eyebrow": "GENERATIONAL",
         "stats": [
@@ -56,7 +56,7 @@
       "face": {
         "surname": "SINDRESORHUS",
         "fullName": "Sindre Sorhus",
-        "ovr": 98,
+        "ovr": 96,
         "roleLabel": "BATTER",
         "eyebrow": "GENERATIONAL",
         "stats": [
@@ -105,7 +105,7 @@
       "face": {
         "surname": "KNADH",
         "fullName": "Kailash Nadh",
-        "ovr": 98,
+        "ovr": 94,
         "roleLabel": "BATTER",
         "eyebrow": "GENERATIONAL",
         "stats": [
@@ -154,7 +154,7 @@
       "face": {
         "surname": "KARPATHY",
         "fullName": "Andrej",
-        "ovr": 98,
+        "ovr": 96,
         "roleLabel": "BATTER",
         "eyebrow": "GENERATIONAL",
         "stats": [

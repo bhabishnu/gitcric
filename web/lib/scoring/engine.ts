@@ -48,13 +48,14 @@ function rawStats(s: Signals): Stats {
 
 // §3.1 — magnitude sigmoid → the center the stats gravitate toward.
 function center(s: Signals): number {
-  const { wStars, wFollowers, wLifetime, wAge, b, lo, hi } = K.magnitude;
+  const { wStars, wFollowers, wLifetime, wAge, b, temp, lo, hi } = K.magnitude;
   const M = sigmoid(
-    wStars * Lg(s.total_stars_owned) +
+    (wStars * Lg(s.total_stars_owned) +
       wFollowers * Lg(s.followers) +
       wLifetime * Lg(s.total_contributions_lifetime) +
       wAge * s.account_age_years +
-      b,
+      b) /
+      temp,
   );
   return lerp(lo, hi, M);
 }
@@ -115,17 +116,17 @@ function familyFromShape(st: Stats): Family {
   return bat >= bowl ? "Batting" : "Bowling";
 }
 
-// §3.6 — position-weighted; stats alone cap at 88.
+// §3.6 — position-weighted; stats alone cap at K.ovrCap.
 function weightedOVR(stats: Stats, family: Family): number {
   const w = WEIGHTS[family];
   const ovr = STATS.reduce((s, k) => s + stats[k] * w[k], 0);
   return Math.min(Math.round(ovr), K.ovrCap);
 }
 
-// §4 — the 88→99 range, bought with years + sustained influence (GitFut's
-// formula, for OVR parity).
+// §4 — the greatness band, bought with REACH and gated (not driven) by tenure.
+// See K.legacy for why GitFut's constants had to be reshaped rather than kept.
 function legacyScore(s: Signals): number {
-  const { aAge, bActive, cFoll, dStars, eMax, f, activeCap } = K.legacy;
+  const { aAge, bActive, cFoll, dStars, eMax, f, temp, activeCap } = K.legacy;
   const z =
     aAge * Math.log(s.account_age_years + 1) +
     bActive * Math.min(s.active_years, activeCap) +
@@ -133,7 +134,17 @@ function legacyScore(s: Signals): number {
     dStars * Lg(s.total_stars_owned) +
     eMax * Lg(s.max_repo_stars) -
     f;
-  return sigmoid(z);
+  return sigmoid(z / temp);
+}
+
+/** The climb from the stats-alone cap to the ceiling. `floor` is the entry to
+ *  the greatness band — below it an account is scored on its stats alone, so
+ *  ordinary accounts are untouched by this layer. `gamma` shapes what's left:
+ *  the compression that makes the top rare is carried by `temp` and `floor`,
+ *  and gamma just trims the curve inside the band. */
+function legacyBonus(L: number): number {
+  const { bonusMax, floor, gamma } = K.legacy;
+  return bonusMax * Math.pow(clamp01((L - floor) / (1 - floor)), gamma);
 }
 
 function tierFor(ovr: number): Tier {
@@ -180,7 +191,7 @@ export function trace(s: Signals) {
   const family = familyFromShape(stats);
   const baseOVR = weightedOVR(stats, family);
   const L = legacyScore(s);
-  const ovr = clamp(baseOVR + Math.round(K.legacy.bonusMax * L), 1, K.ovrMax);
+  const ovr = clamp(baseOVR + Math.round(legacyBonus(L)), 1, K.ovrMax);
   return { raw, center: c, stats, family, baseOVR, L, ovr, focus: focus(s) };
 }
 
@@ -191,7 +202,7 @@ export function buildUserCard(s: Signals): UserCard {
   const family = familyFromShape(stats);
   const baseOVR = weightedOVR(stats, family);
   const L = legacyScore(s);
-  const ovr = clamp(baseOVR + Math.round(K.legacy.bonusMax * L), 1, K.ovrMax);
+  const ovr = clamp(baseOVR + Math.round(legacyBonus(L)), 1, K.ovrMax);
   const role = FAMILY_ROLE[family];
   const archetype = archetypeFor(stats, role, ovr);
   return {
