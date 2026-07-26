@@ -15,6 +15,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | A Zampa | Storm machine | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAdam%20Zampa%202023.jpg) |
 | AA Donald | Robwildlife2 | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAllan%20Donald.jpg) |
 | AB Agarkar | Bollywood Hungama | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAjit%20Agarkar.jpg) |
+| AB de Villiers | YellowMonkey/Blnguyen | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAB%20de%20Villiers%20glove.jpg) |
 | Abdul Razzaq | Charaka Ranasinghe | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ARazzaq.jpg) |
 | Abdur Razzak | Nev1 | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAdbur%20Razzak%20bowling%202010.jpg) |
 | Abdur Rehman | Charaka Ranasinghe | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAbdur%20Rehman.jpg) |
@@ -33,7 +34,6 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | AJ Strauss | PaddyBriggs | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3AAndrew%20Strauss.JPG) |
 | AJ Tye | www.davidmolloyphotography.com from Sydney, Australia | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3A2018.02.03.20.38.56-AUSvNZL%20T20%20NZL%20innings%2C%20SCG-0001%20(38618205890)%20(Tye%20cropped).jpg) |
 | AK Markram | Marcel Sigg | CC0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAiden%20Markram.jpg) |
-| AM Rahane | Bollywood Hungama | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAjinkya%20Rahane.jpg) |
 | AN Cook | Kroome111 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAlastair%20Cook%20vs%20Upminster%20CC.jpg) |
 | AN Petersen | Harrias | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAlviro%20Petersen.jpg) |
 | Anamul Haque | Pro-Vc AIUB | CC BY 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAnamul%20Haque%20Bijoy%2C%20AIUB%2021st%20Convocation%20(cropped).jpg) |
@@ -50,6 +50,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | BA Stokes | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ABEN%20STOKES%20(11704837023)%20(cropped).jpg) |
 | Babar Azam | ICNA | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ABabar%20azam%202023.jpg) |
 | BAW Mendis | Harrias | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMendis%20bowling.jpg) |
+| BB McCullum | Ben Sutherland from Crystal Palace, London, UK | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AEngland%20vs.%20New%20Zealand%202015%20(3)%20(McCullum%20further%20cropped).jpg) |
 | BC Lara | p_a_h | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ALord's%20Bicentenary%20Anniversary%20Match%20-%20Brian%20Lara%20(cropped).jpg) |
 | BJ Haddin | DXR | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3ABrad%20Haddin%20at%20Test%202010.jpg) |
 | BJ Hodge | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ABrad%20Hodge%202008.jpg) |
@@ -96,14 +97,16 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | G Gambhir | Blnguyen | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGautam%20Gambhir%203.jpg) |
 | G Kirsten | Sumeet Moghe | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGaryKirsten.jpg) |
 | G Malla | Krish Dulal | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGyanendra%20Malla.JPG) |
-| GA Gooch | Gwynne Mack | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGraham%20Gooch%202005.jpg) |
+| GA Gooch | fourthandfifteen | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGraham%20Gooch%20OBE%20(3494096746).jpg) |
 | GB Hogg | BradleyHogg.jpg: Deon Maritz from Cape Town, South Africa derivative work: IgnorantArmies | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ABradleyHogg%20(cropped).jpg) |
+| GC Smith | GraemeSmith.jpg: TonyPatterson derivative work: Bigforrap (talk) | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGraeme%20Smith%20portrait.jpg) |
 | GC Wilson | Rorser at English Wikipedia | CC BY 2.5 | [Commons](https://commons.wikimedia.org/wiki/File%3AIreland%20compete%20against%20Essex%20at%20Castle%20Avenue%2C%20Dublin%2C%2013%20May%202007%2C%20Friends%20Provident%20Trophy%20-%20100%201795%20(2).jpg) |
 | GD McGrath | jjron | GFDL 1.2 | [Commons](https://commons.wikimedia.org/wiki/File%3AGlenn%20McGrath%20Portrait%2C%202011%2C%20jjron.jpg) |
 | GH Dockrell | Harrias | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGeorge%20dockrell.jpg) |
 | GH Vihari | Cricket OTT | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AHanuma%20Vihari.png) |
 | GJ Bailey | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGeorge%20Bailey%202008.jpg) |
 | GJ Maxwell | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGlenn%20Maxwell%203.jpg) |
+| GO Jones | Blnguyen | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGeraint%20Jones.jpg) |
 | GP Swann | PaddyBriggs | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3AGraeme%20Swann%2C%202009.jpg) |
 | GS Ballance | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AGary%20Ballance%202014.jpg) |
 | Habibul Bashar | Nurunnaby Chowdhury (Hasive) | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AHabibul%20Bashar%20(1)%20(cropped).jpg) |
@@ -129,7 +132,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | Javed Omar | U.S. Embassy Dhaka | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3AJaved%20Omar.jpg) |
 | JC Archer | Ben Sutherland from Crystal Palace, London, UK | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAustralia%20captain%20wicketkeeper%20Tim%20Paine%20and%20spin%20bowler%20Nathan%20Lyon%20of%20Australia%20discuss%20tactics%20as%20Jofra%20Archer%20walks%20to%20the%20wicket%20on%20Day%204%20of%20the%203rd%20Test%20of%20the%202019%20Ashes%20at%20Headingley%20(48630967226)%20(Archer%20cropped).jpg) |
 | JC Buttler | Ytfc23 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AJos%20Buttler%202017.jpg) |
-| JE Root | Ben Sutherland | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AEngland%20captain%20Joe%20Root%202019.jpg) |
+| JE Root | University of Wolverhampton | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AJoe%20Root%20HIP1487%20(cropped).jpg) |
 | JE Taylor | BIFF Cricket TV | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AJerome%20Taylor%20(1).jpg) |
 | JEC Franklin | Ben Sutherland | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AJames%20Franklin%20and%20Joe%20Burns.jpg) |
 | JH Davey | Ytfc23 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AJosh%20Davey.jpg) |
@@ -178,9 +181,10 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | M Azharuddin | BBC News اردو | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMohammad%20Azharuddin%20(1).jpg) |
 | M Kartik | Harrias | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMurali%20kartik%20bowling.jpg) |
 | M Morkel | YellowMonkey/Blnguyen | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMorne%20Morkel.jpg) |
-| M Muralitharan | Unknown | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMuralitharanBust2004IMG.JPG) |
+| M Muralitharan | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMUTTIAH%20MURALITHARAN%20(5155181205).jpg) |
 | M Ntini | YellowMonkey/Blnguyen | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMakhaya%20Ntini%204.jpg) |
 | M Vijay | Dee03 | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMurali%20Vijay.jpg) |
+| MA Agarwal | Akshayparmar.gu | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMayank%20agarwal%20(cropped).jpg) |
 | MA Starc | Prime Video AU &amp; NZ | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMitchell%20Starc%202023.jpg) |
 | MA Wood | Ytfc23 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMark%20Wood%20cricketer.jpg) |
 | Mahmudullah | Nurunnaby Chowdhury (Hasive) | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMahmudullah%20Riyad%20(2)%20(cropped).jpg) |
@@ -221,6 +225,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | MV Boucher | Harrias | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AMarkboucher.jpg) |
 | N Boje | Steelback at English Wikipedia | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ANickyBoje.JPG) |
 | N Deonarine | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ANARSINGH%20DEONARINE.jpg) |
+| Naseem Shah | BBC Urdu | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ANaseem-Shah.png) |
 | Nasir Hossain | Cricfrenzy Tube | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3A%E0%A6%A8%E0%A6%BE%E0%A6%B8%E0%A6%BF%E0%A6%B0%20%E0%A6%B9%E0%A7%8B%E0%A6%B8%E0%A7%87%E0%A6%A8.png) |
 | Nazmul Hossain Shanto | Rocky Masum | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ANajmul%20Hossain%20Shanto.jpg) |
 | NJ Astle | Unknown | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AAustralia%20vs.%20New%20Zealand%20(cropped).jpg) |
@@ -237,14 +242,17 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | PP Chawla | Blnguyen | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3APiyush%20Chawla.jpg) |
 | PP Ojha | Dee03 | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3APragyan%20Ojha.jpg) |
 | PR Stirling | Harrias | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3APaul%20Stirling.jpg) |
+| PSP Handscomb | Naparazzi | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3APeter%20Handscomb.jpg) |
 | PWH de Silva | 04 ATM 04 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AWaniya.jpg) |
 | Q de Kock | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AQUINTON%20DE%20KOCK%20(15085160584).jpg) |
+| R Ashwin | Dee03 | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ARavi%20Ashwin.jpg) |
 | R Dravid | Prime Minister's Office | GODL-India | [Commons](https://commons.wikimedia.org/wiki/File%3ARahul%20Dravid%20in%20PMO%20New%20Delhi.jpg) |
 | R Rampaul | The Madras | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ARavi%20Rampaul.jpg) |
 | RA Jadeja | Prime Minister's Office | GODL-India | [Commons](https://commons.wikimedia.org/wiki/File%3ARavindrasinh%20Jadeja%20during%20BGT%20in%20Ahemdabad.jpg) |
 | RAS Lakmal | Dave Morton | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3A1%2041%20Suranga%20Lakmal.jpg) |
 | RE van der Merwe | Ytfc23 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ARoelof%20van%20der%20Merwe.jpg) |
 | RG Sharma | Prime Minister's Office | GODL-India | [Commons](https://commons.wikimedia.org/wiki/File%3ARohit%20Sharma%20in%20PMO%20New%20Delhi.jpg) |
+| RJ Harris | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ARyan%20Harris%202014.jpg) |
 | RJ Peterson | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ARobin%20Peterson.jpg) |
 | RJ Sidebottom | Nic Redhead | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ARyan%20Sidebottom.jpg) |
 | RJW Topley | Kyle Andrews | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AReece%20Topley.png) |
@@ -291,7 +299,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | SP Fleming | Oliver Brown | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AStephen%20Fleming%20captain.jpg) |
 | SP Narine | Kolkata Knight Riders - Official | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ASunil%20Narine.jpg) |
 | SPD Smith | NAPARAZZI | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ASTEVE%20SMITH%20(11705303043).jpg) |
-| SR Tendulkar | Bollywood Hungama | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ASachin%20at%20Castrol%20Golden%20Spanner%20Awards%20(crop).jpg) |
+| SR Tendulkar | Blnguyen | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ASachin%20Tendulkar%20cropped.jpg) |
 | SR Watson | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AShane%20Watson.jpg) |
 | SS Iyer | 247 Entertainment | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AShreyas%20Iyer%202021.jpg) |
 | SSJ Brooks | Calistemon | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AShamarh%20Brooks%20batting%20at%20Perth%20Stadium%2C%20First%20Test%20Australia%20versus%20West%20Indies%2C%202%20December%202022%2010.jpg) |

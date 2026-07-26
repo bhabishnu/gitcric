@@ -12,7 +12,8 @@
  *   gen/photos.json                 { playerId: filename } manifest for the app
  */
 import Database from "better-sqlite3";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import sharp from "sharp";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -51,6 +52,60 @@ const COMMONS_API = "https://commons.wikimedia.org/w/api.php";
 
 const limitArg = process.argv.indexOf("--limit");
 const LIMIT = limitArg >= 0 ? parseInt(process.argv[limitArg + 1], 10) : Infinity;
+/** Re-download even when the file already exists (for a width/quality upgrade). */
+const REFETCH = process.argv.includes("--refetch");
+/** `--only id,id` restricts the run to specific player ids — for iterating on a
+ *  single override without touching the other 300+ faces. */
+const onlyArg = process.argv.indexOf("--only");
+const ONLY = onlyArg >= 0 ? new Set(process.argv[onlyArg + 1].split(",").map((s) => s.trim())) : null;
+
+/**
+ * Requested thumbnail width. Was 500, which capped EVERY face at 500px even when
+ * Commons held a far larger original — the card's portrait zone is ~460 CSS px
+ * wide, i.e. ~920 device px on a retina screen, so 500px was being upscaled ~1.8x
+ * and read as blur. 1000 covers the retina case with no meaningful waste;
+ * Commons returns the original when it is smaller than this.
+ */
+const THUMB_W = 1000;
+/** Re-encode quality. Commons thumbs are generously encoded; 80 (mozjpeg) keeps
+ *  these visually identical at roughly half the bytes, which matters at 300+. */
+const JPEG_Q = 80;
+
+/**
+ * Per-player overrides, keyed by OUR player id — they beat the Wikidata P18
+ * pick, which is sometimes an action/stadium shot rather than a face.
+ * Attribution is unaffected: these run through the same commonsInfo() lookup,
+ * so CREDITS.json / CREDITS.md pick up the new author and licence themselves.
+ */
+const PHOTO_OVERRIDES: Record<string, string> = {
+  // Wikidata's pick is 190x260 at ORIGINAL — nothing to re-fetch, it is simply
+  // a tiny file. This one is a sun-hat head-shot, eyes visible, 1265x1273.
+  // Head-and-shoulders in the India sun-hat, face clear. The batting action
+  // shots ("Tendulkar batting against Australia, October 2010 (1)" and its
+  // cropped sibling) were trialled and REJECTED: landscape sources lose 27-47%
+  // of their width to the portrait crop, and he is helmeted and head-down, so
+  // no face survives. Do not re-try them.
+  d2c2b2d5: "Sachin Tendulkar cropped.jpg", // SR Tendulkar
+  // Wikidata's pick is a wide stadium shot: full body at the crease, helmeted,
+  // crowd + hoarding. The card crops to the upper-centre, so it showed crowd.
+  a343262c: "Joe Root HIP1487 (cropped).jpg", // JE Root
+  // Stored file was 117x133 — unusably small.
+  "70b37e7b": "Graham Gooch OBE (3494096746).jpg", // GA Gooch
+  // Wikidata's pick is a good face but sits so low that the name plate clips
+  // his chin, and no crop can fix it (the cover-scale is width-driven, so a
+  // shorter source only pulls the window up). This one frames higher.
+  "4ba44e19": "MUTTIAH MURALITHARAN (5155181205).jpg", // M Muralitharan
+};
+
+/**
+ * Players who get the monogram instead of a photo. Commons has no usable
+ * portrait — better a clean monogram than a broken or unrecognisable face.
+ */
+const PHOTO_EXCLUDE = new Set<string>([
+  // AM Rahane — stored file was 83x169. Commons offers only a watermarked
+  // full-body red-carpet shot and a two-person awards photo; no portrait.
+  "29e95537",
+]);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -107,7 +162,7 @@ interface ImgInfo { thumburl: string; license: string; licenseUrl: string; artis
 async function commonsInfo(files: string[]): Promise<Map<string, ImgInfo>> {
   const titles = files.map((f) => `File:${f}`).join("|");
   const url = `${COMMONS_API}?${new URLSearchParams({
-    action: "query", titles, redirects: "1", prop: "imageinfo", iiprop: "extmetadata|url", iiurlwidth: "500", format: "json",
+    action: "query", titles, redirects: "1", prop: "imageinfo", iiprop: "extmetadata|url", iiurlwidth: String(THUMB_W), format: "json",
   })}`;
   const res = await fetchRetry(url, { headers: { "User-Agent": UA } });
   if (!res.ok) throw new Error(`Commons ${res.status}`);
@@ -151,18 +206,34 @@ async function commonsInfo(files: string[]): Promise<Map<string, ImgInfo>> {
 
 async function download(u: string, dest: string): Promise<boolean> {
   // upload.wikimedia.org rate-limits bursts — retry 429/5xx with backoff.
-  for (let attempt = 0; attempt < 4; attempt++) {
+  for (let attempt = 0; attempt < 5; attempt++) {
     try {
       const res = await fetch(u, { headers: { "User-Agent": UA, Referer: "https://commons.wikimedia.org/" } });
       if (res.ok) {
-        writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+        const buf = Buffer.from(await res.arrayBuffer());
+        // A rate-limited response can still come back 200 with an HTML error
+        // page; writing that would leave a "JPEG" the browser can't decode.
+        if (!(buf[0] === 0xff && buf[1] === 0xd8) && buf.slice(0, 8).toString("hex") !== "89504e470d0a1a0a") {
+          throw new Error("not an image");
+        }
+        // Normalise: bound the width and re-encode. Commons hands back the
+        // ORIGINAL when it declines to render a thumb, so iiurlwidth alone does
+        // not cap anything — without this a 4000px original would land on disk
+        // whole. 1000 still clears the card's ~920 device-px retina need.
+        writeFileSync(
+          dest,
+          await sharp(buf)
+            .resize({ width: THUMB_W, withoutEnlargement: true })
+            .jpeg({ quality: JPEG_Q, mozjpeg: true })
+            .toBuffer(),
+        );
         return true;
       }
       if (res.status !== 429 && res.status < 500) return false; // hard failure — don't retry
     } catch {
-      /* network hiccup — retry */
+      /* network hiccup / bad payload — retry */
     }
-    await sleep(400 * 2 ** attempt); // 400, 800, 1600, 3200ms
+    await sleep(500 * 2 ** attempt); // 0.5, 1, 2, 4, 8s
   }
   return false;
 }
@@ -178,6 +249,7 @@ async function main() {
   `).all() as { id: string; name: string }[])
     .map((p) => ({ ...p, cid: caIds.get(p.id) ?? "" }))
     .filter((p) => p.cid)
+    .filter((p) => !ONLY || ONLY.has(p.id))
     .slice(0, LIMIT);
   console.log(`${players.length} recognizable players with a cricketarchive id`);
 
@@ -218,6 +290,26 @@ async function main() {
   }
   console.log(`Wikidata: ${cidToFile.size} players have a Commons image`);
 
+  // Manual picks beat the automatic one. Applied here, before any download, so
+  // overridden players flow through the identical licence/credit path.
+  const byId = new Map(players.map((p) => [p.id, p]));
+  for (const [id, file] of Object.entries(PHOTO_OVERRIDES)) {
+    const p = byId.get(id);
+    if (!p) { console.log(`  override skipped — no such player ${id}`); continue; }
+    cidToFile.set(p.cid, file);
+    console.log(`  override: ${p.name} → ${file}`);
+  }
+  // Excluded players fall back to the monogram: drop any stored face + manifest
+  // entry, so re-running can't quietly resurrect the bad image.
+  for (const id of PHOTO_EXCLUDE) {
+    const p = byId.get(id);
+    if (p) cidToFile.delete(p.cid);
+    delete manifest[id];
+    delete credits[id];
+    rmSync(join(PHOTO_DIR, `${id}.jpg`), { force: true });
+    console.log(`  excluded (monogram): ${p?.name ?? id}`);
+  }
+
   // 2) Commons imageinfo (license + thumburl), 3) download if not already present
   let saved = 0, skippedNonFree = 0, noMeta = 0, noThumb = 0, dlFail = 0;
   const entries = [...cidToFile.entries()];
@@ -239,12 +331,12 @@ async function main() {
       if (!meta.thumburl) { noThumb++; continue; }
       if (!freeLicense(meta.license)) { skippedNonFree++; continue; }
       const dest = join(PHOTO_DIR, `${player.id}.jpg`);
-      let ok = existsSync(dest);
+      let ok = existsSync(dest) && !REFETCH;
       if (!ok) {
         ok = await download(meta.thumburl, dest);
         if (ok) saved++;
         else dlFail++;
-        await sleep(60);
+        await sleep(150); // gentler on upload.wikimedia.org during a full refetch
       }
       if (ok) {
         manifest[player.id] = `${player.id}.jpg`;
