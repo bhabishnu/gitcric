@@ -22,9 +22,14 @@ function Bar({ fill }: { fill: number }) {
   );
 }
 
-/** Where the OVR sits on the 40..99 scale, one crimson marker. */
-function Distribution({ ovr }: { ovr: number }) {
-  const pct = ovrToPercentile(ovr);
+/**
+ * Where the OVR sits on the 40..99 scale, one crimson marker. `percentile`
+ * overrides the label when a real population stat is available (the YOU card
+ * ranks against the cricketer distribution); the marker always tracks the OVR.
+ */
+function Distribution({ ovr, percentile }: { ovr: number; percentile?: number }) {
+  const pos = ovrToPercentile(ovr);
+  const pct = percentile ?? pos;
   return (
     <div>
       <PanelLabel>Distribution</PanelLabel>
@@ -32,7 +37,7 @@ function Distribution({ ovr }: { ovr: number }) {
         <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[var(--color-hairline)]" />
         <div
           className="absolute top-1/2 h-3 w-[2px] -translate-y-1/2 bg-[var(--color-crimson)]"
-          style={{ left: `${pct}%` }}
+          style={{ left: `${pos}%` }}
         />
       </div>
       <div className="tabular mt-1 flex justify-between text-[10px] text-[var(--color-faint)]">
@@ -94,7 +99,7 @@ export function RightPanel({ segment }: { segment: Segment }) {
           ))}
         </div>
         <div className="mt-6 border-t border-[var(--color-hairline)] pt-5">
-          <Distribution ovr={r.percentile} />
+          <Distribution ovr={r.ovr} percentile={r.percentile} />
         </div>
       </div>
     );

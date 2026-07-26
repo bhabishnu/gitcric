@@ -26,8 +26,8 @@ export default function Home() {
             as a cricket card.
           </h1>
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-[var(--color-muted)]">
-            We scout your commits, stars, and reviews into a six-stat card — then show
-            you the real cricketer of your equal in Tests, ODIs, T20Is and the IPL.
+            Your commits, scored into a six-stat card — then matched to your equal
+            across Tests, ODIs, T20Is, and the IPL.
           </p>
           {/* Capped measure: in the two-column layout the 32rem track is already
               narrower than this, but in the stacked layout the field would

@@ -31,7 +31,7 @@ export function UsernameForm() {
       <button
         type="submit"
         disabled={!clean}
-        className="pressable rounded-md border border-[var(--color-hairline)] bg-[var(--color-panel-2)] px-5 text-sm font-medium text-[var(--color-text)] disabled:opacity-40"
+        className="gc-cta pressable rounded-md px-5 text-sm font-medium disabled:opacity-40"
       >
         Scout me
       </button>

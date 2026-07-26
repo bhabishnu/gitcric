@@ -535,6 +535,29 @@ body {
   }
 }
 
+/* ── the CTA — outline at rest, fills on intent ─────────────────────────────
+   Crimson identity without adding a second saturated object to the page: the
+   card keeps that job. Colour-only transition, so there is nothing here for
+   reduced-motion to strip (the .pressable scale is already handled above). */
+.gc-cta {
+  background: transparent;
+  border: 1px solid var(--color-crimson);
+  color: var(--color-crimson);
+  transition:
+    background-color var(--dur-swap) var(--ease-out),
+    color var(--dur-swap) var(--ease-out);
+}
+.gc-cta:hover:not(:disabled) {
+  background: var(--color-crimson);
+  color: var(--color-bg);
+}
+/* Disabled (empty input) shouldn't advertise itself — drop to the page's
+   hairline so the crimson reads as "ready to go", not decoration. */
+.gc-cta:disabled {
+  border-color: var(--color-hairline);
+  color: var(--color-muted);
+}
+
 /* ── "or try" chips — secondary to the input, crimson only on intent ───────── */
 .gc-chip {
   display: inline-block;

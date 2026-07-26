@@ -6,7 +6,7 @@
 import { archetypeFor } from "./scoring/archetypes";
 import type { Archetype, Trait, UserCard, StatKey, Tier } from "./scoring/types";
 import type { CricketerCard, IndexRow, Role } from "./data";
-import { getCricketerCard, photoFor, type FormatBucket } from "./data";
+import { getCricketerCard, photoFor, PLAYER_INDEX, type FormatBucket } from "./data";
 import type { Twin } from "./match/matcher";
 import { colorwayFor, type Colorway } from "./colorways";
 import { flagForLocation, flagForNation, type FlagCode } from "./flags";
@@ -64,7 +64,9 @@ export interface Segment {
   /** Right panel is a discriminated union: the scout report (YOU) or a
    *  cricketer's real career card. */
   right:
-    | { kind: "scout"; metrics: ScoutMetric[]; percentile: number }
+      /** `percentile` is a real population stat (% of cricketers beaten);
+     *  `ovr` positions the marker on the 40..99 axis. */
+  | { kind: "scout"; metrics: ScoutMetric[]; percentile: number; ovr: number }
     | { kind: "career"; rows: { label: string; value: string }[]; distribution: number };
 }
 
@@ -153,7 +155,10 @@ function youSegment(card: UserCard): Segment {
     right: {
       kind: "scout",
       metrics: card.scout.map((s) => ({ label: s.label, value: s.value, fill: s.fill, axis: s.axis })),
-      percentile: card.baseOVR,
+      // Ranked on the FINAL ovr against the cricketer population — baseOVR is
+      // capped, so it pinned every strong account to the same percentile.
+      percentile: percentileVsCricketers(card.ovr),
+      ovr: card.ovr,
     },
   };
 }
@@ -252,6 +257,44 @@ export function buildPlayerSegments(id: string, index: Record<FormatBucket, Inde
 }
 
 export function ovrToPercentile(ovr: number): number {
-  // A friendly read for the distribution bar: where the OVR sits on 40..99.
+  // Marker POSITION on the 40..99 axis. Not a population statistic.
   return Math.max(0, Math.min(100, Math.round(((ovr - 40) / (99 - 40)) * 100)));
+}
+
+/**
+ * The population a user is ranked against: one OVR per cricketer in the DB,
+ * their best across the formats they're gated in. Built once at module load
+ * from the same index the matcher uses.
+ */
+const CRICKETER_OVRS: number[] = (() => {
+  const best = new Map<string, number>();
+  for (const b of ["test", "odi", "t20i", "ipl"] as FormatBucket[]) {
+    for (const row of PLAYER_INDEX[b]) {
+      const cur = best.get(row.id);
+      if (cur === undefined || row.ovr > cur) best.set(row.id, row.ovr);
+    }
+  }
+  return [...best.values()].sort((a, b) => a - b);
+})();
+
+/**
+ * How many cricketers this OVR actually beats — "higher than X% of the
+ * cricketers in the database". The YOU card used to pass baseOVR here, which is
+ * clamped at K.ovrCap, so every halfway-decent account landed on the identical
+ * number (75th) no matter how good it was. This reads the real distribution.
+ */
+export function percentileVsCricketers(ovr: number): number {
+  const n = CRICKETER_OVRS.length;
+  if (n === 0) return 0;
+  // first index whose OVR is >= ours == how many we strictly beat
+  let lo = 0;
+  let hi = n;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (CRICKETER_OVRS[mid] < ovr) lo = mid + 1;
+    else hi = mid;
+  }
+  // floor, not round: at 99.6% there are still cricketers above you, and
+  // rounding that to "100th percentile" claims you beat the whole database.
+  return Math.floor((lo / n) * 100);
 }
