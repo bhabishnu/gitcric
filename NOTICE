@@ -1,0 +1,41 @@
+GitCric — third-party notices
+=============================
+
+GitCric is distributed under the MIT License (see LICENSE). It includes
+third-party work as described below.
+
+GitCric's GitHub-user scoring engine is derived from GitFut and reuses a
+substantial portion of its scoring math: the GitHub signal set, the six-axis
+raw-stat mapping, the within-profile z-score → tension-pair → spike pipeline,
+the role-weighted OVR, and the two-band (stats cap + legacy gate) OVR
+structure. The axes were re-mapped from football to cricket and the
+calibration constants have since been refitted, but the structure and much of
+the code originate there.
+
+Derived files:
+  web/lib/scoring/        (engine.ts, constants.ts, types.ts)
+  web/scripts/gitfut-ref.ts   — a direct port, retained as a calibration
+                                reference with GitFut's original constants
+
+GitFut
+https://github.com/Younesfdj/gitfut
+
+Copyright (c) 2026 Younesfdj
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
