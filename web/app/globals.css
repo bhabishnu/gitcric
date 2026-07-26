@@ -429,3 +429,114 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .gc-swap { animation: gc-swap-fade var(--dur-swap) var(--ease-out); }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE HERO FAN — the landing page's card spread. Composition only: the card
+   FACE is untouched, these are wrappers. Two nested layers per card so the
+   transforms never fight — .gc-fan-slot places (offset · rotate · scale ·
+   hover lift), .gc-fan-float breathes (translateY only).
+   ═══════════════════════════════════════════════════════════════════════════ */
+.gc-fan {
+  /* ── TUNING SURFACE ───────────────────────────────────────────────────────
+     The whole spread is dialled from here. showcase.json is data-only, so
+     changing any of this never means re-running `npm run gen:showcase`.
+     ─────────────────────────────────────────────────────────────────────── */
+  --fan-card-w: clamp(182px, 14.5vw, 244px);  /* one card at scale 1 (desktop) */
+  --fan-card-w-sm: clamp(168px, 52vw, 228px); /* one card in the mobile row   */
+  --fan-overlap: 0.34;    /* fraction of a card its neighbour covers. Past
+                             ~0.4 the surname band starts getting eaten; the
+                             spread also widens as this DROPS, so keep an eye
+                             on the leftmost card vs the headline column.     */
+  --fan-lift: 10px;       /* how far a card rises on hover / focus            */
+  --fan-float-amp: 5px;   /* float travel, ± from rest                        */
+  --fan-float-dur: 9s;    /* float cycle                                      */
+  /* derived: horizontal distance between adjacent cards */
+  --fan-step: calc(var(--fan-card-w) * (1 - var(--fan-overlap)));
+
+  display: grid;
+  place-items: center;
+  place-content: center;
+}
+
+/* Per-card placement. --x is in steps (so it follows --fan-overlap), --y in px,
+   --s is scale. Slot 2 is the hero: unscaled, near-upright, on top. */
+.gc-fan-slot {
+  grid-area: 1 / 1;
+  width: var(--fan-card-w);
+  transform: translate(calc(var(--x) * var(--fan-step)), calc(var(--y) * 1px))
+    translateY(var(--lift, 0px)) rotate(var(--rot)) scale(var(--s));
+  transition: transform var(--dur-panel) var(--ease-out);
+  will-change: transform;
+}
+.gc-fan-slot[data-slot="0"] { --x: -1.48; --y: 24; --rot: -11deg; --s: 0.82; --delay: 0s;    z-index: 1; }
+.gc-fan-slot[data-slot="1"] { --x: -0.56; --y: -4; --rot: -5deg;  --s: 0.90; --delay: -2.2s; z-index: 2; }
+.gc-fan-slot[data-slot="2"] { --x:  0.42; --y:  0; --rot: 1.5deg; --s: 1;    --delay: -4.5s; z-index: 4; }
+.gc-fan-slot[data-slot="3"] { --x:  1.36; --y: 28; --rot: 8deg;   --s: 0.86; --delay: -6.7s; z-index: 3; }
+
+/* Pick a card up rather than moving it sideways — the fan keeps its shape. */
+.gc-fan-slot:hover,
+.gc-fan-slot:focus-visible {
+  --lift: calc(var(--fan-lift) * -1);
+  z-index: 5;
+}
+
+.gc-fan-float {
+  animation: gc-float var(--fan-float-dur) var(--ease-in-out) var(--delay, 0s) infinite alternate;
+  will-change: transform;
+}
+@keyframes gc-float {
+  from { transform: translateY(calc(var(--fan-float-amp) * -1)); }
+  to   { transform: translateY(var(--fan-float-amp)); }
+}
+
+/* ── narrow: the fan unwinds into a snap-scroll row ─────────────────────────
+   Overlapping cards are a poor tap target on a phone, so below lg every card
+   stands alone at full width with only a hint of the fan's tilt left in. */
+@media (max-width: 1023.98px) {
+  .gc-fan {
+    display: flex;
+    place-content: initial;
+    align-items: center;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* bleed past the page gutter so a card can sit centred on screen */
+    margin-inline: -1.5rem;
+    padding: 26px 1.5rem;
+  }
+  .gc-fan-slot {
+    flex: 0 0 auto;
+    width: var(--fan-card-w-sm);
+    scroll-snap-align: center;
+    transform: rotate(var(--rot-sm, 0deg)) translateY(var(--lift, 0px));
+  }
+  .gc-fan-slot[data-slot="0"] { --rot-sm: -3deg; }
+  .gc-fan-slot[data-slot="1"] { --rot-sm: 2deg; }
+  .gc-fan-slot[data-slot="2"] { --rot-sm: -2deg; }
+  .gc-fan-slot[data-slot="3"] { --rot-sm: 3deg; }
+}
+
+/* Emil's rule: no movement. The fan keeps its shape, loses its breath. */
+@media (prefers-reduced-motion: reduce) {
+  .gc-fan-float { animation: none; }
+  .gc-fan-slot {
+    transition: none;
+    --fan-lift: 0px;
+  }
+}
+
+/* ── "or try" chips — secondary to the input, crimson only on intent ───────── */
+.gc-chip {
+  display: inline-block;
+  border: 1px solid var(--color-hairline);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+  transition: color var(--dur-press) var(--ease-out), border-color var(--dur-press) var(--ease-out);
+}
+.gc-chip:hover {
+  color: var(--color-text);
+  border-color: color-mix(in srgb, var(--color-crimson) 70%, transparent);
+}

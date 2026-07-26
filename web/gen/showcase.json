@@ -1,0 +1,201 @@
+{
+  "generatedAt": "2026-07-26T08:58:47.050Z",
+  "cards": [
+    {
+      "login": "torvalds",
+      "avatar": "/showcase/torvalds.jpg",
+      "face": {
+        "surname": "TORVALDS",
+        "fullName": "Linus Torvalds",
+        "ovr": 98,
+        "roleLabel": "BATTER",
+        "eyebrow": "GENERATIONAL",
+        "stats": [
+          {
+            "key": "BAT",
+            "label": "BAT",
+            "value": 95
+          },
+          {
+            "key": "POW",
+            "label": "POW",
+            "value": 86
+          },
+          {
+            "key": "BWL",
+            "label": "BWL",
+            "value": 63
+          },
+          {
+            "key": "ECO",
+            "label": "ECO",
+            "value": 71
+          },
+          {
+            "key": "FLD",
+            "label": "FLD",
+            "value": 77
+          },
+          {
+            "key": "IMP",
+            "label": "IMP",
+            "value": 98
+          }
+        ],
+        "tier": "immortal",
+        "trim": "you",
+        "colorway": null,
+        "flag": "US",
+        "photoFile": null,
+        "teamLabel": null
+      }
+    },
+    {
+      "login": "sindresorhus",
+      "avatar": "/showcase/sindresorhus.jpg",
+      "face": {
+        "surname": "SINDRESORHUS",
+        "fullName": "Sindre Sorhus",
+        "ovr": 98,
+        "roleLabel": "BATTER",
+        "eyebrow": "GENERATIONAL",
+        "stats": [
+          {
+            "key": "BAT",
+            "label": "BAT",
+            "value": 91
+          },
+          {
+            "key": "POW",
+            "label": "POW",
+            "value": 81
+          },
+          {
+            "key": "BWL",
+            "label": "BWL",
+            "value": 77
+          },
+          {
+            "key": "ECO",
+            "label": "ECO",
+            "value": 60
+          },
+          {
+            "key": "FLD",
+            "label": "FLD",
+            "value": 88
+          },
+          {
+            "key": "IMP",
+            "label": "IMP",
+            "value": 94
+          }
+        ],
+        "tier": "immortal",
+        "trim": "you",
+        "colorway": null,
+        "flag": null,
+        "photoFile": null,
+        "teamLabel": null
+      }
+    },
+    {
+      "login": "knadh",
+      "avatar": "/showcase/knadh.jpg",
+      "face": {
+        "surname": "KNADH",
+        "fullName": "Kailash Nadh",
+        "ovr": 98,
+        "roleLabel": "BATTER",
+        "eyebrow": "GENERATIONAL",
+        "stats": [
+          {
+            "key": "BAT",
+            "label": "BAT",
+            "value": 94
+          },
+          {
+            "key": "POW",
+            "label": "POW",
+            "value": 82
+          },
+          {
+            "key": "BWL",
+            "label": "BWL",
+            "value": 69
+          },
+          {
+            "key": "ECO",
+            "label": "ECO",
+            "value": 64
+          },
+          {
+            "key": "FLD",
+            "label": "FLD",
+            "value": 81
+          },
+          {
+            "key": "IMP",
+            "label": "IMP",
+            "value": 99
+          }
+        ],
+        "tier": "immortal",
+        "trim": "you",
+        "colorway": null,
+        "flag": "IN",
+        "photoFile": null,
+        "teamLabel": null
+      }
+    },
+    {
+      "login": "karpathy",
+      "avatar": "/showcase/karpathy.jpg",
+      "face": {
+        "surname": "KARPATHY",
+        "fullName": "Andrej",
+        "ovr": 98,
+        "roleLabel": "BATTER",
+        "eyebrow": "GENERATIONAL",
+        "stats": [
+          {
+            "key": "BAT",
+            "label": "BAT",
+            "value": 95
+          },
+          {
+            "key": "POW",
+            "label": "POW",
+            "value": 83
+          },
+          {
+            "key": "BWL",
+            "label": "BWL",
+            "value": 68
+          },
+          {
+            "key": "ECO",
+            "label": "ECO",
+            "value": 65
+          },
+          {
+            "key": "FLD",
+            "label": "FLD",
+            "value": 81
+          },
+          {
+            "key": "IMP",
+            "label": "IMP",
+            "value": 99
+          }
+        ],
+        "tier": "immortal",
+        "trim": "you",
+        "colorway": null,
+        "flag": null,
+        "photoFile": null,
+        "teamLabel": null
+      }
+    }
+  ]
+}

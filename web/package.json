@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
     "export-data": "tsx scripts/export-data.ts",
     "gen-flags": "tsx scripts/gen-flags.ts",
+    "gen:showcase": "tsx scripts/gen-showcase.ts",
     "copy-check": "tsx scripts/copy-check.ts",
     "calibrate": "tsx scripts/calibrate.ts",
     "match-check": "tsx scripts/match-check.ts"
