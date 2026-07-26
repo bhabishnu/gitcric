@@ -442,7 +442,8 @@ body {
      changing any of this never means re-running `npm run gen:showcase`.
      ─────────────────────────────────────────────────────────────────────── */
   --fan-card-w: clamp(182px, 14.5vw, 244px);  /* one card at scale 1 (desktop) */
-  --fan-card-w-sm: clamp(168px, 52vw, 228px); /* one card in the mobile row   */
+  --fan-card-w-sm: 360px; /* max card width in the stacked (mobile) layout    */
+  --fan-stack-gap: 40px;  /* space between stacked cards                      */
   --fan-overlap: 0.34;    /* fraction of a card its neighbour covers. Past
                              ~0.4 the surname band starts getting eaten; the
                              spread also widens as this DROPS, so keep an eye
@@ -495,35 +496,34 @@ body {
   to   { transform: translateY(var(--fan-float-amp)); }
 }
 
-/* ── narrow: the fan unwinds into a snap-scroll row ─────────────────────────
-   Overlapping cards are a poor tap target on a phone, so below xl every card
-   stands alone at full width with only a hint of the fan's tilt left in.
+/* ── narrow: the fan unwinds into a vertical stack ──────────────────────────
+   A phone reads these as a feed — one card under the next, scrolled down the
+   page normally. No sideways scroll, no snap, no fan transform: every card
+   sits upright, standalone and fully tappable.
    The cut is at xl, not lg: between 1024 and 1279 the right column is too
    narrow to hold the spread, and the outermost card was overflowing the
    viewport (a horizontal scrollbar at 1024) rather than merely looking tight. */
 @media (max-width: 1279.98px) {
   .gc-fan {
     display: flex;
-    place-content: initial;
+    flex-direction: column;
     align-items: center;
+    place-content: initial;
+    gap: var(--fan-stack-gap);
+    /* the desktop slack-shift means nothing in a single column */
     transform: none;
-    gap: 14px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    /* bleed past the page gutter so a card can sit centred on screen */
-    margin-inline: -1.5rem;
-    padding: 26px 1.5rem;
+    overflow: visible;
+    margin-inline: 0;
+    padding: 0;
   }
   .gc-fan-slot {
-    flex: 0 0 auto;
-    width: var(--fan-card-w-sm);
-    scroll-snap-align: center;
-    transform: rotate(var(--rot-sm, 0deg)) translateY(var(--lift, 0px));
+    /* full width inside the page gutter, capped so a tablet doesn't get a
+       comically large card, and centred by the flex alignment above */
+    width: min(100%, var(--fan-card-w-sm));
+    /* drop the fan placement entirely — no rotation, offset, scale or stacking */
+    transform: none;
+    z-index: auto;
   }
-  .gc-fan-slot[data-slot="0"] { --rot-sm: -3deg; }
-  .gc-fan-slot[data-slot="1"] { --rot-sm: 2deg; }
-  .gc-fan-slot[data-slot="2"] { --rot-sm: -2deg; }
-  .gc-fan-slot[data-slot="3"] { --rot-sm: 3deg; }
 }
 
 /* Emil's rule: no movement. The fan keeps its shape, loses its breath. */
