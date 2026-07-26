@@ -118,8 +118,8 @@ body {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    THE CARD — the jewel. A die-cut CREST/SHIELD (our own geometry). Layered
-   depth: colorway gradient → tone-on-tone filigree → ghosted watermark → inset
-   frame → portrait → content, all cut to the crest by an SVG clip-path. Tier
+   depth: colorway gradient → tone-on-tone filigree → inset frame → portrait →
+   content, all cut to the crest by an SVG clip-path. Tier
    finishes and per-format trim live here and nowhere else; the card is the
    sanctioned exception to the page's no-gradient rule.
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -148,14 +148,6 @@ body {
   height: 100%;
   display: block;
   z-index: 0;
-}
-.gc-watermark {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 150px;
-  letter-spacing: 0.12em;
-  fill: var(--ink);
-  opacity: 0.06;
 }
 .gc-frame {
   stroke: color-mix(in srgb, var(--trim) 78%, transparent);

@@ -7,7 +7,7 @@ import { Flag } from "../lib/flags";
  * THE CARD — the jewel. A die-cut CREST/SHIELD (our own geometry, not EA's):
  * near-flat top with sloped shoulders, straight sides, a soft point at the base.
  * The shield path is drawn as a layered SVG background (colorway gradient →
- * tone-on-tone filigree → ghosted watermark → inset frame) AND used as a
+ * tone-on-tone filigree → inset frame) AND used as a
  * clip-path so nothing renders outside the crest. FUT layout grammar on top:
  * huge OVR, role and flag over a full-bleed portrait; a surname band (plus a
  * franchise caption on IPL); six stats in two tight columns. Format, matches and
@@ -15,7 +15,6 @@ import { Flag } from "../lib/flags";
  */
 const LEFT = ["BAT", "BWL", "FLD"] as const;
 const RIGHT = ["POW", "ECO", "IMP"] as const;
-const TRIM_LABEL: Record<string, string> = { you: "GITCRIC", test: "TEST", odi: "ODI", t20i: "T20I", ipl: "IPL" };
 
 // ── crest geometry (viewBox 540 × 820) ───────────────────────────────────────
 // Near-flat top w/ sloped shoulders → straight sides → soft point at the base.
@@ -49,7 +48,6 @@ export function PlayerCard({
   const byKey = Object.fromEntries(face.stats.map((s) => [s.key, s.value]));
   const monogram = face.surname.slice(0, 2);
   const portrait = face.photoFile ?? avatarUrl ?? null;
-  const watermark = TRIM_LABEL[face.trim] ?? "GITCRIC";
 
   // Cricketer: override the tier-finish vars with the team colorway (inline
   // style wins over the data-tier/data-trim CSS). YOU: keep the tier finish.
@@ -71,8 +69,8 @@ export function PlayerCard({
       style={cwStyle}
       id={captureId}
     >
-      {/* layered crest background — gradient · filigree · watermark · frame */}
-      <ShieldBg watermark={watermark} tier={face.tier} />
+      {/* layered crest background — gradient · filigree · frame */}
+      <ShieldBg tier={face.tier} />
 
       {/* clip everything to the crest (belt-and-suspenders; the portrait mask
           already keeps the photo well inside the edge) */}
@@ -127,9 +125,9 @@ export function PlayerCard({
   );
 }
 
-/** The layered crest: gradient fill, tone-on-tone filigree, ghosted watermark,
- *  and the inset frame + outer rim that carry the tier/trim treatment. */
-function ShieldBg({ watermark, tier }: { watermark: string; tier: string }) {
+/** The layered crest: gradient fill, tone-on-tone filigree, and the inset
+ *  frame + outer rim that carry the tier/trim treatment. */
+function ShieldBg({ tier }: { tier: string }) {
   return (
     <svg className="gc-shield" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden>
       <defs>
@@ -160,29 +158,6 @@ function ShieldBg({ watermark, tier }: { watermark: string; tier: string }) {
       <path d={SHIELD} fill="url(#gc-fil)" />
       <path d={SHIELD} fill="url(#gc-sheen)" />
 
-      {/* ghosted format mark — sits in the lower crest behind the stats, where
-          the full-bleed portrait can't bury it (FUT hides theirs behind cut-out
-          players; ours are headshots) */}
-      <text
-        className="gc-watermark"
-        x={W / 2}
-        y={612}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        // Inline, not via the CSS class alone — same reason as the frame stroke
-        // below: html-to-image doesn't carry class-based styling on SVG children
-        // into the PNG, and the watermark was exporting at the default ~16px.
-        style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 800,
-          fontSize: 150,
-          letterSpacing: "0.12em",
-          fill: "var(--ink)",
-          opacity: 0.06,
-        }}
-      >
-        {watermark}
-      </text>
 
       {/* inset frame line (trim) — follows the crest, ~11px in. Stroke is set
           inline (not via CSS class) so html-to-image inlines it into the PNG. */}
