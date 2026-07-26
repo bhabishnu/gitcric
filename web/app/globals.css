@@ -447,6 +447,11 @@ body {
                              ~0.4 the surname band starts getting eaten; the
                              spread also widens as this DROPS, so keep an eye
                              on the leftmost card vs the headline column.     */
+  /* How far the spread sits right of its column centre. Tracks the page's own
+     outer margin (max-w-6xl = 72rem), so once the viewport stops growing the
+     fan drifts into the empty right gutter instead of crowding the hero — and
+     stays exactly where it is on narrower screens, where there is no slack. */
+  --fan-shift: min(160px, max(0px, (100vw - 72rem) / 4));
   --fan-lift: 10px;       /* how far a card rises on hover / focus            */
   --fan-float-amp: 5px;   /* float travel, ± from rest                        */
   --fan-float-dur: 9s;    /* float cycle                                      */
@@ -456,6 +461,7 @@ body {
   display: grid;
   place-items: center;
   place-content: center;
+  transform: translateX(var(--fan-shift));
 }
 
 /* Per-card placement. --x is in steps (so it follows --fan-overlap), --y in px,
@@ -490,13 +496,17 @@ body {
 }
 
 /* ── narrow: the fan unwinds into a snap-scroll row ─────────────────────────
-   Overlapping cards are a poor tap target on a phone, so below lg every card
-   stands alone at full width with only a hint of the fan's tilt left in. */
-@media (max-width: 1023.98px) {
+   Overlapping cards are a poor tap target on a phone, so below xl every card
+   stands alone at full width with only a hint of the fan's tilt left in.
+   The cut is at xl, not lg: between 1024 and 1279 the right column is too
+   narrow to hold the spread, and the outermost card was overflowing the
+   viewport (a horizontal scrollbar at 1024) rather than merely looking tight. */
+@media (max-width: 1279.98px) {
   .gc-fan {
     display: flex;
     place-content: initial;
     align-items: center;
+    transform: none;
     gap: 14px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;

@@ -11,12 +11,12 @@ export default function Home() {
   // the 6xl column without affecting layout — and clipping would cut the outer
   // cards off the moment the spread is widened in .gc-fan.
   return (
-    <main className="mx-auto flex min-h-dvh max-w-6xl flex-col justify-center gap-14 px-6 py-16 lg:grid lg:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] lg:items-center lg:gap-10 lg:py-0">
+    <main className="mx-auto flex min-h-dvh max-w-6xl flex-col justify-center gap-14 px-6 py-16 xl:grid xl:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] xl:items-center xl:gap-12 xl:py-0">
       <div>
         <p className="tabular text-xs uppercase tracking-[0.2em] text-[var(--color-muted)]">
           The scouting report
         </p>
-        <h1 className="mt-3 font-[family-name:var(--font-display)] text-6xl font-[800] uppercase leading-[0.92] tracking-tight sm:text-7xl lg:text-6xl">
+        <h1 className="mt-3 font-[family-name:var(--font-display)] text-6xl font-[800] uppercase leading-[0.92] tracking-tight sm:text-7xl xl:text-6xl">
           Your GitHub,
           <br />
           as a cricket card.
@@ -25,7 +25,10 @@ export default function Home() {
           We scout your commits, stars, and reviews into a six-stat card — then show
           you the real cricketer of your equal in Tests, ODIs, T20Is and the IPL.
         </p>
-        <div className="mt-8">
+        {/* Capped measure: in the two-column layout the 32rem track is already
+            narrower than this, but in the stacked layout the field would
+            otherwise run the full width of a 1279px viewport. */}
+        <div className="mt-8 max-w-xl">
           <UsernameForm />
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-2">
