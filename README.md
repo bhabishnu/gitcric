@@ -1,181 +1,101 @@
-# GitCric — data pipeline
+# GitCric 🏏
 
-Turns Cricsheet ball-by-ball data into FIFA-Ultimate-Team-style cricketer rating
-cards, **one card per format** (Test, ODI, T20I, IPL). Each card has six stats, a
-reference OVR out of 99, a role, and a nearest-legend equate. This repo is the
-**data pipeline only** — it writes a SQLite DB behind a typed accessor that a
-scoring engine / web app will later import. There is no self-rating path: the
-model is "type a name → get cards".
+Your GitHub, rated out of 99 — as a cricket card.
 
-Inspired by [gitfut](https://github.com/Younesfdj/gitfut) (MIT), whose two-band
-scoring math this mirrors.
+<p align="center">
+  <img src="web/public/readme/torvalds.png" width="32%" alt="torvalds — 96 OVR" />
+  <img src="web/public/readme/rauchg.png" width="32%" alt="rauchg — 94 OVR" />
+  <img src="web/public/readme/sindresorhus.png" width="32%" alt="sindresorhus — 96 OVR" />
+  <br />
+  <img src="web/public/readme/knadh.png" width="32%" alt="knadh — 94 OVR" />
+  <img src="web/public/readme/soumith.png" width="32%" alt="soumith — 94 OVR" />
+</p>
 
-## Run it
-
-```bash
-npm install
-npm run ingest    # download → parse → aggregate → join → calibrate → OVR → equate → SQLite
-npm run verify    # prints each test player's cards and asserts the acceptance tests
-```
-
-Look a player up (fuzzy name match, one lookup per quoted argument):
-
-```bash
-npm run card "Jasprit Bumrah" "Joe Root"   # cards across all formats, per player
-```
-
-`ingest` downloads the Cricsheet zips + people register into `data/raw/` (cached;
-re-runs skip re-download), parses every match once, and writes `data/gitcric.db`.
-A full men's international + IPL run aggregates in a few minutes; **re-runs are
-incremental** — only match files not already in `processed_matches` are parsed,
-so a second `ingest` recomputes calibration/OVR in under a second.
-
-## The data contract
-
-The scoring engine depends on the TYPE, never on pipeline internals. It imports:
-
-- `src/types/stats.ts` — `PlayerCardData`, `CardStats`, `FormatBucket`, `Role`,
-  `LegendAnchor`, `MetricCalib`.
-- `src/db/accessor.ts` — `new GitCricStore().getCard(playerId, bucket)` returns a
-  fully-typed `PlayerCardData | null` (null = no gated card in that format), plus
-  `findByName(query)` and `bucketsFor(playerId)`.
-
-`PlayerCardData` carries the six `stats`, `role`, `ovr`, the band breakdown
-(`bands.peakOvr`, `bands.greatnessBonus`, the z-scores), the raw+shrunk+percentile
-trail for every metric, sample sizes, career line, and the `equatedLegend`.
-
-### The six stats
-
-| Stat | Meaning | Driver |
-|------|---------|--------|
-| BAT  | batting effectiveness | batting average percentile |
-| POW  | explosiveness | **batting strike rate** percentile (primary impact axis) |
-| BWL  | wicket-taking | **bowling strike rate** = balls/wicket percentile (primary impact axis) |
-| ECO  | bowling control | economy percentile |
-| FLD  | fielding | (catches + stumpings + run-outs) / match percentile |
-| IMP  | career weight | tempered log of matches + span + milestones |
-
-A pure batter's near-zero BWL/ECO (and a pure bowler's near-zero BAT/POW) is by
-design — an axis below the min-balls floor gets a low FLOOR stat, so the card
-SHAPE tells the story, like a striker's low DEF.
-
-## Calibration & scoring knobs (all in `src/config/calibration.ts`)
-
-- **Qualification gates** (`src/config/competitions.ts`, `qualifyingMatches`):
-  Test 8, ODI 17, T20I 25, IPL 20 matches. Below the floor → **no card** for that
-  format. The gate is the primary filter for unproven players; past it, a player
-  is judged on their real numbers.
-
-- **Shrinkage `SHRINKAGE_K = 175` (balls).** Above the gate, each metric is gently
-  pulled toward the format-bucket population median:
-  `shrunk = (n·raw + k·popMedian) / (n + k)`, with `n` in **balls** (faced for
-  batting metrics, bowled for bowling metrics). Deliberately light — the gate
-  already guarantees a real sample, so a gated player keeps most of their raw
-  signal. Raise `k` to shrink harder toward the median, lower it to trust raw
-  numbers more.
-
-- **Stat mapping cooling (`STAT_FLOOR = 30`, `STAT_CEIL = 94`).** A percentile is
-  mapped linearly onto a stat: `stat = FLOOR + (CEIL − FLOOR)·percentile`. The
-  ceiling sits well below 99 on purpose, so even a 99th-percentile metric lands in
-  the low 90s, not 96–99. This is what keeps the six stats — and therefore OVRs —
-  spread across a wide range instead of all clustering at the top; only the
-  greatness band can carry a card into the high 90s. Raise the ceiling to warm the
-  whole scale, lower it to cool/compress it.
-
-- **Peak band (caps at 88).** Position-weighted sum of the six cooled,
-  percentile-anchored stats. Weights are keyed by (role × bucket) in
-  `PEAK_WEIGHTS`: a pure bowler is judged almost entirely on BWL/ECO, a specialist
-  batsman on BAT (his batting is weighted heavier than a keeper-batsman's, whose
-  card value is split with the gloves), with a per-format tilt (POW leads in
-  T20I/IPL, ECO leads for T20 bowlers, batting technique leads in Test). This role
-  differentiation is what lets a specialist Test batsman out-peak a keeper of
-  similar raw numbers, and a peak specialist bowler reach the same ceiling as a
-  peak batter.
-
-- **The peak-vs-longevity knob: `PEAK_VS_LONGEVITY` ∈ [0,1] (default 0.82).**
-  The greatness band (88→99) is
-  `bonus = BONUS_MAX · sigmoid(a·longevity_z + b·peakEliteness_z − c) · gate`,
-  with `a = GREATNESS_GAIN·(1−t)`, `b = GREATNESS_GAIN·t` for the knob `t`. Higher
-  `t` → peak eliteness matters more (needed so ABdV's ODI peak beats Ponting's
-  longevity). `GREATNESS_GAIN` (default 2.6) is the sigmoid **steepness** — raise
-  it to fan the elite tier out instead of bunching it. `GREATNESS_OFFSET` (default
-  4.4) is the **bar**: set high so most "very good" internationals get ≈0 bonus
-  and sit in the peak band, the 90s are earned, and 95+ is immortal-only. The
-  `gate` term zeroes the bonus for a true rookie regardless of peak.
-
-- **Design tiers & the OVR pin.** The scale is tuned to read as tiers: 95-98
-  all-time immortals (~a dozen cards), 90-94 all-time greats, 84-89 elite
-  internationals, 75-83 solid, 65-74 fringe, <65 barely-qualified. **99 is
-  reserved** — the only player card at 99 is set by `OVR_PINS` (an editorial
-  top-of-scale pin: Kohli's ODI is #1, Tendulkar's ODI #2), applied in the runner
-  after scoring so no other card shifts; the only other 99 is the seeded Bradman
-  Test anchor.
-
-- **Equate-to-legend** (`EQUATE`): nearest anchor by weighted distance over the
-  6-stat profile + OVR, within the SAME bucket and SAME role. Modern legends are
-  computed anchors (top OVRs per group); pre-limited-overs greats (Bradman,
-  Sobers, Hadlee, …) are hand-seeded in `src/legends/anchors.seed.ts`
-  (`source = "seeded"`). An OVR-99 Test batter equates to the seeded Bradman.
-
-## Adding a new league
-
-One line in `src/config/competitions.ts`:
-
-```ts
-bbl: { formatBucket: "bbl", displayLabel: "Big Bash", qualifyingMatches: 20, zip: "bbl_json.zip" },
-```
-
-Add `"bbl"` to the `FormatBucket` union in `src/types/stats.ts` and a
-`PEAK_WEIGHTS` column for it, then `npm run ingest`. The bucket gets its own
-percentile population and its own cards — a player with both a T20I and a BBL
-history gets a distinct card for each, because buckets are keyed on the **source
-competition**, not `match_type`.
-
-## Pre-2000 historical layer
-
-Cricsheet ball-by-ball starts ~2000, so era-spanning greats were scored on only
-the tail of their careers. A second data source (`src/pipeline/historical/`)
-supplies full-career totals and merges the **pre-Cricsheet portion** in, without
-double-counting the overlap years:
+## Scout your own
 
 ```
-pre2000 = max(0, career_total − cricsheet_aggregate)
-merged  = cricsheet_aggregate + pre2000            # = career total, each match once
+gitcric.vercel.app/<your-username>
 ```
 
-- **Spanning** players (Tendulkar Test 82→200, ODI 146→463) keep Cricsheet's rich
-  post-2000 ball-by-ball and gain the pre-2000 remainder — greatness/longevity
-  finally opens (Tendulkar ODI 97→99, Lara Test 83→98, Gilchrist Test 82→94).
-- **Post-2000-only** players are untouched: `max(0, …)` + a debut-year gate mean
-  Kohli / SKY / Bumrah keep identical match counts (small OVR drift is only the
-  re-percentiling against the now-stronger population).
-- **Fully pre-2000** players (Gavaskar, Viv, Marshall) enter as new `hist:` ids.
-- Missing pre-2000 balls (older records don't track strike rate) are estimated
-  from the player's **own** post-2000 rate so the merge preserves their tempo.
-- Identity is matched on Cricinfo id / surname+initial, with a **namesake guard**
-  (a career that ended before a Cricsheet record began is a different person, so
-  1990s Imran Khan never merges onto a modern "Imran Khan (2)").
+That's the whole product. You get a card, a scout report of the signals behind it,
+and the cricketer you'd be — toggle **Test · ODI · T20I · IPL** to meet a different
+twin in each format. Kohli in T20Is doesn't mean Kohli in Tests.
 
-Source is a curated CSV (`src/pipeline/historical/careers.seed.csv`, public career
-totals — verify/extend freely). Drop a fuller Kaggle export at
-`data/historical/careers.csv` with a column map (`src/config/historical.ts`) to
-supersede it. The merged aggregates flow through the **same** calibration / OVR /
-role / equate pipeline, with percentiles recomputed on the combined population.
+## How the scouting works
 
-## Pipeline stages
+Six signals off a live GitHub profile. No surveys, no self-reporting, nothing you
+can fill in about yourself.
 
-`download` → `parse` (delivery attribution on stable registry IDs, incremental)
-→ `aggregate` (per player×bucket) → `register` join (display name + Cricinfo id)
-→ `calibrate` (shrinkage, percentiles, distributions) → `ovr` (two-band engine)
-→ `equate` → SQLite + typed accessor. Edge cases handled: matches without
-ball-by-ball, super-overs, no-results/forfeits, missing registry entries,
-multi-fielder run-outs, retired-hurt, and players who only batted or only bowled.
+| Stat | Cricket meaning | What it reads |
+|------|-----------------|---------------|
+| **BAT** | Batting | total stars earned, weighted by your biggest repo |
+| **POW** | Power | contributions in the last year — raw velocity |
+| **BWL** | Bowling | pull requests opened on other people's repos, issues closed |
+| **ECO** | Economy | focus: how concentrated your stars are, how tight your language stack is, how many PRs you actually land vs open |
+| **FLD** | Fielding | code reviews, plus followers |
+| **IMP** | Impact | lifetime contributions and how many years you've been active |
 
-## Schema
+ECO is the one people argue with. It rewards finishing things — a maintainer with
+one flagship and a high merge ratio reads high; forty half-abandoned repos across
+eleven languages reads low. That's deliberate, and it's the closest honest analog
+to a bowler who doesn't leak runs.
 
-`players`, `player_format_stats` (raw + shrunk metrics, percentiles, sample
-sizes, career span, the six stats, band breakdown, role, equated legend),
-`format_distributions` (per-bucket percentile breakpoints), `legend_anchors`,
-`processed_matches` (incremental bookkeeping), `meta`.
+## The number
 
-Data © Cricsheet, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+Two bands, borrowed from how the cricketers are scored. Your six stats are
+role-weighted into a peak score that caps out — no matter how good the stats are,
+that alone won't carry you past the low 80s. Everything above is a **greatness
+band**, bought with sustained reach and years on the clock rather than a good
+twelve months, which is why 99 is effectively unreachable and even 96 is rare.
+
+The point of the cap is the twins. User OVRs are calibrated onto the *same* 40–99
+scale as the real cricketers in the database, so "you're a 94" and "Muralitharan is
+a 92" are the same sentence. Without that, matching you to a cricketer would be
+decoration. With it, it's a lookup.
+
+The cricketer side is stricter still: peak caps at 88, the greatness band runs
+88→99, and 99 is pinned editorially — Kohli's ODI card is #1, Tendulkar's ODI #2.
+
+## Tiers
+
+The rim and finish on the card change with the number.
+
+`bronze` under 70 · `silver` 70–83 · `gold` 84–90 · `immortal` 91+
+
+The header line above the card names it differently — **ON THE FRINGE**, **IN THE
+SQUAD**, **CAPTAIN'S PICK**, **GENERATIONAL** — because a tier is a material and a
+selection is a verdict, and they're not the same thing.
+
+## Under the hood
+
+1,684 cricketers, 2,698 format cards, built from [Cricsheet](https://cricsheet.org)
+ball-by-ball data through a SQLite pipeline that lands as static JSON in the web app.
+Nothing queries a database at request time. Qualification gates keep the pool honest
+— 8 Tests, 17 ODIs, 25 T20Is, 20 IPL matches, below which you don't get a card at all,
+which is what stops a two-cap wonder turning up as your twin.
+
+Twins are drawn from cricketers gated in at least two formats, sampled within ±3 OVR
+of you (±4 up at the top, where the pool thins), seeded on your username so your card
+never reshuffles.
+
+335 player photos come from Wikimedia Commons under free licences, credited in
+[`web/public/players/CREDITS.md`](web/public/players/CREDITS.md). Where Commons has
+nothing usable, the card falls back to a monogram rather than ship something wrong.
+
+**Built with** Next.js 15 · TypeScript · Tailwind v4 · Barlow Condensed & JetBrains Mono,
+plus the SQLite → static-JSON data pipeline in [`src/`](src/).
+
+## Credit
+
+GitCric is a port of [**GitFut**](https://github.com/Younesfdj/gitfut) by
+[@Younesfdj](https://github.com/Younesfdj) — the same idea, rated as football.
+The two-band scoring engine here started as his, re-axed from PAC/SHO/PAS to
+BAT/POW/BWL and recalibrated against a cricket population. GitFut is MIT-licensed;
+the notice travels with the code in [NOTICE](NOTICE).
+
+If you like this, go star his repo — the good idea was his first.
+
+---
+
+Pipeline docs: [`docs/pipeline.md`](docs/pipeline.md) · Cricket data © Cricsheet,
+[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) · MIT
