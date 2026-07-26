@@ -52,7 +52,7 @@ export default function Home() {
 
       {/* Credit, not navigation — the scoring engine is derived from GitFut.
           See NOTICE for the licence notice this line is the human half of. */}
-      <footer className="mx-auto w-full max-w-6xl px-6 pb-6">
+      <footer className="w-full px-6 pb-5 text-center">
         <p className="tabular text-[11px] text-[var(--color-faint)]">
           Inspired by{" "}
           <a
