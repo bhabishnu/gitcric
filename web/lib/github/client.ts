@@ -6,10 +6,31 @@ export class GitHubError extends Error {
   constructor(
     message: string,
     readonly status: number,
-    readonly kind: "not_found" | "rate_limit" | "auth" | "unknown" = "unknown",
+    readonly kind: "not_found" | "rate_limit" | "auth" | "timeout" | "unknown" = "unknown",
   ) {
     super(message);
   }
+}
+
+/**
+ * Per-attempt ceiling on a GitHub call. Without one, a hung connection blocks
+ * until Vercel's function timeout and the visitor sees a spinner the whole way —
+ * the "first hit sometimes just fails" symptom. Fail fast, show the retry state.
+ */
+const REQUEST_TIMEOUT_MS = 9_000;
+/**
+ * Ceiling on a WHOLE scout. One scout is a profile call followed by parallel
+ * year-batch calls, so per-request timeouts alone can stack (9s + 9s). A shared
+ * deadline bounds the lot, which is what keeps us inside the serverless
+ * function limit however many batches a long-lived account needs.
+ */
+const TOTAL_BUDGET_MS = 14_000;
+
+/** Time left on the scout's shared deadline, floored so we never issue a
+ *  request with an already-expired signal. */
+function budgetFor(deadline?: number): number {
+  if (!deadline) return REQUEST_TIMEOUT_MS;
+  return Math.max(500, Math.min(REQUEST_TIMEOUT_MS, deadline - Date.now()));
 }
 
 function token(): string {
@@ -18,21 +39,43 @@ function token(): string {
   return t;
 }
 
-async function graphql<T>(query: string, variables: Record<string, unknown>): Promise<T> {
-  const res = await fetch(ENDPOINT, {
-    method: "POST",
-    headers: {
-      Authorization: `bearer ${token()}`,
-      "Content-Type": "application/json",
-      "User-Agent": "gitcric",
-    },
-    body: JSON.stringify({ query, variables }),
-    // Cache at the fetch layer; the route adds its own revalidation.
-    next: { revalidate: 60 * 60 * 6 },
-  });
+async function graphql<T>(query: string, variables: Record<string, unknown>, deadline?: number): Promise<T> {
+  const timeoutMs = budgetFor(deadline);
+  let res: Response;
+  try {
+    res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        Authorization: `bearer ${token()}`,
+        "Content-Type": "application/json",
+        "User-Agent": "gitcric",
+      },
+      body: JSON.stringify({ query, variables }),
+      signal: AbortSignal.timeout(timeoutMs),
+      // Cache at the fetch layer; the route adds its own revalidation.
+      next: { revalidate: 60 * 60 * 6 },
+    });
+  } catch (e) {
+    // token() throws its own classified error from inside this try — don't
+    // relabel it, or a missing token reads as a generic network fault.
+    if (e instanceof GitHubError) throw e;
+    // AbortSignal.timeout rejects with a TimeoutError DOMException.
+    if (e instanceof DOMException && e.name === "TimeoutError") {
+      throw new GitHubError(`GitHub did not respond within ${timeoutMs}ms`, 504, "timeout");
+    }
+    // Genuine network failure (DNS, reset). Surfaced as unknown -> the retry
+    // state, rather than bubbling a raw TypeError out of the route.
+    throw new GitHubError(`GitHub request failed: ${(e as Error).message}`, 502, "unknown");
+  }
 
-  if (res.status === 401 || res.status === 403) {
-    throw new GitHubError("GitHub auth/rate-limit", res.status, res.status === 401 ? "auth" : "rate_limit");
+  // 401 is a dead credential (expired/revoked/malformed). 403 is usually the
+  // secondary rate limit. Keeping them apart is what makes an expired token
+  // diagnosable instead of looking like ordinary throttling.
+  if (res.status === 401) {
+    throw new GitHubError("GitHub rejected the credential (401)", 401, "auth");
+  }
+  if (res.status === 403 || res.status === 429) {
+    throw new GitHubError(`GitHub rate limit (${res.status})`, res.status, "rate_limit");
   }
   if (!res.ok) throw new GitHubError(`GitHub HTTP ${res.status}`, res.status);
 
@@ -46,6 +89,15 @@ async function graphql<T>(query: string, variables: Record<string, unknown>): Pr
   if (json.data?.user) return json.data;
   if (json.errors?.some((e) => e.type === "NOT_FOUND")) {
     throw new GitHubError("no such user", 404, "not_found");
+  }
+  // GraphQL reports throttling and dead credentials with HTTP 200 + an errors
+  // array, so status codes alone would misfile both as "unknown".
+  const types = new Set((json.errors ?? []).map((e) => e.type));
+  if (types.has("RATE_LIMITED")) {
+    throw new GitHubError("GitHub GraphQL rate limit exhausted", 429, "rate_limit");
+  }
+  if (types.has("UNAUTHORIZED") || types.has("FORBIDDEN") || types.has("INSUFFICIENT_SCOPES")) {
+    throw new GitHubError(`GitHub rejected the credential: ${json.errors![0].message}`, 401, "auth");
   }
   if (json.errors?.length) throw new GitHubError(json.errors[0].message, 502, "unknown");
   if (!json.data) throw new GitHubError("empty GitHub response", 502);
@@ -143,7 +195,9 @@ function yearWindows(createdAt: string, nowISO: string): { from: string; to: str
 
 /** Fetch the full GitFut signal set for a login. */
 export async function fetchSignals(login: string): Promise<Signals> {
-  const { user } = await graphql<ProfileData>(PROFILE_QUERY, { login });
+  // One deadline for the whole scout — profile call plus every year batch.
+  const deadline = Date.now() + TOTAL_BUDGET_MS;
+  const { user } = await graphql<ProfileData>(PROFILE_QUERY, { login }, deadline);
   if (!user) throw new GitHubError(`No GitHub user "${login}"`, 404, "not_found");
 
   const nowISO = new Date().toISOString();

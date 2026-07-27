@@ -8,9 +8,13 @@ export default function Error({ reset }: { error: Error; reset: () => void }) {
       <h1 className="font-[family-name:var(--font-display)] text-4xl font-[800] uppercase tracking-tight">
         Innings interrupted
       </h1>
+      {/* Deliberately cause-neutral. Next strips server error detail before this
+          component sees it, so the old copy asserted rate-limiting for what
+          might equally be a timeout or a dead token — the real cause is written
+          to the server log instead. */}
       <p className="mt-3 text-[15px] text-[var(--color-muted)]">
-        We couldn&apos;t scout that profile just now — GitHub may be rate-limiting the scout.
-        Give it a moment and try again.
+        We couldn&apos;t scout that profile just now — the read from GitHub didn&apos;t come
+        back. Give it a moment and try again.
       </p>
       <div className="mt-6 flex justify-center gap-2">
         <button
