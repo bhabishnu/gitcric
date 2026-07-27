@@ -512,9 +512,33 @@ body {
     /* full width inside the page gutter, capped so a tablet doesn't get a
        comically large card, and centred by the flex alignment above */
     width: min(100%, var(--fan-card-w-sm));
+    /* Stacked, the four cards are ~2000px of scroll and at most one is on
+       screen. Skip rendering (and animating) the rest until they scroll in —
+       each card is a clip-path + composited double mask + layered SVG, which is
+       the real per-card cost on a mid-range phone. `auto` remembers the real
+       size after first paint, so the scrollbar doesn't jump. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 520px;
+    will-change: auto;
     /* drop the fan placement entirely — no rotation, offset, scale or stacking */
     transform: none;
     z-index: auto;
+  }
+}
+
+/* ── mobile only: stop holding GPU layers we don't need ─────────────────────
+   will-change is a transient hint, but written into a rule it is permanent —
+   the layer (and its memory) is held for the life of the element. On desktop
+   that is a fair trade and the promoted-layer text rendering is what the design
+   was tuned against, so the hints stay. On a phone, four stacked cards each
+   carrying a clip-path and a composited double mask, plus promoted layers for a
+   200ms one-shot, is real memory pressure for no gain: there is no hover, and a
+   running transform animation composites with or without the hint. */
+@media (max-width: 1279.98px) {
+  .gc-swap,
+  .gc-fan-float,
+  .gc-switch-active {
+    will-change: auto;
   }
 }
 
