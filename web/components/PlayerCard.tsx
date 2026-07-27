@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { CardFace } from "../lib/view";
-import { STAT_FULL } from "../lib/view";
+import { STAT_FULL } from "../lib/scale";
 import { Flag } from "../lib/flags";
 
 /**

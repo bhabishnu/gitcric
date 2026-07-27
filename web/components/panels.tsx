@@ -1,5 +1,5 @@
 import type { Segment } from "../lib/view";
-import { ovrToPercentile } from "../lib/view";
+import { ovrToPercentile } from "../lib/scale";
 
 /* ── shared primitives ─────────────────────────────────────────────────────── */
 

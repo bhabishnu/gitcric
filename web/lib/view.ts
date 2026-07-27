@@ -13,13 +13,12 @@ import { flagForLocation, flagForNation, type FlagCode } from "./flags";
 
 export type SegmentId = "you" | FormatBucket;
 
-export const STAT_ORDER: StatKey[] = ["BAT", "POW", "BWL", "ECO", "FLD", "IMP"];
-export const STAT_LABEL: Record<StatKey, string> = {
-  BAT: "BAT", POW: "POW", BWL: "BWL", ECO: "ECO", FLD: "FLD", IMP: "IMP",
-};
-export const STAT_FULL: Record<StatKey, string> = {
-  BAT: "Batting", POW: "Power", BWL: "Bowling", ECO: "Economy", FLD: "Fielding", IMP: "Impact",
-};
+// Stat labels + the axis helper live in ./scale so the CLIENT card components
+// can import them without dragging this module — and therefore the cricketer
+// index — into the browser bundle. Re-exported for server-side callers.
+import { STAT_ORDER, STAT_LABEL } from "./scale";
+export { STAT_ORDER, STAT_LABEL, STAT_FULL, ovrToPercentile } from "./scale";
+
 const ROLE_LABEL: Record<Role, string> = {
   batter: "BATTER", bowler: "BOWLER", allrounder: "ALL-ROUNDER", keeper: "WK-BATTER",
 };
@@ -64,9 +63,9 @@ export interface Segment {
   /** Right panel is a discriminated union: the scout report (YOU) or a
    *  cricketer's real career card. */
   right:
-      /** `percentile` is a real population stat (% of cricketers beaten);
-     *  `ovr` positions the marker on the 40..99 axis. */
-  | { kind: "scout"; metrics: ScoutMetric[]; percentile: number; ovr: number }
+    /** `percentile` is a real population stat (% of cricketers beaten), computed
+     *  on the server; `ovr` positions the marker on the 40..99 axis. */
+    | { kind: "scout"; metrics: ScoutMetric[]; percentile: number; ovr: number }
     | { kind: "career"; rows: { label: string; value: string }[]; distribution: number };
 }
 
@@ -254,11 +253,6 @@ export function buildPlayerSegments(id: string, index: Record<FormatBucket, Inde
     segments.push(twinSegment(twin, card));
   }
   return segments;
-}
-
-export function ovrToPercentile(ovr: number): number {
-  // Marker POSITION on the 40..99 axis. Not a population statistic.
-  return Math.max(0, Math.min(100, Math.round(((ovr - 40) / (99 - 40)) * 100)));
 }
 
 /**
