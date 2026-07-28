@@ -162,7 +162,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | KMDN Kulasekara | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ANuwan%20Kulasekara.jpg) |
 | KP Pietersen | Blnguyen | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AKevin%20Pietersen.jpg) |
 | KR Mayers | Calistemon | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AKyle%20Mayers%20batting%20at%20Perth%20Stadium%2C%20First%20Test%20Australia%20versus%20West%20Indies%2C%202%20December%202022%2011.jpg) |
-| KS Williamson | CRICKETNEXT | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AKane%20Williamson.jpg) |
+| KS Williamson | Mark Lockett | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AKane%20Williamson%20in%202019.jpg) |
 | KTGD Prasad | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ADammika%20prasad.jpg) |
 | KW Richardson | YellowMonkey | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AKane%20Richardson%202.jpg) |
 | L Ngidi | Starc99 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ALungi%20Ngidi.jpg) |

@@ -119,7 +119,11 @@ const PHOTO_OVERRIDES: Record<string, string> = {
   abb83e27: "2 05 Bairstow out.jpg", // JM Bairstow
   a757b0d8: "Kieron Pollard.jpg", // KA Pollard
   "0a476045": "SHIKHAR DHAWAN (16005494418).jpg", // S Dhawan
-  d027ba9f: "Kane Williamson.jpg", // KS Williamson
+  // KS Williamson deliberately has NO override. "Kane Williamson.jpg" was
+  // trialled and REVERTED: at 450x386 it fell below the card's ~920 device-px
+  // retina need and turned a portrait source (0.65) into a landscape one
+  // (1.17). The automatic P18 pick, "Kane Williamson in 2019.jpg", is the
+  // better card image. Do not re-add it.
   "7dc35884": "Shakib Al Hasan (2).jpg", // Shakib Al Hasan
   de8cce37: "VVSLaxman.jpg", // VVS Laxman
   "3fb19989": "Mitchell Starc fielding 2021 (cropped).jpg", // MA Starc
