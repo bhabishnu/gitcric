@@ -12,3 +12,16 @@
 next-env.d.ts
 .vercel
 .env*
+
+# Photo triage/review artifacts — local review tools, not part of the product.
+# They inline every image as a data URI, so each runs to megabytes and GitHub's
+# language stats read the repo as ~90% HTML instead of TypeScript.
+#
+# Anchored with a leading slash so these only match this directory. Product data
+# that lives deeper is unaffected and stays tracked:
+#   gen/photos.json              imported by lib/data.ts
+#   public/players/CREDITS.json  attribution written by fetch-photos.ts
+#   public/players/*.jpg         the actual card portraits
+/photo-*.html
+/photo-*.md
+/photo-*.json
