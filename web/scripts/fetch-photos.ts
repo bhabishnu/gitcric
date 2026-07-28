@@ -46,7 +46,15 @@ function loadCricketArchiveIds(): Map<string, string> {
 const PHOTO_DIR = join(__dirname, "..", "public", "players");
 const GEN = join(__dirname, "..", "gen");
 
-const UA = "GitCric/1.1 (github.com/gitcric; cricketer identity photo build; non-commercial)";
+/**
+ * Wikimedia's User-Agent policy wants a UA that identifies the tool AND offers
+ * a way to contact whoever runs it. The old value named "github.com/gitcric",
+ * which is not a real repository and carries no contact, and Wikimedia
+ * throttled it hard: upload.wikimedia.org returned 429 for this UA while the
+ * same request from a compliant one returned 200. That was the cause of the
+ * download failures in the Phase 2A batch, not request volume.
+ */
+const UA = "GitCric/1.1 (https://github.com/bhabishnu/gitcric; cricketer identity photo build; non-commercial)";
 const SPARQL = "https://query.wikidata.org/sparql";
 const COMMONS_API = "https://commons.wikimedia.org/w/api.php";
 
@@ -95,6 +103,47 @@ const PHOTO_OVERRIDES: Record<string, string> = {
   // his chin, and no crop can fix it (the cover-scale is width-driven, so a
   // shorter source only pulls the window up). This one frames higher.
   "4ba44e19": "MUTTIAH MURALITHARAN (5155181205).jpg", // M Muralitharan
+
+  // ── Phase 2A: 33 vetted replacements for low-quality stored photos ────────
+  // Selection was NOT filename-based — that approach proposed a bronze statue
+  // for Ponting, a TV camera in front of Dhawan's face, and (worst) Ravindra
+  // Jadeja's wife Rivaba. Each entry below was face-detected (YuNet), scored on
+  // where the face lands in the card's real crop, identity-checked against the
+  // player's previous photo (SFace cosine >= 0.36), and finally eyeballed.
+  // Full record: web/photo-phase2a-proposals.json / -review.html.
+  "271f83cd": "Suryakumar Yadav in PMO New Delhi.jpg", // SA Yadav
+  db584dad: "CHRIS GAYLE (4338758231).jpg", // CH Gayle
+  "6b71e6cf": "KUMAR SANGAKKARA (5155171149).jpg", // KC Sangakkara
+  b8d490fd: "AARON FINCH (6299558883).jpg", // AJ Finch
+  "6a26221c": "Aiden Markram interview after WTC final 2025 (cropped).png", // AK Markram
+  abb83e27: "2 05 Bairstow out.jpg", // JM Bairstow
+  a757b0d8: "Kieron Pollard.jpg", // KA Pollard
+  "0a476045": "SHIKHAR DHAWAN (16005494418).jpg", // S Dhawan
+  d027ba9f: "Kane Williamson.jpg", // KS Williamson
+  "7dc35884": "Shakib Al Hasan (2).jpg", // Shakib Al Hasan
+  de8cce37: "VVSLaxman.jpg", // VVS Laxman
+  "3fb19989": "Mitchell Starc fielding 2021 (cropped).jpg", // MA Starc
+  "495d42a5": "Ravichandran Ashwin (2).jpg", // R Ashwin
+  fe93fd9d: "Ravindra Jadeja in PMO New Delhi.jpg", // RA Jadeja
+  c03f1114: "Dinesh.Karthik.jpg", // KD Karthik
+  "2254ab79": "Sarfaraz Ahmed answering RAPID FIRE questions (PCB) 02.jpg", // Sarfraz Ahmed
+  "8cf9814c": "Mohammed Shami bowling against England at Edgbaston.jpg", // Mohammed Shami
+  a94e08ea: "Mushfiqur Rahim 2018 (cropped).jpg", // Mushfiqur Rahim
+  "9cb8d7a6": "Imad Wasim 1.jpg", // Imad Wasim
+  "96a6a7ad": "Nathan Lyon The Test clip.png", // NM Lyon
+  "53597be1": "Cricket at Lord's (17165108401) (Brendon Taylor cropped).jpg", // BRM Taylor
+  "00ea847a": "2 38 Agarwal mugshot.jpg", // MA Agarwal
+  "40c041ea": "4 12 Imam-ul-Haq mugshot.jpg", // Imam-ul-Haq
+  cc1e8c68: "Umesh Yadav (2).jpg", // UT Yadav
+  "45a7e761": "Shaheen Afridi jogging Sri Lanka vs Pakistan - 2nd TEST Match - SSC, Colombo (cropped).jpg", // Shaheen Shah Afridi
+  "7147f314": "Sabbir Rahman 2016 (cropped).jpg", // Sabbir Rahman
+  "5bb1a1c4": "Ishant Sharma 2.JPG", // I Sharma
+  "755a77c6": "4 02 Gary Ballance.jpg", // GS Ballance
+  c16d2e28: "Steve Harmison bowl.jpg", // SJ Harmison
+  "10a91f35": "Shoaib Akhtar in 2014 (cropped).jpg", // Shoaib Akhtar
+  bbd41817: "Andre Russell (2).jpg", // AD Russell
+  "5a37ec26": "Monty Panesar (2014) (02).jpg", // MS Panesar
+  ef18b66e: "Taskin Ahmed at Chef's Table.png", // Taskin Ahmed
 };
 
 /**
@@ -105,6 +154,18 @@ const PHOTO_EXCLUDE = new Set<string>([
   // AM Rahane — stored file was 83x169. Commons offers only a watermarked
   // full-body red-carpet shot and a two-person awards photo; no portrait.
   "29e95537",
+  // Phase 2A: reviewed and chosen for the monogram. Commons has files for these
+  // players but nothing that is both verifiably them and usable after the
+  // card's crop — a clean monogram beats an unrecognisable face.
+  "88fccd6c", // SM Pollock
+  "d2babdd5", // E Chigumbura
+  "221ad9d9", // GP Swann
+  "0fa5042b", // L Ronchi
+  "f846de6a", // MN Samuels
+  "944533a5", // KK Nair
+  "e957b38f", // AR McBrine
+  "2503e881", // A Nel
+  "6eea0b32", // Nasir Hossain
 ]);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
