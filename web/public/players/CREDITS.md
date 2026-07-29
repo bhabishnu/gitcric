@@ -75,7 +75,6 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | C de Grandhomme | www.davidmolloyphotography.com from Sydney, Australia | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3A2018.02.03.20.52.20-AUSvNZL%20T20%20NZL%20innings%2C%20SCG%20(38618201470)%20(de%20Grandhomme%20cropped).jpg) |
 | C Green | Calistemon | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AJermaine%20Blackwood%20batting%20and%20Cameron%20Green%20bowling%20at%20Perth%20Stadium%2C%20First%20Test%20Australia%20versus%20West%20Indies%2C%202%20December%202022%2004.jpg) |
 | C Karunaratne | Point of Pavithra | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AChamika%20Karunaratne.jpg) |
-| C Madande | Amuzujoe | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3A2023%20African%20Games%2001%20cricket%20162%20(cropped).jpg) |
 | C Munro | Joeyjackets | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AColin%20Munro%20with%20the%20Sydney%20Sixers.jpg) |
 | C Overton | Harrias | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ACraig%20Overton.jpg) |
 | CA Lynn | www.davidmolloyphotography.com | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AChris%20lynn%202018.jpg) |
@@ -457,7 +456,6 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | SL Malinga | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ALasith%20Malinga%20tossing%20a%20cricket%20ball%20at%20practice.jpg) |
 | SM Boland | DustyNail | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3A260329%20D4%20Scott%20Boland%2001.jpg) |
 | SM Curran | Number 10 | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AThe%20Prime%20Minister%20welcomes%20the%20World%20Cup%20winning%20cricketers%20(52764650104)%20-%20Sam%20Curran%20(cropped).jpg) |
-| SM Ervine | HampshireCricketFan | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ADominicCork.jpg) |
 | SM Katich | Theannaconda at English Wikipedia | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3AKatich2.jpg) |
 | SNJ O'Keefe | paddynapper | CC BY-SA 2.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AStephen%20O'Keefe.jpg) |
 | SO Hetmyer | CRICKETNEXT | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AShimron%20Hetmyer.jpg) |

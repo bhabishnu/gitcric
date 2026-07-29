@@ -277,7 +277,6 @@ const PHOTO_OVERRIDES: Record<string, string> = {
   "45a43fe2": "Ruturaj Gaikwad.jpeg", // RD Gaikwad · B3 · tier B
   "348195ea": "Jefferson and Flower.jpg", // GW Flower · B3 · tier C
   "c404f58a": "Dirk nannes.jpg", // DP Nannes · B3 · tier B
-  "3560a786": "2023 African Games 01 cricket 162 (cropped).jpg", // C Madande · B3 · tier C
   "33f28243": "Rana Naved Ul Hassan 1.jpg", // Naved-ul-Hasan · B3 · tier A
   "3eb7c45d": "Imran Nazir (02).jpg", // Imran Nazir · B3 · tier C
   "aad0c365": "Nitish Kumar Reddy BGT 2024 (cropped) 2.jpg", // Nithish Kumar Reddy · B3 · tier B
@@ -303,7 +302,6 @@ const PHOTO_OVERRIDES: Record<string, string> = {
   "29e8a62e": "3 27 Rory Burns.jpg", // RJ Burns · B3 · tier C
   "f76ffa81": "Nasser Hussain.JPG", // N Hussain · B3 · tier C
   "818e8bf2": "Somerset bowlers warming up.JPG", // ID Blackwell · B3 · tier C
-  "556302a7": "DominicCork.jpg", // SM Ervine · B3 · tier C
   "1e66c162": "2 09 Jaydev Unadkat 1.jpg", // JD Unadkat · B3 · tier C
   "749a1b3a": "Brendan Nash.jpg", // BP Nash · B3 · tier C
   "a15aaa7f": "Ambrose, Tim.JPG", // TR Ambrose · B3 · tier C
@@ -483,6 +481,13 @@ const PHOTO_EXCLUDE = new Set<string>([
   "a1b69936", // DG Bedingham — 2-player photo shared with K Verreynne
   "bf814547", // K Verreynne — 2-player photo shared with DG Bedingham
   "de3d549a", // AM Fernando — file categorised under Babar Azam, not him
+
+  // Two-person photos, rejected on review: neither face can be confirmed as the
+  // player. Madande's African Games shot is categorised under both him and
+  // Rakep Patel; Ervine's Wikidata image is literally named DominicCork.jpg and
+  // described as Dominic Cork lifting the 2009 Friends Provident Trophy.
+  "3560a786", // C Madande — 2-player African Games photo, face unconfirmable
+  "556302a7", // SM Ervine — file is a Dominic Cork photo
 ]);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
