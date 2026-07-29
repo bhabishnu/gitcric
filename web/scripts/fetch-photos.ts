@@ -148,6 +148,226 @@ const PHOTO_OVERRIDES: Record<string, string> = {
   bbd41817: "Andre Russell (2).jpg", // AD Russell
   "5a37ec26": "Monty Panesar (2014) (02).jpg", // MS Panesar
   ef18b66e: "Taskin Ahmed at Chef's Table.png", // Taskin Ahmed
+
+  // ── Phase 2B: photos for players who were on the monogram fallback ────────
+  // 208 picks approved from the four review pages. Candidates came only
+  // from each player's own Wikidata image or their own Commons category; where a
+  // category held several photos the face recurring across them was taken as the
+  // player, so group shots resolve to the right person. Each was rendered through
+  // the card's real crop and eyeballed before approval.
+  //
+  // 15 further proposals are deliberately ABSENT pending confirmation — they were
+  // same-name matches on a different person (an architect, an Oklahoma politician,
+  // Asif Ali Zardari, a Taliban minister, an FC St. Pauli footballer) or two-person
+  // photos where the player's face could not be told from the other's.
+  "126e56a1": "Wasim Akram WWC.jpg", // Wasim Akram · B1 · tier A
+  "hist:viv-richards": "Viv Richards.jpg", // Viv Richards · B1 · tier B
+  "622dee94": "Steve Waugh (6529451409).jpg", // SR Waugh · B1 · tier A
+  "b410bd3d": "Sandeep Lamichhane in 2018.png", // S Lamichhane · B1 · tier B
+  "5f547c8b": "Rashid Khan.jpg", // Rashid Khan · B1 · tier A
+  "hist:curtly-ambrose": "CURTLEY AMBROSE AND GRAHAM GOOCH (2876068345).jpg", // Curtly Ambrose · B1 · tier B
+  "hist:allan-border": "ALLAN BORDER (6299581573).jpg", // Allan Border · B1 · tier B
+  "4f629497": "New Zealand cricket team, Shoaib Malik, Dunedin, NZ, 2009 (cropped).jpg", // SE Bond · B1 · tier C
+  "hist:kapil-dev": "Kapil Dev at Equation sports auction.jpg", // Kapil Dev · B1 · tier B
+  "752f7486": "Ishan Kishan.jpg", // Ishan Kishan · B1 · tier C
+  "hist:courtney-walsh": "Courtney Walsh (1).jpg", // Courtney Walsh · B1 · tier B
+  "hist:sunil-gavaskar": "Sunil Gavaskar BH.jpg", // Sunil Gavaskar · B1 · tier B
+  "hist:dennis-lillee": "Dennis Keith Lillee (8121209028).jpg", // Dennis Lillee · B1 · tier B
+  "hist:mahela-jayawardene": "Mahela Jayawardene 3.JPG", // Mahela Jayawardene · B1 · tier B
+  "hist:javed-miandad": "Cricket Nederland tegen Pakistan Javed Miomdaal van Pakistan aan bat, achter he, Bestanddeelnr 929-8094.jpg", // Javed Miandad · B1 · tier C
+  "hist:ian-botham": "Sky Team.jpg", // Ian Botham · B1 · tier C
+  "hist:richard-hadlee": "Sir Richard Hadlee Fill the Basin for Christchurch.jpg", // Richard Hadlee · B1 · tier B
+  "1dc12ab9": "Suresh Raina.jpg", // SK Raina · B2 · tier A
+  "b17e2f24": "LOKESH RAHUL-15573141953 (cropped).JPG", // KL Rahul · B2 · tier B
+  "e798611a": "Hashim Amla.jpg", // HM Amla · B2 · tier A
+  "1777c020": "Fakhar Zaman, Pakistan vs Sri Lanka, 1st ODI, 2017.jpg", // Fakhar Zaman · B2 · tier B
+  "eade4650": "DarylMitchellEmmysSept09.jpg", // DJ Mitchell · B2 · tier B (full-name match)
+  "b4b99816": "Shubman Gill.jpg", // Shubman Gill · B2 · tier B
+  "48a1d7b7": "Shimron Hetmyer.jpg", // SO Hetmyer · B2 · tier B
+  "4c61a0f9": "Hayley and Nathan Bracken (6640177185).jpg", // NW Bracken · B2 · tier B
+  "989889ff": "20251224 Josh Inglis 01.jpg", // JP Inglis · B2 · tier B
+  "e62dd25d": "Rabada.jpg", // K Rabada · B2 · tier A
+  "8d2c70ad": "Kuldeep Yadav in PMO New Delhi.jpg", // Kuldeep Yadav · B2 · tier B
+  "d8906a73": "Waqar younis.jpg", // Waqar Younis · B2 · tier A
+  "fa433be6": "20251224 Marnus Labuschagne 01.jpg", // M Labuschagne · B2 · tier A
+  "ea42ddb9": "Trescothick misfield.JPG", // ME Trescothick · B2 · tier C
+  "ba5e1069": "Rachin Ravindra.jpg", // R Ravindra · B2 · tier C
+  "12bffe91": "Tsotsobe.jpg", // LL Tsotsobe · B2 · tier A
+  "81c36ee9": "Marco Jansen 2022.jpg", // M Jansen · B2 · tier B
+  "e824e6ee": "U.S. Rep. Tom Latham, R-Ames (4100119599).jpg", // TWM Latham · B2 · tier B (full-name match)
+  "59ea70a4": "Harry Tector 2022.jpg", // HT Tector · B2 · tier B
+  "fd835ab3": "David Hussey 2.jpg", // DJ Hussey · B2 · tier B
+  "0a8fce53": "Mustafizur Rahman on practice field in Dhaka on 2018 (1) (cropped).jpg", // Mustafizur Rahman · B2 · tier B
+  "2f49c897": "Mohammed.siraj.jpg", // Mohammed Siraj · B2 · tier B
+  "9e52a414": "Towhid Hridoy.jpg", // Towhid Hridoy · B2 · tier B
+  "33085ffb": "3 27 Dean Elgar mugshot.jpg", // D Elgar · B2 · tier A
+  "29e95537": "Ajinkya Rahane 2016.jpg", // AM Rahane · B2 · tier B
+  "8afe73e2": "1 52 Young faces Rauf (cropped).jpg", // WA Young · B2 · tier C
+  "c03449e0": "Grant Elliott.jpg", // GD Elliott · B2 · tier B
+  "03521fd3": "Henry Nicholls double century 2023-03-18.jpg", // HM Nicholls · B2 · tier C (full-name match)
+  "ccdd8308": "The England Cricket Team Ashes 2015 (finn cropped).jpg", // ST Finn · B2 · tier B
+  "f19ccfad": "Washington Sundar 2.jpg", // Washington Sundar · B2 · tier C
+  "2498e163": "James Hopes.jpg", // JR Hopes · B2 · tier B
+  "a8e3170f": "Mohammad Irfan 03.jpg", // Mohammad Irfan · B2 · tier B
+  "84826f48": "Niall O'Brien with ICL.jpg", // NJ O'Brien · B2 · tier C
+  "9de62878": "Shadab Khan.png", // Shadab Khan · B2 · tier C
+  "24bb1c2f": "1 53 Haris Rauf.jpg", // Haris Rauf · B2 · tier B
+  "5fbe14fc": "Imrul Kayes (2).jpg", // Imrul Kayes · B2 · tier B
+  "7d5af2ea": "Kraigg Brathwaite batting at Perth Stadium, First Test Australia versus West Indies, 2 December 2022 06.jpg", // KC Brathwaite · B2 · tier C
+  "244048f6": "Prime Minister Of Bharat Shri Narendra Damodardas Modi with Arshdeep Singh Family (Cropped).jpg", // Arshdeep Singh · B2 · tier B
+  "1747ea18": "Dsairee.jpg", // DS Airee · B3 · tier B
+  "e3386c8a": "Kushal-bhurtel.jpg", // K Bhurtel · B3 · tier B
+  "3c6ffae8": "Yusuf Pathan.jpg", // YK Pathan · B3 · tier B
+  "b0482a1d": "Tilak Varma in March 2026.png", // Tilak Varma · B3 · tier B
+  "06cad4f0": "Alishan sharafu 007.jpg", // A Sharafu · B3 · tier C (full-name match)
+  "a4e37e47": "Shivam Dube in PMO New Delhi.jpg", // S Dube · B3 · tier B
+  "23638956": "Simon Harmer.jpg", // SR Harmer · B3 · tier B
+  "6c19c6e5": "Yashasvi Jaiswal in PMO New Delhi.jpg", // YBK Jaiswal · B3 · tier B
+  "7e9f1cde": "Kushal-malla-4.jpg", // Kushal Malla · B3 · tier C
+  "a3bfec5d": "Stuart clark closeup.jpg", // SR Clark · B3 · tier C
+  "78adc879": "2 37 Neil Wagner.jpg", // N Wagner · B3 · tier B
+  "d167edd3": "260329 D4 Scott Boland 01.jpg", // SM Boland · B3 · tier A
+  "45eda7c8": "Chris lynn 2018.jpg", // CA Lynn · B3 · tier C
+  "e03b66ec": "MOHAMMAD ASIF (4246253787).jpg", // Mohammad Asif · B3 · tier A
+  "6a71ba3a": "Michael Levitt (50372828237).jpg", // M Levitt · B3 · tier B (full-name match)
+  "94198ef4": "Justin Langer Portrait.jpg", // JL Langer · B3 · tier A
+  "e66732f8": "2 40 Ryan Rickleton.jpg", // RD Rickelton · B3 · tier B
+  "94eac556": "Clint McKay.jpg", // CJ McKay · B3 · tier A
+  "aa8d28ae": "DAVID WIESE (15702924581).jpg", // D Wiese · B3 · tier B
+  "5b8c830e": "Krunal Pandya and Hardik Pandya.jpg", // KH Pandya · B3 · tier C
+  "72e60730": "Assad Vala.png", // A Vala · B3 · tier B
+  "e94bc520": "Ollie Pope.jpg", // OJ Pope · B3 · tier C
+  "df1f2f29": "2 51 Farhan Ahmed.jpg", // Fiaz Ahmed · B3 · tier C (full-name match)
+  "0f3ee070": "Ollie Robinson, 2023 (cropped).jpg", // OE Robinson · B3 · tier B
+  "a72b14ff": "Chris Tremlett, 2009 Friends Provident Trophy final, Lord's.jpg", // CT Tremlett · B3 · tier C
+  "c89474d1": "Tim Murtagh.jpg", // TJ Murtagh · B3 · tier B
+  "dc0f5506": "Hoggy & Strauss at the Brabourne.jpg", // MJ Hoggard · B3 · tier B
+  "f28a60e0": "SaadBinZafarDisplay.jpg", // Saad Bin Zafar · B3 · tier B
+  "9caf69a1": "4 20 Will Jacks.jpg", // WG Jacks · B3 · tier C (full-name match)
+  "49b6c09f": "James Tredwell playing cricket.jpg", // JC Tredwell · B3 · tier C
+  "7a8bd078": "Rajasthan Royals player Shreyas Gopal in a post-match presentation during 2019 Indian Premier League.png", // S Gopal · B3 · tier B
+  "922e1b19": "1 03 Zak Crawley (cropped).jpg", // Z Crawley · B3 · tier B
+  "c834c290": "3 48 Jamie Smith.jpg", // JL Smith · B3 · tier B
+  "84212ffb": "Janith Liyanage batting debut.jpg", // J Liyanage · B3 · tier C
+  "c654af19": "RYAN MCLAREN (15519878577).jpg", // R McLaren · B3 · tier B
+  "32198ae0": "Moises' Henriques NSW.jpg", // MC Henriques · B3 · tier A
+  "23eeb873": "Deepak Chahar.jpg", // DL Chahar · B3 · tier B
+  "d8360178": "Chris Rogers.jpg", // CJL Rogers · B3 · tier B
+  "9d84d41d": "Haynes Gough.jpg", // DL Haynes · B3 · tier C
+  "cb9b8664": "2 14 Will O'Rourke mugshot.jpg", // W O'Rourke · B3 · tier B
+  "c3b93a03": "Jermaine Blackwood batting and Cameron Green bowling at Perth Stadium, First Test Australia versus West Indies, 2 December 2022 04.jpg", // J Blackwood · B3 · tier C
+  "fcbf5a30": "Darren Gough portrait.jpg", // D Gough · B3 · tier A
+  "60dac349": "STUART MACGILL.jpg", // SCG MacGill · B3 · tier A
+  "addfb70e": "Shan Tait.jpg", // SW Tait · B3 · tier B
+  "6843a783": "1 26 Shan Masood.jpg", // Shan Masood · B3 · tier A
+  "18fac429": "1 51 Samit.jpg", // SR Patel · B3 · tier A
+  "9b4935c8": "CALLUM FERGUSON (6319486691).jpg", // CJ Ferguson · B3 · tier A
+  "c374f37f": "Cricket at Lord's (17165108401).jpg", // JWA Taylor · B3 · tier C
+  "a8e56914": "Duanne Olivier 2019.jpg", // D Olivier · B3 · tier C
+  "03252e44": "Phil Jaques (cropped).jpg", // PA Jaques · B3 · tier A
+  "d07c1b2f": "1 37 Saud Shakeel.jpg", // Saud Shakeel · B3 · tier C
+  "1adb8ee8": "Sompal Kami Cricketer.jpg", // Sompal Kami · B3 · tier B
+  "619aa81f": "Wasim jafar With Rashid Zirak.jpg", // W Jaffer · B3 · tier A
+  "feb37330": "With moin khan.jpg", // Moin Khan · B3 · tier B
+  "8ea6e670": "Nathan Hauritz 2.jpg", // NM Hauritz · B3 · tier B
+  "a48fc79d": "Ed Joyce 2007 cropped.jpg", // EC Joyce · B3 · tier B
+  "74d12124": "Justin Greaves.jpg", // JP Greaves · B3 · tier C (full-name match)
+  "6020a3c6": "Keacy Carty.jpg", // KU Carty · B3 · tier C (full-name match)
+  "3987e390": "Jack Leach.jpg", // MJ Leach · B3 · tier B
+  "45a43fe2": "Ruturaj Gaikwad.jpeg", // RD Gaikwad · B3 · tier B
+  "348195ea": "Jefferson and Flower.jpg", // GW Flower · B3 · tier C
+  "c404f58a": "Dirk nannes.jpg", // DP Nannes · B3 · tier B
+  "3560a786": "2023 African Games 01 cricket 162 (cropped).jpg", // C Madande · B3 · tier C
+  "33f28243": "Rana Naved Ul Hassan 1.jpg", // Naved-ul-Hasan · B3 · tier A
+  "3eb7c45d": "Imran Nazir (02).jpg", // Imran Nazir · B3 · tier C
+  "aad0c365": "Nitish Kumar Reddy BGT 2024 (cropped) 2.jpg", // Nithish Kumar Reddy · B3 · tier B
+  "a830c083": "Neil McKenzie 2.jpg", // ND McKenzie · B3 · tier B
+  "3540beff": "Stephen O'Keefe.jpg", // SNJ O'Keefe · B3 · tier A
+  "f5f18a18": "SURAJ RANDIV (5155795898).jpg", // S Randiv · B3 · tier B
+  "0be1b885": "DANISH KANERIA (4246120363).jpg", // Danish Kaneria · B3 · tier A
+  "a354c917": "Neil Broom.jpg", // NT Broom · B3 · tier A
+  "78f34e15": "Iain O'Brien, Dunedin, NZ, 2009 1.jpg", // IE O'Brien · B3 · tier A
+  "d32782ae": "Rashid Latif (1).jpg", // Rashid Latif · B3 · tier A
+  "bd17b45f": "Stuart Binny (2019).jpg", // STR Binny · B3 · tier B
+  "0994d0ae": "Vijay Shankar 4.jpg", // V Shankar · B3 · tier B
+  "26e5cabf": "Manoj Tiwary 2.jpg", // MK Tiwary · B3 · tier B
+  "502b2c81": "XAVIER DOHERTY (3071566113).jpg", // XJ Doherty · B3 · tier B
+  "7ee2ce62": "Vikram Solanki.jpg", // VS Solanki · B3 · tier B
+  "79aad751": "Lakshan Sandakan.jpg", // PADLR Sandakan · B3 · tier B (full-name match)
+  "59ddd811": "Nkrumah Bonner batting at Perth Stadium, First Test Australia versus West Indies, 2 December 2022 02.jpg", // NE Bonner · B3 · tier C
+  "43936951": "DARYL TUFFEY (11914123155).jpg", // DR Tuffey · B3 · tier A
+  "99464591": "Marcus North (5108060986).jpg", // MJ North · B3 · tier B
+  "dadbdb68": "1 01 Jacob Duffy.jpg", // JA Duffy · B3 · tier B (full-name match)
+  "37654b75": "Nasum Ahmed on 2022.png", // Nasum Ahmed · B3 · tier C
+  "fd093ca9": "PAUL HARRIS (3194655079).jpg", // PL Harris · B3 · tier A
+  "29e8a62e": "3 27 Rory Burns.jpg", // RJ Burns · B3 · tier C
+  "f76ffa81": "Nasser Hussain.JPG", // N Hussain · B3 · tier C
+  "818e8bf2": "Somerset bowlers warming up.JPG", // ID Blackwell · B3 · tier C
+  "556302a7": "DominicCork.jpg", // SM Ervine · B3 · tier C
+  "1e66c162": "2 09 Jaydev Unadkat 1.jpg", // JD Unadkat · B3 · tier C
+  "749a1b3a": "Brendan Nash.jpg", // BP Nash · B3 · tier C
+  "a15aaa7f": "Ambrose, Tim.JPG", // TR Ambrose · B3 · tier C
+  "fee3c48a": "Ed Cowan.jpg", // EJM Cowan · B3 · tier B
+  "894b2d25": "2 14 Matthew Potts mugshot.jpg", // MJ Potts · B3 · tier B
+  "8479a24a": "Keaton Jennings (51208506111) (cropped).jpg", // KK Jennings · B3 · tier B
+  "e9987a94": "Craig Overton.jpg", // C Overton · B3 · tier A
+  "582e9baa": "Chris Harris (Cricketer).jpg", // CZ Harris · B3 · tier B
+  "1bb0993e": "Abu Jayed Chowdhury (1).jpg", // Abu Jayed · B3 · tier A
+  "48ad3373": "1 03 Blair Tickner.jpg", // BM Tickner · B3 · tier B
+  "218d4d78": "2 02 Matt Renshaw.jpg", // MT Renshaw · B3 · tier C
+  "bdadf7da": "Joe Denly TW 18.jpg", // JL Denly · B3 · tier A
+  "4d3097d8": "Gareth hopkins a.jpg", // GJ Hopkins · B3 · tier A
+  "be4cefab": "Slips.jpg", // CMW Read · B3 · tier C
+  "05da443b": "Adnan akmal cropped.jpg", // Adnan Akmal · B3 · tier A
+  "bab78fa2": "Joshua Da Silva batting at Perth Stadium, First Test Australia versus West Indies, 2 December 2022 07.jpg", // J Da Silva · B3 · tier C
+  "3812d56b": "Michael Yardy 2010.jpg", // MH Yardy · B3 · tier C
+  "97e434a6": "Dom Sibley in June 2019 (cropped).jpg", // DP Sibley · B3 · tier B
+  "e1891e00": "2 10 Ben Sears (cropped).jpg", // BV Sears · B3 · tier B
+  "99663fa5": "Dinesh Mongia (Dec 2021) 01.jpg", // D Mongia · B3 · tier B
+  "e5437a99": "Nick compton training.jpg", // NRD Compton · B3 · tier C
+  "463cd7cb": "Craig Cumming 2.jpg", // CD Cumming · B3 · tier A
+  "f78e7113": "Seekkuge Prasanna.jpg", // S Prasanna · B3 · tier A
+  "a22fb7b5": "Peter Nevill 2011.jpg", // PM Nevill · B3 · tier A
+  "0b0cc297": "Tanzim Hasan Sakib in 2024.jpg", // Tanzim Hasan Sakib · B3 · tier B
+  "0c8a1d51": "Khaled Mahmud Sujon (2).jpg", // Khaled Mahmud · B3 · tier A
+  "3d0ed2f9": "Jake Ball bowls for Nottinghamshire.jpg", // JT Ball · B3 · tier C
+  "8b3e9c7c": "Prithvi shaw.png", // PP Shaw · C · tier C
+  "5d9a1a73": "Rohit Sharma in PMO New Delhi.jpg", // R Sharma · C · tier B
+  "119678fd": "Karn Sharma 2015.jpg", // KV Sharma · C · tier A
+  "56b93d46": "20251224 Beau Webster 02.jpg", // BJ Webster · C · tier A
+  "c7a995d3": "Sai Kishore.jpg", // R Sai Kishore · C · tier C
+  "8fb88ee3": "Cricket, Oval, 26th April 2007 006 (cropped).jpg", // MA Butcher · C · tier A
+  "62af8546": "Mohammad Nabi with an Afghan-Australian fan in 2014.jpg", // Mohammad Nabi · C · tier C
+  "a24be938": "Venkatesh Iyer.png", // VR Iyer · C · tier C
+  "c1f6c27e": "Onions at Edgbaston, 2009 (1) (cropped).jpg", // G Onions · C · tier C
+  "c03e2850": "MananVohra Magic book of record.jpg", // M Vohra · C · tier C
+  "9a158001": "Azhar Mahmood.jpg", // Azhar Mahmood · C · tier C
+  "f4dfcbb4": "Stiaan van Zyl (51223939959).jpg", // S van Zyl · C · tier C
+  "e2db2409": "M Ashwin.jpg", // M Ashwin · C · tier C
+  "3576e47e": "Subramaniam Badrinath.JPG", // S Badrinath · C · tier A
+  "709b0bac": "India Vs New zealand One day International, 10 December 2010 (6160465490).jpg", // SS Tiwary · C · tier C
+  "063b3673": "RCL 2016 MoM Dishant Yagnik.jpg", // DH Yagnik · C · tier C (full-name match)
+  "ae091d39": "Swapnil Asnodkar 2009.jpg", // SA Asnodkar · C · tier C
+  "ad46c747": "3 12 Well batted.jpg", // DM Bess · C · tier A
+  "7d92277a": "Mujeeb Ur Rahman celebrating.jpg", // Mujeeb Ur Rahman · C · tier C
+  "c8179c68": "Shadab Jakati in 2016 (01).jpg", // SB Jakati · C · tier C
+  "4b685e2d": "4 34 Dan Lawrence mugshot.jpg", // DW Lawrence · C · tier A
+  "890946a0": "NAMAN OJHA (16192960225).jpg", // NV Ojha · C · tier A
+  "f89d3b11": "Sameer rizvi With Rashid Zirak.jpg", // Sameer Rizvi · C · tier C
+  "ce794613": "T Natarajan.jpg", // T Natarajan · C · tier C
+  "399b0b94": "2 22 Cameron Bancroft.jpg", // CT Bancroft · C · tier C
+  "855a210c": "Aditya Tare.jpg", // AP Tare · C · tier C
+  "c4d9634c": "Rahkeem Cornwall collects first-ever CPL century.png", // RRS Cornwall · C · tier A
+  "9e85455c": "260329 D4 Marcus Harris 02.jpg", // MS Harris · C · tier A
+  "1c2a64cd": "Ashish Reddy and Shikhar Dhawan.jpg", // A Ashish Reddy · C · tier B
+  "a3ce3d1d": "Saral Erwee 2022.jpg", // SJ Erwee · C · tier C
+  "c42aaf71": "Mithun manhas.jpg", // M Manhas · C · tier C
+  "dc9dd038": "Sachin baby.jpg", // Sachin Baby · C · tier B
+  "fe0c5457": "Scott bowland dismisses haseeb hameed.jpg", // H Hameed · C · tier C
+  "ae78bc32": "Mpsgoni.jpg", // MS Gony · C · tier C
+  "46a9bea1": "Tushar Deshpande.jpg", // TU Deshpande · C · tier C
+  "c9c0fe50": "Alex Lees (cricketer).jpg", // AZ Lees · C · tier B
+  "2e11c706": "Ben Cutting GABBA.jpg", // BCJ Cutting · C · tier C
 };
 
 /**
@@ -155,9 +375,9 @@ const PHOTO_OVERRIDES: Record<string, string> = {
  * portrait — better a clean monogram than a broken or unrecognisable face.
  */
 const PHOTO_EXCLUDE = new Set<string>([
-  // AM Rahane — stored file was 83x169. Commons offers only a watermarked
-  // full-body red-carpet shot and a two-person awards photo; no portrait.
-  "29e95537",
+  // AM Rahane — was excluded in Phase 2A (only a watermarked red-carpet shot
+  // and a two-person awards photo existed then). Phase 2B found a real portrait
+  // in his own Commons category, so the exclude is lifted and the override wins.
   // Phase 2A: reviewed and chosen for the monogram. Commons has files for these
   // players but nothing that is both verifiably them and usable after the
   // card's crop — a clean monogram beats an unrecognisable face.
@@ -170,6 +390,79 @@ const PHOTO_EXCLUDE = new Set<string>([
   "e957b38f", // AR McBrine
   "2503e881", // A Nel
   "6eea0b32", // Nasir Hossain
+
+  // ── Phase 2B: reviewed and chosen for the monogram ────────────────────────
+  // 68 players whose proposed photo was rejected on review — wrong person,
+  // unusable crop, or no photo worth having. Listed here so a re-run cannot
+  // quietly resurrect a rejected pick.
+  "a28a7fba", // A Johnson
+  "17aa4f1d", // Aaron Jones
+  "f29185a1", // Abhishek Sharma
+  "abb7c76c", // Abrar Ahmed
+  "53bc7b84", // Aftab Ahmed
+  "de3acffe", // AJ McKay
+  "0a67aec0", // Akash Deep
+  "eb2d5fe7", // Anwar Ali
+  "db31895a", // AS Rajpoot
+  "e7e86505", // B Evans
+  "7fca84b7", // BA King
+  "953e3931", // BA Williams
+  "adbf0400", // Basil Hameed
+  "dcdb87f2", // Bilal Khan
+  "eaa36b2a", // BJ Bennett
+  "fb66ce1f", // CH Morris
+  "05e0fab5", // CS Martin
+  "de7d833e", // D Madushanka
+  "f1eb3c73", // DMW Rawlins
+  "9d710afe", // DR Flynn
+  "85ad2217", // DS Smith
+  "0d38ab25", // H Fennell
+  "94238673", // HK Bennett
+  "2b0f2af3", // Imran Khan (2)
+  "cd56a813", // Jaker Ali
+  "b80dd12c", // Jatinder Singh
+  "6fd0c8e1", // JD Campbell
+  "aae9ce90", // JF Mooney
+  "bc773eeb", // JM Bird
+  "086f5984", // Junaid Khan
+  "934b36a6", // Khawar Ali
+  "e012ad13", // KOA Powell
+  "e1592949", // KS Leverock
+  "4a461c24", // LA Dawson
+  "b8f3362a", // LR Johnson
+  "c8574282", // MD Craig
+  "759ac88f", // MM Sharma
+  "ff3f6fc1", // Mohammad Haris
+  "7923a51d", // Mohammad Naim
+  "7ff3fcaa", // Mohammad Rafique
+  "b3a28446", // Mohammad Saifuddin
+  "2cffab74", // Mukesh Kumar
+  "c573d173", // MWR Stokes
+  "023f6b02", // Nadeem Ahmed
+  "05b1aef8", // NG Smith
+  "efc04be7", // Noor Ahmad
+  "9eb1455b", // NT Ellis
+  "9418198b", // P Simran Singh
+  "41eb4a4f", // R Vinay Kumar
+  "a63775d6", // Rahat Ali
+  "17efdeb8", // Raqibul Hasan
+  "b8527c3d", // Rasikh Salam
+  "cccdde80", // RP Arnold
+  "67af6f81", // RW Price
+  "957532de", // S Aravind
+  "0f6db197", // S Mahmood
+  "8de618ab", // SA Ahmad
+  "b59db04f", // SA Edwards
+  "bbc192a4", // Sajid Khan
+  "ce820073", // Sandeep Sharma
+  "13bee186", // SC Cook
+  "090f9211", // Shahadat Hossain
+  "f088b960", // SN Khan
+  "5af743d0", // Sohail Khan
+  "7f3ad1ed", // SR Thompson
+  "a9231c3f", // Steven Ryan Taylor
+  "21e5f325", // TA Blundell
+  "f1f99156", // TH David
 ]);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -308,15 +601,27 @@ async function main() {
   mkdirSync(GEN, { recursive: true });
   const db = new Database(DB_PATH, { readonly: true });
   const caIds = loadCricketArchiveIds();
+  // gf>=2 gates the AUTOMATIC sweep to players recognizable in two or more
+  // formats. An explicit override is a decision already made by hand, so it
+  // bypasses the gate: 144 of the approved photos are for players who render as
+  // cards in the app but sit below the threshold, and an inner join silently
+  // dropped every one of them.
   const players = (db.prepare(`
     WITH agg AS (SELECT player_id, SUM(CASE WHEN gated=1 THEN 1 ELSE 0 END) gf FROM player_format_stats GROUP BY player_id)
-    SELECT p.id, p.name FROM players p JOIN agg a ON a.player_id=p.id WHERE a.gf>=2
-  `).all() as { id: string; name: string }[])
+    SELECT p.id, p.name, COALESCE(a.gf, 0) AS gf FROM players p LEFT JOIN agg a ON a.player_id=p.id
+  `).all() as { id: string; name: string; gf: number }[])
+    .filter((p) => p.gf >= 2 || PHOTO_OVERRIDES[p.id])
     .map((p) => ({ ...p, cid: caIds.get(p.id) ?? "" }))
-    .filter((p) => p.cid)
+    // A cricketarchive id is how the AUTOMATIC Wikidata lookup finds a photo, so
+    // players without one used to be dropped here. But an explicit override
+    // needs no lookup — it already names the file — and most of the players we
+    // hand-picked have no cricketarchive id at all (that is precisely why they
+    // had to be resolved by name). Dropping them silently skipped 162 of 208
+    // approved photos, so keep anyone who has an override.
+    .filter((p) => p.cid || PHOTO_OVERRIDES[p.id])
     .filter((p) => !ONLY || ONLY.has(p.id))
     .slice(0, LIMIT);
-  console.log(`${players.length} recognizable players with a cricketarchive id`);
+  console.log(`${players.length} players in scope (${players.filter((p) => p.cid).length} with a cricketarchive id, ${players.filter((p) => !p.cid).length} override-only)`);
 
   // existing manifest → allow idempotent re-runs
   const manifestPath = join(GEN, "photos.json");
@@ -326,7 +631,7 @@ async function main() {
   const priorCredits = existsSync(creditsPath) ? JSON.parse(readFileSync(creditsPath, "utf8")) : {};
   Object.assign(credits, priorCredits);
 
-  const byCid = new Map(players.map((p) => [p.cid, p]));
+  const byCid = new Map(players.filter((p) => p.cid).map((p) => [p.cid, p]));
 
   // Persist manifest + credits + CREDITS.md — called after every batch so a
   // timeout never loses progress (idempotent, resumable).
@@ -343,41 +648,48 @@ async function main() {
 
   // 1) Wikidata SPARQL → cricketarchive id → commons filename (ALL players, so
   // credits are (re)captured even for faces downloaded in an earlier run).
-  const cidToFile = new Map<string, string>();
-  for (const batch of chunk(players.map((p) => p.cid), 140)) {
+  // Keyed by OUR player id, not the cricketarchive id: overrides exist for
+  // players who have no cricketarchive id at all, and a cid-keyed map cannot
+  // represent them (they would all collide on the empty string).
+  const fileByPlayer = new Map<string, string>();
+  for (const batch of chunk(players.filter((p) => p.cid).map((p) => p.cid), 140)) {
     try {
       const m = await sparqlBatch(batch);
-      m.forEach((v, k) => cidToFile.set(k, v));
+      m.forEach((file, cid) => {
+        const p = byCid.get(cid);
+        if (p) fileByPlayer.set(p.id, file);
+      });
     } catch (e) {
       console.log("  SPARQL batch failed:", (e as Error).message);
     }
     await sleep(400);
   }
-  console.log(`Wikidata: ${cidToFile.size} players have a Commons image`);
+  console.log(`Wikidata: ${fileByPlayer.size} players have a Commons image`);
 
   // Manual picks beat the automatic one. Applied here, before any download, so
   // overridden players flow through the identical licence/credit path.
   const byId = new Map(players.map((p) => [p.id, p]));
+  let overrideHits = 0;
   for (const [id, file] of Object.entries(PHOTO_OVERRIDES)) {
     const p = byId.get(id);
-    if (!p) { console.log(`  override skipped — no such player ${id}`); continue; }
-    cidToFile.set(p.cid, file);
-    console.log(`  override: ${p.name} → ${file}`);
+    if (!p) continue; // out of scope for this run (--only), or not a gated player
+    fileByPlayer.set(p.id, file);
+    overrideHits++;
   }
+  console.log(`overrides applied in this run: ${overrideHits}`);
   // Excluded players fall back to the monogram: drop any stored face + manifest
   // entry, so re-running can't quietly resurrect the bad image.
   for (const id of PHOTO_EXCLUDE) {
-    const p = byId.get(id);
-    if (p) cidToFile.delete(p.cid);
+    fileByPlayer.delete(id);
     delete manifest[id];
     delete credits[id];
     rmSync(join(PHOTO_DIR, `${id}.jpg`), { force: true });
-    console.log(`  excluded (monogram): ${p?.name ?? id}`);
   }
+  console.log(`monogram (excluded): ${PHOTO_EXCLUDE.size}`);
 
   // 2) Commons imageinfo (license + thumburl), 3) download if not already present
   let saved = 0, skippedNonFree = 0, noMeta = 0, noThumb = 0, dlFail = 0;
-  const entries = [...cidToFile.entries()];
+  const entries = [...fileByPlayer.entries()];
   for (const fileBatch of chunk(entries, 25)) {
     const files = fileBatch.map(([, f]) => f);
     let info: Map<string, ImgInfo>;
@@ -388,9 +700,9 @@ async function main() {
       await sleep(500);
       continue;
     }
-    for (const [cid, file] of fileBatch) {
+    for (const [playerId, file] of fileBatch) {
       const meta = info.get(file);
-      const player = byCid.get(cid);
+      const player = byId.get(playerId);
       if (!player) continue;
       if (!meta) { noMeta++; continue; }
       if (!meta.thumburl) { noThumb++; continue; }
