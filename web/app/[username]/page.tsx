@@ -6,6 +6,7 @@ import { pickTwins } from "../../lib/match/matcher";
 import { PLAYER_INDEX } from "../../lib/data";
 import { buildSegments } from "../../lib/view";
 import { CardExperience } from "../../components/CardExperience";
+import { StarOnGitHub } from "../../components/StarOnGitHub";
 import Link from "next/link";
 
 // NOTE: currently INERT. This route calls headers() (for shareUrl), which opts
@@ -78,14 +79,23 @@ export default async function UserPage({ params }: { params: Promise<{ username:
     throw e; // rate_limit / auth / timeout / unknown → error.tsx
   }
 
+  // headers() is still called deliberately — it is what keeps this route fully
+  // dynamic (see the note above the revalidate export). Dropping it would flip
+  // user pages onto page-level ISR, which is a caching change, not a UI one.
+  const CANONICAL_HOST = "gitcric.vercel.app";
   const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "gitcric.vercel.app";
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  const shareUrl = `${proto}://${host}/${encodeURIComponent(username.replace(/^@/, ""))}`;
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? CANONICAL_HOST;
+  // A share intent has to publish a URL other people can open, so localhost and
+  // preview deployments still hand out the canonical link.
+  const shareOrigin = host === CANONICAL_HOST ? `https://${host}` : `https://${CANONICAL_HOST}`;
+  const shareUrl = `${shareOrigin}/${encodeURIComponent(username.replace(/^@/, ""))}`;
 
   return (
     <main className="min-h-dvh">
-      <nav className="border-b border-[var(--color-hairline)]">
+      {/* No bottom border: the nav flows straight into the card experience the
+          way the landing page does. Scoped to this element rather than the
+          .border-b utility, so /player/[id]'s nav keeps its rule. */}
+      <nav>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
           <Link
             href="/"
@@ -93,9 +103,12 @@ export default async function UserPage({ params }: { params: Promise<{ username:
           >
             Git<span className="text-[var(--color-crimson)]">Cric</span>
           </Link>
-          <Link href="/" className="text-xs text-[var(--color-muted)] hover:text-[var(--color-text)]">
-            Scout another →
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="text-xs text-[var(--color-muted)] hover:text-[var(--color-text)]">
+              Scout another →
+            </Link>
+            <StarOnGitHub compact />
+          </div>
         </div>
       </nav>
       <CardExperience

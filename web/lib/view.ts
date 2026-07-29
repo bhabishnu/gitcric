@@ -9,7 +9,10 @@ import type { CricketerCard, IndexRow, Role } from "./data";
 import { getCricketerCard, photoFor, PLAYER_INDEX, type FormatBucket } from "./data";
 import type { Twin } from "./match/matcher";
 import { colorwayFor, type Colorway } from "./colorways";
-import { flagForLocation, flagForNation, type FlagCode } from "./flags";
+// Flags resolve to their inline SVG HERE, on the server. The card face carries
+// the chosen asset so the 200 kB table never reaches the browser.
+import { assetForNation, assetForUser } from "./geo/location";
+import type { FlagAsset } from "./flags.data";
 
 export type SegmentId = "you" | FormatBucket;
 
@@ -34,7 +37,7 @@ export interface CardFace {
   trim: SegmentId;
   /** Team colorway for a cricketer; null on the YOU card (keeps its tier finish). */
   colorway: Colorway | null;
-  flag: FlagCode | null;
+  flag: FlagAsset | null;
   /** Cricketer face path, or null → monogram. YOU uses avatarUrl instead. */
   photoFile: string | null;
   /** Franchise name — IPL cards only (colorways are ambiguous: RCB vs PBKS red).
@@ -139,7 +142,7 @@ function youSegment(card: UserCard): Segment {
       tier: card.tier,
       trim: "you",
       colorway: null, // YOU keeps its tier finish
-      flag: flagForLocation(card.location),
+      flag: assetForUser(card.login, card.location),
       photoFile: null,
       teamLabel: null,
     },
@@ -204,7 +207,7 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
       tier,
       trim: twin.bucket,
       colorway,
-      flag: flagForNation(twin.nation),
+      flag: assetForNation(twin.nation),
       photoFile: photoFor(twin.id),
       // franchise caption on IPL only; nation cards let the flag do the naming
       teamLabel: twin.bucket === "ipl" ? colorway.label : null,

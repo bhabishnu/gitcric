@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { UsernameForm } from "./username-form";
 import { ShowcaseFan } from "../components/ShowcaseFan";
+import { StarOnGitHub } from "../components/StarOnGitHub";
 
 /** Secondary entry points — one tap to a card, for anyone not ready to type
  *  their own handle. GitHub logins are case-insensitive; the route canonicalises. */
@@ -15,7 +16,16 @@ export default function Home() {
     // that's left; appending the footer to a min-h-dvh main would push the page
     // past the fold and add a scrollbar.
     <div className="flex min-h-dvh flex-col">
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-14 px-6 py-16 xl:grid xl:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] xl:items-center xl:gap-12 xl:py-0">
+      {/* Pinned rather than in flow so it cannot push the hero down or steal a
+          line from the fan. `pointer-events-none` on the strip keeps the dead
+          space beside the pill from swallowing clicks meant for the page. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end px-5 py-4 sm:px-6">
+        <div className="pointer-events-auto">
+          <StarOnGitHub compact />
+        </div>
+      </div>
+
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-14 px-6 pb-16 pt-24 sm:pt-16 xl:grid xl:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] xl:items-center xl:gap-12 xl:py-0">
         <div>
           <p className="tabular text-xs uppercase tracking-[0.2em] text-[var(--color-muted)]">
             The scouting report

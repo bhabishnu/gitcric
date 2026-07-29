@@ -2,24 +2,31 @@
 
 import { useState } from "react";
 import { toPng } from "html-to-image";
+import { XMark, LinkedInMark, RedditMark } from "./icons";
 
 /**
  * Share row: download the card as a PNG (rendered from the live card node) plus
  * X / LinkedIn / Reddit intents. Buttons scale on :active (pressable).
+ *
+ * `ovr` and `role` describe the VISITOR's own card, not the active segment — the
+ * copy says "I got scouted", so switching to a cricketer twin must not rewrite
+ * the boast with the twin's numbers.
  */
 export function ShareRow({
   captureId,
   username,
   ovr,
+  role,
   shareUrl,
 }: {
   captureId: string;
   username: string;
   ovr: number;
+  role: string;
   shareUrl: string;
 }) {
   const [busy, setBusy] = useState(false);
-  const text = `I'm a ${ovr} OVR on GitCric — my GitHub as a cricket card. Find your cricketer twin:`;
+  const text = `I got scouted — ${ovr} OVR ${role} on GitCric 🏏`;
 
   async function download() {
     const node = document.getElementById(captureId);
@@ -47,9 +54,15 @@ export function ShareRow({
 
   return (
     <div className="flex items-center gap-2">
-      <ShareLink href={links.x} label="Share on X">X</ShareLink>
-      <ShareLink href={links.linkedin} label="Share on LinkedIn">in</ShareLink>
-      <ShareLink href={links.reddit} label="Share on Reddit">R</ShareLink>
+      <ShareLink href={links.x} label="Share on X">
+        <XMark className="h-[13px] w-[13px]" />
+      </ShareLink>
+      <ShareLink href={links.linkedin} label="Share on LinkedIn">
+        <LinkedInMark className="h-[15px] w-[15px]" />
+      </ShareLink>
+      <ShareLink href={links.reddit} label="Share on Reddit">
+        <RedditMark className="h-[15px] w-[15px]" />
+      </ShareLink>
       <button
         onClick={download}
         disabled={busy}
@@ -68,7 +81,7 @@ function ShareLink({ href, label, children }: { href: string; label: string; chi
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="pressable tabular flex h-8 w-8 items-center justify-center rounded-md border border-[var(--color-hairline)] text-xs text-[var(--color-muted)] hover:text-[var(--color-text)]"
+      className="pressable gc-share"
     >
       {children}
     </a>

@@ -2,51 +2,30 @@
  * C7 — flags. The artwork is a real asset set (flag-icons v7, MIT, 4x3), baked
  * into flags.data.ts by scripts/gen-flags.ts; the hand-drawn approximations this
  * replaced were wrong often enough to be a bug (Nepal rendered as a red block,
- * i.e. Morocco). Cricketers: keyed on derived nation. GitHub users: best-effort
- * parse of the profile location, shown ONLY on a confident country match.
+ * i.e. Morocco).
+ *
+ * This module is CLIENT-SAFE and deliberately holds no data. The asset table is
+ * ~200 kB across 61 flags and used to ride into the browser through
+ * CardExperience; it is now resolved on the SERVER in lib/view.ts and only the
+ * chosen flag travels with the card face. Same single render path — one inline
+ * <svg> — just fed by prop instead of by client-side lookup, so nothing is
+ * fetched at paint time and html-to-image can still serialise the card from the
+ * DOM alone.
+ *
+ * Resolution (nation → code, GitHub location → code) lives in lib/geo/location.ts,
+ * which must never be imported from a client component.
  */
-import { FLAG_ASSETS } from "./flags.data";
+import type { FlagAsset } from "./flags.data";
 
 export type FlagCode =
+  // cricketing nations — reached from a cricketer's derived nation
   | "IN" | "AU" | "EN" | "PK" | "ZA" | "WI" | "NZ" | "LK" | "BD" | "ZW" | "IE" | "AF"
-  | "SC" | "NL" | "NA" | "NP" | "AE" | "OM" | "US" | "CA" | "PG" | "KE";
-
-const NATION_TO_CODE: Record<string, FlagCode> = {
-  India: "IN", Australia: "AU", England: "EN", Pakistan: "PK", "South Africa": "ZA",
-  "West Indies": "WI", "New Zealand": "NZ", "Sri Lanka": "LK", Bangladesh: "BD",
-  Zimbabwe: "ZW", Ireland: "IE", Afghanistan: "AF", Scotland: "SC", Netherlands: "NL",
-  Namibia: "NA", Nepal: "NP", "United Arab Emirates": "AE", Oman: "OM",
-  "United States of America": "US", Canada: "CA", "Papua New Guinea": "PG", Kenya: "KE",
-};
-
-export function flagForNation(nation: string | null): FlagCode | null {
-  return nation ? NATION_TO_CODE[nation] ?? null : null;
-}
-
-/** Best-effort GitHub location → country. Conservative: unmatched → null. */
-export function flagForLocation(location: string | null): FlagCode | null {
-  if (!location) return null;
-  const s = ` ${location.toLowerCase()} `;
-  const has = (...w: string[]) => w.some((x) => s.includes(x));
-  if (has("india", "bengaluru", "bangalore", "mumbai", "delhi", "hyderabad", "chennai", "pune", "kolkata")) return "IN";
-  if (has("pakistan", "karachi", "lahore", "islamabad")) return "PK";
-  if (has("bangladesh", "dhaka")) return "BD";
-  if (has("sri lanka", "colombo")) return "LK";
-  if (has("nepal", "kathmandu")) return "NP";
-  if (has("australia", "sydney", "melbourne", "brisbane", "perth")) return "AU";
-  if (has("new zealand", "auckland", "wellington")) return "NZ";
-  if (has("scotland", "edinburgh", "glasgow")) return "SC";
-  if (has("ireland", "dublin")) return "IE";
-  if (has("netherlands", "amsterdam", "holland")) return "NL";
-  if (has("south africa", "johannesburg", "cape town")) return "ZA";
-  if (has("canada", "toronto", "vancouver", "montreal")) return "CA";
-  if (has("united arab emirates", " uae ", "dubai", "abu dhabi")) return "AE";
-  if (has("england", "london", "manchester", "united kingdom", " uk ", "britain", "leeds", "bristol")) return "EN";
-  if (has("united states", " usa ", " u.s.", "america", "new york", "san francisco", "seattle", "boston", "austin", "california", " ca ", " ny ", " tx ", "washington", "portland", "oregon", "chicago", "los angeles", "denver", "atlanta")) return "US";
-  return null;
-}
-
-// ── rendering ───────────────────────────────────────────────────────────────
+  | "SC" | "NL" | "NA" | "NP" | "AE" | "OM" | "US" | "CA" | "PG" | "KE"
+  // everywhere else — only ever reached from a GitHub profile location
+  | "DE" | "FR" | "BR" | "JP" | "CN" | "RU" | "ES" | "IT" | "PL" | "SE" | "NO"
+  | "DK" | "FI" | "CH" | "AT" | "BE" | "PT" | "TR" | "UA" | "IL" | "SG" | "KR"
+  | "MX" | "AR" | "ID" | "PH" | "VN" | "TH" | "MY" | "NG" | "EG" | "GR" | "CZ"
+  | "RO" | "HU" | "TW" | "HK" | "CO" | "CL" | "GB";
 
 /**
  * A flag at its TRUE proportions. Every asset is drawn with `meet` (never
@@ -56,9 +35,7 @@ export function flagForLocation(location: string | null): FlagCode | null {
  * neutral plate to sit on, so a non-rectangular flag reads as itself instead of
  * as a mystery gap.
  */
-export function Flag({ code, className }: { code: FlagCode | null; className?: string }) {
-  if (!code) return null;
-  const asset = FLAG_ASSETS[code];
+export function Flag({ asset, className }: { asset: FlagAsset | null; className?: string }) {
   if (!asset) return null;
   return (
     <svg

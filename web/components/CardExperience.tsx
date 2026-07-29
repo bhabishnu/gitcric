@@ -51,10 +51,13 @@ export function CardExperience({
             />
           </div>
           <div className="w-full max-w-[500px]">
+            {/* the visitor's OWN card drives the share copy, not `seg` — the
+                text says "I got scouted", so a cricketer twin must not hijack it */}
             <ShareRow
               captureId={CAPTURE_ID}
               username={you.card.surname.toLowerCase()}
-              ovr={seg.card.ovr}
+              ovr={you.card.ovr}
+              role={you.card.roleLabel}
               shareUrl={shareUrl}
             />
           </div>

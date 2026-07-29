@@ -99,7 +99,7 @@ export function PlayerCard({
         <span className="gc-ovr tabular">{face.ovr}</span>
         <span className="gc-role">{face.roleLabel}</span>
         <div className="gc-idrow">
-          {face.flag && <Flag code={face.flag} className="gc-flag" />}
+          {face.flag && <Flag asset={face.flag} className="gc-flag" />}
         </div>
       </div>
 

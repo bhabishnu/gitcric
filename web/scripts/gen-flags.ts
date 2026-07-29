@@ -29,6 +29,14 @@ const SOURCE: Record<string, string> = {
   IN: "in", AU: "au", EN: "gb-eng", PK: "pk", ZA: "za", NZ: "nz", LK: "lk",
   BD: "bd", ZW: "zw", IE: "ie", AF: "af", SC: "gb-sct", NL: "nl", NA: "na",
   NP: "np", AE: "ae", OM: "om", US: "us", CA: "ca", PG: "pg", KE: "ke",
+  // Non-cricket nations, added for GitHub profile locations. These never come
+  // from a cricketer's nation — only from flagForLocation().
+  DE: "de", FR: "fr", BR: "br", JP: "jp", CN: "cn", RU: "ru", ES: "es",
+  IT: "it", PL: "pl", SE: "se", NO: "no", DK: "dk", FI: "fi", CH: "ch",
+  AT: "at", BE: "be", PT: "pt", TR: "tr", UA: "ua", IL: "il", SG: "sg",
+  KR: "kr", MX: "mx", AR: "ar", ID: "id", PH: "ph", VN: "vn", TH: "th",
+  MY: "my", NG: "ng", EG: "eg", GR: "gr", CZ: "cz", RO: "ro", HU: "hu",
+  TW: "tw", HK: "hk", CO: "co", CL: "cl", GB: "gb",
 };
 
 const NAME: Record<string, string> = {
@@ -38,6 +46,15 @@ const NAME: Record<string, string> = {
   NL: "Netherlands", NA: "Namibia", NP: "Nepal", AE: "United Arab Emirates",
   OM: "Oman", US: "United States", CA: "Canada", PG: "Papua New Guinea",
   KE: "Kenya",
+  DE: "Germany", FR: "France", BR: "Brazil", JP: "Japan", CN: "China",
+  RU: "Russia", ES: "Spain", IT: "Italy", PL: "Poland", SE: "Sweden",
+  NO: "Norway", DK: "Denmark", FI: "Finland", CH: "Switzerland",
+  AT: "Austria", BE: "Belgium", PT: "Portugal", TR: "Turkey", UA: "Ukraine",
+  IL: "Israel", SG: "Singapore", KR: "South Korea", MX: "Mexico",
+  AR: "Argentina", ID: "Indonesia", PH: "Philippines", VN: "Vietnam",
+  TH: "Thailand", MY: "Malaysia", NG: "Nigeria", EG: "Egypt", GR: "Greece",
+  CZ: "Czechia", RO: "Romania", HU: "Hungary", TW: "Taiwan",
+  HK: "Hong Kong", CO: "Colombia", CL: "Chile", GB: "United Kingdom",
 };
 
 /**
@@ -108,7 +125,11 @@ function inner(code: string): { viewBox: string; inner: string } {
 }
 
 const codes = ["IN", "AU", "EN", "PK", "ZA", "WI", "NZ", "LK", "BD", "ZW", "IE",
-  "AF", "SC", "NL", "NA", "NP", "AE", "OM", "US", "CA", "PG", "KE"];
+  "AF", "SC", "NL", "NA", "NP", "AE", "OM", "US", "CA", "PG", "KE",
+  "DE", "FR", "BR", "JP", "CN", "RU", "ES", "IT", "PL", "SE", "NO", "DK",
+  "FI", "CH", "AT", "BE", "PT", "TR", "UA", "IL", "SG", "KR", "MX", "AR",
+  "ID", "PH", "VN", "TH", "MY", "NG", "EG", "GR", "CZ", "RO", "HU", "TW",
+  "HK", "CO", "CL", "GB"];
 
 const entries = codes.map((c) => {
   const { viewBox, inner: body } = inner(c);

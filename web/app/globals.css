@@ -589,3 +589,83 @@ body {
   color: var(--color-text);
   border-color: color-mix(in srgb, var(--color-crimson) 70%, transparent);
 }
+
+/* ── "Star on GitHub" pill ─────────────────────────────────────────────────── */
+/* Sized as a real button, not a caption: 40px tall with generous padding so it
+   carries the weight a primary CTA needs. Graphite everywhere except the star,
+   which is the single crimson pop — the label, mark and count stay monochrome so
+   the colour reads as emphasis rather than decoration. */
+.gc-ghstar {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: 999px;
+  padding: 0 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+  background: var(--color-panel-2);
+  transition: border-color var(--dur-press) var(--ease-out), background var(--dur-press) var(--ease-out);
+}
+.gc-ghstar:hover {
+  background: color-mix(in srgb, var(--color-panel-2) 70%, #fff 6%);
+  border-color: color-mix(in srgb, var(--color-crimson) 70%, transparent);
+}
+/* The count sits behind a hairline divider so it reads as a separate fact from
+   the label, the way GitHub's own button splits them. */
+.gc-ghstar-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding-left: 11px;
+  border-left: 1px solid var(--color-hairline-strong);
+  color: var(--color-muted);
+  font-size: 12.5px;
+}
+/* The one pop of colour on the pill. */
+.gc-ghstar-star { color: var(--color-crimson); }
+
+/* Mobile: collapse to mark + count, but keep a 44px touch target. */
+@media (max-width: 639px) {
+  .gc-ghstar {
+    min-height: 44px;
+    padding: 0 14px;
+    gap: 8px;
+  }
+}
+
+/* ── share icon buttons ────────────────────────────────────────────────────── */
+/* Brand marks are monochrome graphite at rest; hover warms to crimson, matching
+   the chip/footer-link convention rather than introducing brand colours. */
+.gc-share {
+  display: inline-flex;
+  height: 32px;
+  width: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid var(--color-hairline);
+  color: var(--color-muted);
+  transition: color var(--dur-press) var(--ease-out), border-color var(--dur-press) var(--ease-out);
+}
+.gc-share:hover {
+  color: var(--color-crimson);
+  border-color: color-mix(in srgb, var(--color-crimson) 55%, transparent);
+}
+
+/* ── @handle link on the result header ─────────────────────────────────────── */
+/* Underline on hover only: an always-on underline would compete with the tier
+   line sitting beside it. Border-bottom rather than text-decoration so the
+   metric box never reflows. */
+.gc-handle {
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-press) var(--ease-out), border-color var(--dur-press) var(--ease-out);
+}
+.gc-handle:hover {
+  color: var(--color-text);
+  border-bottom-color: color-mix(in srgb, var(--color-crimson) 70%, transparent);
+}

@@ -144,7 +144,20 @@ export function CardHeader({ segment }: { segment: Segment }) {
             the card face. Tier picks up the display family, letterspaced and a
             step down, so it reads as a rank rather than another fact. */}
         <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[13px] text-[var(--color-muted)]">
-          {segment.header.handle && <span>{segment.header.handle}</span>}
+          {/* The handle is only ever set on the YOU segment (cricketers carry
+              null), so it is always a real GitHub login and safe to link. This
+              is the header text, NOT the card face — the card face must stay
+              plain for the html-to-image capture. */}
+          {segment.header.handle && (
+            <a
+              href={`https://github.com/${encodeURIComponent(segment.header.handle.replace(/^@/, ""))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gc-handle"
+            >
+              {segment.header.handle}
+            </a>
+          )}
           {segment.header.handle && segment.header.sub && <span className="text-[var(--color-faint)]">·</span>}
           {segment.header.sub && <span>{segment.header.sub}</span>}
           {(segment.header.handle || segment.header.sub) && (
