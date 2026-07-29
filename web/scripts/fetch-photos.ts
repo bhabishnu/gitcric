@@ -463,6 +463,26 @@ const PHOTO_EXCLUDE = new Set<string>([
   "a9231c3f", // Steven Ryan Taylor
   "21e5f325", // TA Blundell
   "f1f99156", // TH David
+
+  // ── Phase 2B follow-up: confirmed wrong-person / unverifiable ─────────────
+  // Reviewed and rejected after the main batch. Nine were same-name matches on a
+  // different human entirely; the rest were two-person photos where the player
+  // could not be told from the other face.
+  "d3851cd8", // Ehsan Khan — file is Ehsan Khan (architect)
+  "7fa12533", // MS Chapman — file is Mark Chapman, Oklahoma politician
+  "afe57f7a", // SC Williams — file is Sean Williams the author
+  "0a4736eb", // Asif Ali — file is Asif Ali Zardari, President of Pakistan
+  "8abdf100", // CJ Anderson — file is Corey Anderson the Australian para-athlete
+  "d84378a4", // M Kaif — file categorised 'Founders from Rajasthan' — a startup founder
+  "c5d7b244", // Mohammad Nadeem — file is Neda Mohammad Nadeem, Taliban minister
+  "5e5eab39", // Nazmul Hossain — file categorised 'Journalists from Bangladesh'
+  "aab3e7be", // MJ Mason — file is a FC St. Pauli footballer
+  "7dcb9bc9", // M Shahrukh Khan — Wikidata P18 is titled 'Majid Khan Cricket Legend' — a different cricketer
+  "39a2dfa8", // R Tewatia — 3-person photo, cannot verify which face is him
+  "7a5f232a", // JA Burns — 2-person photo with James Franklin
+  "a1b69936", // DG Bedingham — 2-player photo shared with K Verreynne
+  "bf814547", // K Verreynne — 2-player photo shared with DG Bedingham
+  "de3d549a", // AM Fernando — file categorised under Babar Azam, not him
 ]);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

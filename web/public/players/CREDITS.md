@@ -164,6 +164,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | Habibul Bashar | Nurunnaby Chowdhury (Hasive) | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AHabibul%20Bashar%20(1)%20(cropped).jpg) |
 | Harbhajan Singh | Bollywood Hungama | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AHarbhajan%20Singh's%20Pepsi%20promotional%20event%20'Change%20The%20Game'.jpg) |
 | Haris Rauf | Dave Morton | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3A1%2053%20Haris%20Rauf.jpg) |
+| Haris Sohail | CRICKETNEXT | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AHaris%20Sohail.png) |
 | HC Brook | Dave Morton | PDM-owner | [Commons](https://commons.wikimedia.org/wiki/File%3AHarry%20Brook%20(51225504151)%20(cropped).jpg) |
 | HH Gibbs | YellowMonkey/Blnguyen | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AHerschelle%20Gibbs.jpg) |
 | HH Pandya | Prime Minister's Office | GODL-India | [Commons](https://commons.wikimedia.org/wiki/File%3AHardik%20Pandya%20in%20PMO%20New%20Delhi.jpg) |
@@ -485,6 +486,7 @@ All images from Wikimedia Commons under free (CC / public-domain / open-data) li
 | T Bavuma | Michael Sherman | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ATemba%20Bavuma%20Speaks%20Out%20on%20South%20African%20Cricket%20-%20Transformation%20and%20Controversy%20with%20the%20Warriors%20(cropped).png) |
 | T Natarajan | Dee03 | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3AT%20Natarajan.jpg) |
 | TA Boult | YellowMonkey/Blnguyen | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ATrent%20Boult.jpg) |
+| Taijul Islam | Press Information Department | Public domain | [Commons](https://commons.wikimedia.org/wiki/File%3ATaijul%20Islam%2C%202024%20(2)%20(cropped).jpg) |
 | Tamim Iqbal | Cricfrenzy Tube | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ATamim%20Iqbal%20Khan.jpg) |
 | Tanzim Hasan Sakib | Cricket Today | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ATanzim%20Hasan%20Sakib%20in%202024.jpg) |
 | Taskin Ahmed | Tripod Films | CC BY 3.0 | [Commons](https://commons.wikimedia.org/wiki/File%3ATaskin%20Ahmed%20at%20Chef's%20Table.png) |
