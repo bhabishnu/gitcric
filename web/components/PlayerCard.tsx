@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { CardFace } from "../lib/view";
 import { STAT_FULL } from "../lib/scale";
-import { Flag } from "../lib/flags";
+import { Flag, LangMark } from "../lib/flags";
 
 /**
  * THE CARD — the jewel. A die-cut CREST/SHIELD (our own geometry, not EA's):
@@ -93,14 +93,29 @@ export function PlayerCard({
         <span className="gc-scrim" aria-hidden />
       </div>
 
-      {/* OVR + role + flag, stacked top-left over the portrait. Tier is NOT named
-          here — it lives in the frame/finish and the page header line. */}
+      {/* Top-left identity column, in deliberate order of weight:
+            OVR      — dominant, the one number that matters
+            ROLE     — its caption, tucked directly under
+            flag · language — one compact identity line, hairline-separated
+          Language is a GitHub concept, so it is present on the YOU card only;
+          a cricketer shows the flag alone and the row collapses to it.
+          Tier is NOT named here — it lives in the frame/finish and the header. */}
       <div className="gc-badges">
         <span className="gc-ovr tabular">{face.ovr}</span>
         <span className="gc-role">{face.roleLabel}</span>
-        <div className="gc-idrow">
-          {face.flag && <Flag asset={face.flag} className="gc-flag" />}
-        </div>
+        {(face.flag || face.language) && (
+          <div className="gc-idrow">
+            {face.flag && <Flag asset={face.flag} className="gc-flag" />}
+            {/* Language sits BELOW the flag on the same column at the same
+                footprint. A curated mark when we have one, otherwise the short
+                text label — never a guess at a logo we do not own. */}
+            {face.languageMark ? (
+              <LangMark asset={face.languageMark} className="gc-langmark" />
+            ) : (
+              face.language && <span className="gc-lang tabular">{face.language}</span>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="gc-namebar">

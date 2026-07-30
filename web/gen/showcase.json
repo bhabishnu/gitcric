@@ -51,7 +51,13 @@
      "inner": "<path fill=\"#bd3d44\" d=\"M0 0h640v480H0\"/><path stroke=\"#fff\" stroke-width=\"37\" d=\"M0 55.3h640M0 129h640M0 203h640M0 277h640M0 351h640M0 425h640\"/><path fill=\"#192f5d\" d=\"M0 0h364.8v258.5H0\"/><marker id=\"gcf-US-us-a\" markerHeight=\"30\" markerWidth=\"30\"><path fill=\"#fff\" d=\"m14 0 9 27L0 10h28L5 27z\"/></marker><path fill=\"none\" marker-mid=\"url(#gcf-US-us-a)\" d=\"m0 0 16 11h61 61 61 61 60L47 37h61 61 60 61L16 63h61 61 61 61 60L47 89h61 61 60 61L16 115h61 61 61 61 60L47 141h61 61 60 61L16 166h61 61 61 61 60L47 192h61 61 60 61L16 218h61 61 61 61 60z\"/>"
     },
     "photoFile": null,
-    "teamLabel": null
+    "teamLabel": null,
+    "language": "C",
+    "languageMark": {
+     "viewBox": "0 0 24 24",
+     "name": "C",
+     "inner": "<polygon points=\"12,0 22.4,6 22.4,18 12,24 1.6,18 1.6,6\" fill=\"#5C6BC0\"/><text x=\"12\" y=\"15.6\" text-anchor=\"middle\" font-family=\"ui-monospace,Menlo,monospace\" font-size=\"10\" font-weight=\"700\" fill=\"#fff\">C</text>"
+    }
    }
   },
   {
@@ -104,7 +110,13 @@
      "inner": "<path fill=\"#ed2939\" d=\"M0 0h640v480H0z\"/><path fill=\"#fff\" d=\"M180 0h120v480H180z\"/><path fill=\"#fff\" d=\"M0 180h640v120H0z\"/><path fill=\"#002664\" d=\"M210 0h60v480h-60z\"/><path fill=\"#002664\" d=\"M0 210h640v60H0z\"/>"
     },
     "photoFile": null,
-    "teamLabel": null
+    "teamLabel": null,
+    "language": "JavaScript",
+    "languageMark": {
+     "viewBox": "0 0 24 24",
+     "name": "JavaScript",
+     "inner": "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\" rx=\"1\" fill=\"#F7DF1E\"/><text x=\"21.6\" y=\"21\" text-anchor=\"end\" font-family=\"ui-monospace,Menlo,monospace\" font-size=\"9\" font-weight=\"700\" fill=\"#000\">JS</text>"
+    }
    }
   },
   {
@@ -157,7 +169,13 @@
      "inner": "<path fill=\"#f93\" d=\"M0 0h640v160H0z\"/><path fill=\"#fff\" d=\"M0 160h640v160H0z\"/><path fill=\"#128807\" d=\"M0 320h640v160H0z\"/><g transform=\"matrix(3.2 0 0 3.2 320 240)\"><circle r=\"20\" fill=\"#008\"/><circle r=\"17.5\" fill=\"#fff\"/><circle r=\"3.5\" fill=\"#008\"/><g id=\"gcf-IN-in-d\"><g id=\"gcf-IN-in-c\"><g id=\"gcf-IN-in-b\"><g id=\"gcf-IN-in-a\" fill=\"#008\"><circle r=\".9\" transform=\"rotate(7.5 -8.8 133.5)\"/><path d=\"M0 17.5.6 7 0 2l-.6 5z\"/></g><use xlink:href=\"#gcf-IN-in-a\" width=\"100%\" height=\"100%\" transform=\"rotate(15)\"/></g><use xlink:href=\"#gcf-IN-in-b\" width=\"100%\" height=\"100%\" transform=\"rotate(30)\"/></g><use xlink:href=\"#gcf-IN-in-c\" width=\"100%\" height=\"100%\" transform=\"rotate(60)\"/></g><use xlink:href=\"#gcf-IN-in-d\" width=\"100%\" height=\"100%\" transform=\"rotate(120)\"/><use xlink:href=\"#gcf-IN-in-d\" width=\"100%\" height=\"100%\" transform=\"rotate(-120)\"/></g>"
     },
     "photoFile": null,
-    "teamLabel": null
+    "teamLabel": null,
+    "language": "Go",
+    "languageMark": {
+     "viewBox": "0 0 24 24",
+     "name": "Go",
+     "inner": "<text x=\"12\" y=\"17.8\" text-anchor=\"middle\" font-family=\"ui-monospace,Menlo,monospace\" font-size=\"16\" font-weight=\"700\" fill=\"#00ADD8\">Go</text>"
+    }
    }
   },
   {
@@ -210,7 +228,13 @@
      "inner": "<path fill=\"#bd3d44\" d=\"M0 0h640v480H0\"/><path stroke=\"#fff\" stroke-width=\"37\" d=\"M0 55.3h640M0 129h640M0 203h640M0 277h640M0 351h640M0 425h640\"/><path fill=\"#192f5d\" d=\"M0 0h364.8v258.5H0\"/><marker id=\"gcf-US-us-a\" markerHeight=\"30\" markerWidth=\"30\"><path fill=\"#fff\" d=\"m14 0 9 27L0 10h28L5 27z\"/></marker><path fill=\"none\" marker-mid=\"url(#gcf-US-us-a)\" d=\"m0 0 16 11h61 61 61 61 60L47 37h61 61 60 61L16 63h61 61 61 61 60L47 89h61 61 60 61L16 115h61 61 61 61 60L47 141h61 61 60 61L16 166h61 61 61 61 60L47 192h61 61 60 61L16 218h61 61 61 61 60z\"/>"
     },
     "photoFile": null,
-    "teamLabel": null
+    "teamLabel": null,
+    "language": "Python",
+    "languageMark": {
+     "viewBox": "0.9 0.4 24.56 24.61",
+     "name": "Python",
+     "inner": "<path fill=\"#3776AB\" d=\"M11.8 1.5c-2.6 0-4.4.9-4.4 2.9v2.1h4.6v.8H5.3C3.3 7.3 2 8.8 2 11.5S3.2 15.7 5.3 15.7h1.5v-2.5c0-2.1 1.7-3.6 3.8-3.6h4.3c1.8 0 3.1-1.3 3.1-3V4.4c0-1.7-1.5-2.6-3.4-2.8-.9-.1-1.8-.1-2.8-.1Zm-2.4 2c.5 0 .9.4.9 1s-.4 1-.9 1-.9-.4-.9-1 .4-1 .9-1Z\"/><path fill=\"#FFD343\" d=\"M17.2 8.3v2.4c0 2.2-1.8 3.7-3.8 3.7H9.1c-1.7 0-3.1 1.4-3.1 3v3c0 1.7 1.5 2.7 3.1 3.1 2 .5 3.9.6 6.2 0 1.6-.4 3.1-1.3 3.1-3.1v-2.1h-4.6v-.8h6.9c2 0 2.8-1.4 3.3-3.4.5-2.1.5-4-.1-5.7-.4-1.2-1.3-2.1-2.6-2.1h-4.1Zm-2.6 12.4c.5 0 .9.4.9 1s-.4 1-.9 1-.9-.4-.9-1 .4-1 .9-1Z\"/>"
+    }
    }
   }
  ]

@@ -12,6 +12,8 @@ import { XMark, LinkedInMark, RedditMark } from "./icons";
  * copy says "I got scouted", so switching to a cricketer twin must not rewrite
  * the boast with the twin's numbers.
  */
+const raf = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
+
 export function ShareRow({
   captureId,
   username,
@@ -28,12 +30,46 @@ export function ShareRow({
   const [busy, setBusy] = useState(false);
   const text = `I got scouted — ${ovr} OVR ${role} on GitCric 🏏`;
 
+  /**
+   * The card node, once nothing on it is still animating.
+   *
+   * A format switch REMOUNTS the card (it is keyed on the segment), so the node
+   * has to be re-read after waiting — awaiting on the old reference and then
+   * capturing it produced an empty "data:," image, because React had already
+   * swapped the element out from under it. Loop, because settling one animation
+   * can reveal the next.
+   */
+  async function settledCard(): Promise<HTMLElement | null> {
+    // Two frames first: a format switch schedules a React re-render, and
+    // without this we sample the OUTGOING node — which has no animations yet,
+    // looks settled, and is detached moments later, yielding an empty capture.
+    await raf();
+    await raf();
+    for (let i = 0; i < 4; i++) {
+      const node = document.getElementById(captureId);
+      if (!node) return null;
+      const running = node.getAnimations({ subtree: true });
+      if (running.length === 0 && node.isConnected) return node;
+      await Promise.all(running.map((a) => a.finished.catch(() => undefined)));
+      await raf();
+    }
+    return document.getElementById(captureId);
+  }
+
   async function download() {
-    const node = document.getElementById(captureId);
-    if (!node || busy) return;
+    if (busy) return;
     setBusy(true);
     try {
-      const dataUrl = await toPng(node, { pixelRatio: 3, cacheBust: true, backgroundColor: "#0a0a0b" });
+      let dataUrl = "";
+      // Two attempts: if the first lands in the seam of a swap it comes back as
+      // an empty "data:," and the retry, a frame later, gets the settled card.
+      for (let attempt = 0; attempt < 2 && !dataUrl.startsWith("data:image/png"); attempt++) {
+        const node = await settledCard();
+        if (!node) return;
+        dataUrl = await toPng(node, { pixelRatio: 3, cacheBust: true, backgroundColor: "#0a0a0b" });
+      }
+      // Never hand the user a broken download.
+      if (!dataUrl.startsWith("data:image/png")) return;
       const a = document.createElement("a");
       a.download = `gitcric-${username}.png`;
       a.href = dataUrl;

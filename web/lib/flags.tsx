@@ -35,18 +35,37 @@ export type FlagCode =
  * neutral plate to sit on, so a non-rectangular flag reads as itself instead of
  * as a mystery gap.
  */
-export function Flag({ asset, className }: { asset: FlagAsset | null; className?: string }) {
+export function InlineAsset({
+  asset, className, label, preserve = "xMidYMid meet",
+}: { asset: FlagAsset | null; className?: string; label: string; preserve?: string }) {
   if (!asset) return null;
   return (
     <svg
       viewBox={asset.viewBox}
       className={className}
-      preserveAspectRatio="xMidYMid meet"
+      preserveAspectRatio={preserve}
       role="img"
-      aria-label={`${asset.name} flag`}
-      // The asset markup is generated at build time from a vendored library —
-      // never user input.
+      aria-label={label}
+      // The asset markup is ours — a vendored flag set or our own language
+      // marks — never user input.
       dangerouslySetInnerHTML={{ __html: asset.inner }}
     />
+  );
+}
+
+export function Flag({ asset, className }: { asset: FlagAsset | null; className?: string }) {
+  return <InlineAsset asset={asset} className={className} label={asset ? `${asset.name} flag` : ""} />;
+}
+
+/**
+ * Same render path as Flag — one inline <svg>, nothing fetched — but LEFT
+ * aligned. The cluster is a flush-left column, and a centred mark inside a
+ * square box floats right of the flag above it; each mark's viewBox is
+ * tightened to its own ink, and xMinYMid pins that ink to the column edge.
+ */
+export function LangMark({ asset, className }: { asset: FlagAsset | null; className?: string }) {
+  return (
+    <InlineAsset asset={asset} className={className} preserve="xMinYMid meet"
+                 label={asset ? `${asset.name}` : ""} />
   );
 }

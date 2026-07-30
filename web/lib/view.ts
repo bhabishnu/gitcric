@@ -13,6 +13,7 @@ import { colorwayFor, type Colorway } from "./colorways";
 // the chosen asset so the 200 kB table never reaches the browser.
 import { assetForNation, assetForUser } from "./geo/location";
 import type { FlagAsset } from "./flags.data";
+import { markForLanguage, type LangMark } from "./lang.data";
 
 export type SegmentId = "you" | FormatBucket;
 
@@ -43,6 +44,13 @@ export interface CardFace {
   /** Franchise name — IPL cards only (colorways are ambiguous: RCB vs PBKS red).
    *  Null on nation cards (the flag already names the country) and YOU. */
   teamLabel: string | null;
+  /** Top GitHub language — YOU only. Language is a GitHub concept, so cricketer
+   *  cards carry null and show flag + role alone. */
+  language: string | null;
+  /** Inline mark for that language, resolved server-side like the flag. Null
+   *  when the language has no mark in the curated set — the card then falls
+   *  back to the short text label. */
+  languageMark: LangMark | null;
 }
 
 export type { Trait } from "./scoring/types";
@@ -145,6 +153,8 @@ function youSegment(card: UserCard): Segment {
       flag: assetForUser(card.login, card.location),
       photoFile: null,
       teamLabel: null,
+      language: card.topLanguage,
+      languageMark: markForLanguage(card.topLanguage),
     },
     header: {
       handle: `@${card.login}`,
@@ -211,6 +221,8 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
       photoFile: photoFor(twin.id),
       // franchise caption on IPL only; nation cards let the flag do the naming
       teamLabel: twin.bucket === "ipl" ? colorway.label : null,
+      language: null, // GitHub concept — never on a cricketer card
+      languageMark: null,
     },
     header: {
       handle: null,

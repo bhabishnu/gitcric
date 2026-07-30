@@ -233,44 +233,97 @@ body {
 }
 
 /* ── OVR block, over the portrait, top-left ─────────────────────────────────── */
+/* ── top-left identity column ───────────────────────────────────────────────
+   One deliberate column, not three stacked accidents. Order of weight:
+   OVR (dominant) → ROLE (its caption) → flag · language (one identity line).
+   Everything hangs off a single --gc-inset so the cluster keeps a consistent
+   distance from the crest edge at any card size; the shield wall sits at
+   ~4.1cqw and its inset frame line ~2cqw further in, so 10cqw leaves real air
+   rather than tucking the OVR against the frame.
+
+   SIZE-RESPONSIVE, same contract as the stat block below: each size is
+   clamp(<today's cqw>, <a bigger fraction>, <cap>), with every cap set to the
+   first term's value at a 270px card — just under the narrowest result card
+   (280px on a 320px viewport) and just over the widest fan slot (244px). So
+   every result/stacked card ≥280px computes byte-identical values to before,
+   and only the desktop fan (149–244px native) takes the ~1.3× lift that keeps
+   the cluster legible next to the already-lifted stat numerals. */
+.gc-card { --gc-inset: 11cqw; --gc-cluster-gap: clamp(2cqw, 2.6cqw, 5.4px); }
 .gc-badges {
   position: absolute;
   z-index: 2;
-  top: 6.5cqw;
-  left: 8.5cqw;
+  top: 7.5cqw;
+  left: var(--gc-inset);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  /* ONE gap for the whole column — the three steps used to be 3.2 / 10.8 / 7.6
+     card-units apart, which is what made the stack read as ragged. */
+  gap: var(--gc-cluster-gap);
   line-height: 0.84;
 }
 .gc-ovr {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 20cqw;
+  /* 54px IS 20cqw at 270px — identical on every result card, ×1.3 on the fan. */
+  font-size: clamp(20cqw, 26cqw, 54px);
   letter-spacing: -0.02em;
+  /* Optical alignment. Every box in this column already starts at the same x —
+     measured identical — but the INK does not: the numeral carries ~0.042em of
+     left side bearing and the role label ~0.08em, so they float right of the
+     flag, which is flush. Pull each back by its own bearing. */
+  margin-left: -0.042em;
 }
 .gc-role {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 4.3cqw;
+  font-size: clamp(4.3cqw, 5.6cqw, 11.6px);
   letter-spacing: 0.14em;
   opacity: 0.86;
-  margin-top: 0.4cqw;
+  margin-left: -0.08em;
 }
+/* Identity line: flag and language read as one unit, split by a hairline so
+   neither looks like a caption of the other. */
+/* Identity column: flag above, language mark directly below it, same width so
+   the two read as one stacked unit rather than two loose badges. */
 .gc-idrow {
   display: flex;
-  align-items: center;
-  gap: 2.4cqw;
-  margin-top: 2.6cqw;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gc-cluster-gap);
+}
+/* Brand colours are baked into the mark itself, so nothing here tints it. */
+.gc-langmark {
+  width: clamp(9cqw, 11.7cqw, 24.3px);
+  height: clamp(9cqw, 11.7cqw, 24.3px);
+  display: block;
+}
+/* Language badge — typographic, not a chip. Mono at small size with wide
+   tracking so it fills the column without competing with the role above it. */
+/* Text fallback for a language with no curated mark. Sits in the same column
+   slot the mark would occupy. */
+.gc-lang {
+  font-family: var(--font-mono);
+  font-size: clamp(2.7cqw, 3.5cqw, 7.3px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
+  white-space: nowrap;
+  max-width: 24cqw;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* Flag plate. The box is 4:3 (the asset set's ratio) and every flag is drawn
    `meet`, so rectangular flags fill the plate exactly while Nepal's pennant —
    the one non-rectangular national flag — sits centered at its true shape on the
    neutral backing instead of being stretched into a rectangle it doesn't own. */
 .gc-flag {
-  width: 9cqw;
+  width: clamp(9cqw, 11.7cqw, 24.3px);
   aspect-ratio: 4 / 3;
   border-radius: 1px;
   display: block;
+  flex: none;
   background: color-mix(in srgb, var(--ink) 9%, transparent);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent);
 }
@@ -279,7 +332,11 @@ body {
 .gc-namebar {
   position: absolute;
   z-index: 2;
-  top: 56%;
+  /* Lifted from 56%. The crest tapers hard below ~59% of its height, so the
+     whole lower stack has to sit higher for the last stat row to clear the
+     frame line — measured, the FLD/IMP row was 12 units from a wall whose
+     inset frame sits 11 units in, i.e. touching it. */
+  top: 53.5%;
   left: 0;
   right: 0;
   padding: 2cqw 8cqw;
@@ -290,7 +347,10 @@ body {
 .gc-surname {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(26px, 13cqw, 62px);
+  /* The floor only bites below a 223px card — fan territory. A small lift so
+     the name holds its place between the bigger OVR and the bigger stat
+     numerals; every card ≥280px still resolves to 13cqw exactly as before. */
+  font-size: clamp(29px, 13cqw, 62px);
   letter-spacing: 0.04em;
   line-height: 0.92;
   display: block;
@@ -301,7 +361,7 @@ body {
 .gc-team {
   display: block;
   font-family: var(--font-mono);
-  font-size: 2.4cqw;
+  font-size: clamp(2.4cqw, 3.1cqw, 6.5px);
   letter-spacing: 0.08em;
   margin-top: 1.2cqw;
   color: color-mix(in srgb, var(--ink) 58%, transparent);
@@ -310,34 +370,72 @@ body {
   text-overflow: ellipsis;
 }
 
-/* ── six stats, two tight centered columns ──────────────────────────────────── */
+/* ── six stats, two tight centered columns ──────────────────────────────────
+   SIZE-RESPONSIVE TYPE. A pure cqw size is a fixed FRACTION of the card, so the
+   fan card and the result card rendered at identical proportions — which is
+   exactly the problem: at 217cqw-wide the stat numerals came out 10.9px, a
+   whisper next to a 27px surname. GitFut's fan keeps its numbers a much larger
+   fraction of the card, and that is what makes a small card still read.
+
+   The fix is one clamp() per property, NOT a breakpoint. Card widths in the wild
+   form a continuum with no safe gap — desktop fan 188-254, landing stack 342-360,
+   result page 280 (on a 320px viewport) to 460 — so any hard threshold either
+   misses fan sizes or catches a narrow phone.
+
+       clamp(<today's cqw>, <a bigger fraction>, <absolute cap>)
+
+   reads, in order: never smaller than today; aim for a larger fraction; stop
+   growing past the cap. Above ~308px the first term wins outright, so the 460px
+   result card and the 342px landing stack compute byte-identical values — and
+   because the low bound is itself proportional, the smallest fan card (188px at
+   a 1280px viewport) scales DOWN again instead of being blown out by a constant
+   floor that no longer fits the crest.
+
+   Everything here is bounded by the crest taper: the stat block has to finish
+   before the shield narrows to a point, which is why the leading tightens rather
+   than the block simply growing downward. */
 .gc-stats {
   position: absolute;
   z-index: 2;
-  top: 70%;
+  top: 66.5%;
   left: 0;
   right: 0;
   display: grid;
   grid-template-columns: auto auto auto;
   justify-content: center;
-  gap: 1.9cqw 6cqw;
+  /* row gap breathes with the taller digits; column gap stays proportional */
+  gap: clamp(1.6cqw, 2.3cqw, 5px) 6cqw;
+  /* never let a wide value push the block toward the taper */
+  padding-inline: var(--gc-inset);
 }
-.gc-stat-col { display: flex; flex-direction: column; gap: 1.9cqw; }
+.gc-stat-col { display: flex; flex-direction: column; gap: clamp(1.6cqw, 2.3cqw, 5px); }
 .gc-stat-divider { width: 1px; background: color-mix(in srgb, var(--ink) 14%, transparent); }
 .gc-stat {
   display: flex;
   align-items: baseline;
-  gap: 2.2cqw;
+  gap: clamp(2.2cqw, 3.2cqw, 5.4px);
 }
+/* The number is the hero — it takes the whole lift.
+   The leading tightens with it: 1.5 is generous for a two-digit numeral, and on
+   a small card that dead space is what pushed the last row into the taper.
+   7.8cqw IS 1.5 x 5.2cqw, so at full size this resolves to exactly the 1.5 it
+   has always been; only below the crossover does the 1.14em floor bite. */
 .gc-stat-val {
   font-weight: 700;
-  font-size: 5.2cqw;
+  font-size: clamp(5.2cqw, 7.6cqw, 16px);
+  line-height: clamp(1.05em, 1.5em, 7.8cqw);
   width: 2.2ch;
   text-align: right;
 }
+/* The label stays deliberately small: its cap is proportionally lower than the
+   value's, so on a fan card the value:label ratio widens from 1.79 to 2.11 and
+   the numeral reads as the hero more strongly than it does at full size. */
 .gc-stat-key {
   font-family: var(--font-mono);
-  font-size: 2.9cqw;
+  font-size: clamp(2.9cqw, 4.2cqw, 7.6px);
+  /* 4.35cqw IS 1.5 x 2.9cqw — identical leading at full size, tighter only once
+     the value's cap has kicked in and the row needs to give height back. */
+  line-height: clamp(1em, 1.5em, 4.35cqw);
   letter-spacing: 0.1em;
   opacity: 0.62;
 }
@@ -425,8 +523,8 @@ body {
 /* ═══════════════════════════════════════════════════════════════════════════
    THE HERO FAN — the landing page's card spread. Composition only: the card
    FACE is untouched, these are wrappers. Two nested layers per card so the
-   transforms never fight — .gc-fan-slot places (offset · rotate · scale ·
-   hover lift), .gc-fan-float breathes (translateY only).
+   transforms never fight — .gc-fan-slot sizes and places (width · offset ·
+   rotate · hover lift), .gc-fan-float breathes (translateY only).
    ═══════════════════════════════════════════════════════════════════════════ */
 .gc-fan {
   /* ── TUNING SURFACE ───────────────────────────────────────────────────────
@@ -458,12 +556,20 @@ body {
 }
 
 /* Per-card placement. --x is in steps (so it follows --fan-overlap), --y in px,
-   --s is scale. Slot 2 is the hero: unscaled, near-upright, on top. */
+   --s SIZES the slot natively. It used to be a transform scale(), which meant
+   the browser laid the card out at full width, rasterised it there, and shrank
+   the raster on the GPU — text and SVG on three of the four slots were
+   permanently soft. Sizing the slot itself keeps every glyph rendered at its
+   true pixel size; the cqw typography inside follows the width for free.
+   Positions are untouched: the grid centres each slot in the shared cell, which
+   is exactly where scale-about-centre used to leave the card (rotation and
+   uniform scale about the same centre commute). Slot 2 is the hero: full-size,
+   near-upright, on top. */
 .gc-fan-slot {
   grid-area: 1 / 1;
-  width: var(--fan-card-w);
+  width: calc(var(--fan-card-w) * var(--s, 1));
   transform: translate(calc(var(--x) * var(--fan-step)), calc(var(--y) * 1px))
-    translateY(var(--lift, 0px)) rotate(var(--rot)) scale(var(--s));
+    translateY(var(--lift, 0px)) rotate(var(--rot));
   transition: transform var(--dur-panel) var(--ease-out);
   will-change: transform;
 }
@@ -669,3 +775,30 @@ body {
   color: var(--color-text);
   border-bottom-color: color-mix(in srgb, var(--color-crimson) 70%, transparent);
 }
+
+/* ── USER card: keep the identity cluster off the face ──────────────────────
+   GitFut sidesteps this by putting the photo on the right half of the card;
+   ours is full-bleed, so a GitHub avatar whose subject sits left-of-centre ends
+   up with the OVR block planted on their face (bhabishnu is the clear case).
+   Scoped to [data-trim="you"] — cricketer crops are curated and must not move.
+
+   (a) Compact the cluster so it claims less of the photo.
+   (b) Slide the subject right. NOTE: object-position's X is INERT here — the
+       avatars are square (460x460) and the portrait window is wider than tall
+       (1.135), so object-fit:cover scales by width and leaves no horizontal
+       overflow to position against. Widening the image box is what actually
+       creates the room: the window then shows the image's left portion and the
+       subject moves right, off the cluster. */
+.gc-card[data-trim="you"] { --gc-inset: 9cqw; }
+/* Same size-responsive contract as the base cluster: every cap is the first
+   term's value at a 270px card, so result cards (≥280px) keep today's compact
+   sizes to the byte and only the desktop fan takes the ×1.3 lift. These
+   compact values OVERRIDE the base .gc-ovr/.gc-flag/.gc-langmark clamps for
+   every [data-trim="you"] card — the fan is entirely "you" cards, so the lift
+   has to live here or it never reaches the fan at all. */
+.gc-card[data-trim="you"] .gc-ovr { font-size: clamp(15.5cqw, 20.2cqw, 41.9px); }
+.gc-card[data-trim="you"] .gc-role { font-size: clamp(3.5cqw, 4.6cqw, 9.5px); letter-spacing: 0.12em; }
+.gc-card[data-trim="you"] .gc-flag { width: clamp(6.4cqw, 8.3cqw, 17.3px); }
+.gc-card[data-trim="you"] .gc-langmark { width: clamp(6.4cqw, 8.3cqw, 17.3px); height: clamp(6.4cqw, 8.3cqw, 17.3px); }
+.gc-card[data-trim="you"] { --gc-cluster-gap: clamp(1.7cqw, 2.2cqw, 4.6px); }
+.gc-card[data-trim="you"] .gc-avatar { width: 128%; object-position: 50% 12%; }
