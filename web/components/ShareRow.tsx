@@ -89,7 +89,9 @@ export function ShareRow({
   };
 
   return (
-    <div className="flex items-center gap-2">
+    // one action row: share marks and the download button share a height and a
+    // single gap rhythm, so the bar reads as one control group
+    <div className="flex items-center gap-2.5">
       <ShareLink href={links.x} label="Share on X">
         <XMark className="h-[13px] w-[13px]" />
       </ShareLink>
@@ -102,7 +104,7 @@ export function ShareRow({
       <button
         onClick={download}
         disabled={busy}
-        className="pressable ml-auto rounded-md border border-[var(--color-hairline)] bg-[var(--color-panel-2)] px-3 py-2 text-xs font-medium text-[var(--color-text)] disabled:opacity-50"
+        className="pressable ml-auto inline-flex h-9 items-center rounded-md border border-[var(--color-hairline)] bg-[var(--color-panel-2)] px-4 text-xs font-medium text-[var(--color-text)] transition-colors duration-150 hover:border-[color-mix(in_srgb,var(--color-crimson)_55%,transparent)] disabled:opacity-50"
       >
         {busy ? "Rendering…" : "Download PNG"}
       </button>

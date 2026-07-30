@@ -69,6 +69,9 @@ export interface Segment {
   /** `sub` is the "TEST · 168 matches" line; `tierLabel` is appended to it in the
    *  page header — the card face itself names neither format, matches nor tier. */
   header: { handle: string | null; sub: string | null; tierLabel: string; commentary: string };
+  /** Cricketer OVR density, for the distribution chart. Same array on every
+   *  segment — it describes the population, not the player. */
+  density: number[];
   archetype: string;
   traits: Trait[];
   /** Right panel is a discriminated union: the scout report (YOU) or a
@@ -140,6 +143,7 @@ function youSegment(card: UserCard): Segment {
   return {
     id: "you",
     tabLabel: "YOU",
+    density: OVR_DENSITY,
     card: {
       surname: surname(card.login),
       fullName: card.name,
@@ -207,6 +211,7 @@ function twinSegment(twin: Twin, card: CricketerCard): Segment {
   return {
     id: twin.bucket,
     tabLabel: BUCKET_LABEL[twin.bucket],
+    density: OVR_DENSITY,
     card: {
       surname: surname(twin.name),
       fullName: twin.name,
@@ -292,6 +297,23 @@ const CRICKETER_OVRS: number[] = (() => {
  * clamped at K.ovrCap, so every halfway-decent account landed on the identical
  * number (75th) no matter how good it was. This reads the real distribution.
  */
+/**
+ * Population density across the 40..99 scale, normalised to 0..1 — the shape of
+ * the real cricketer distribution, not a decorative bell. Computed once at
+ * module load from the same array the percentile is ranked against, and passed
+ * to the client as ~28 numbers so PLAYER_INDEX itself never leaves the server.
+ */
+const DENSITY_BINS = 28;
+export const OVR_DENSITY: number[] = (() => {
+  const bins: number[] = new Array(DENSITY_BINS).fill(0);
+  for (const o of CRICKETER_OVRS) {
+    const t = (o - 40) / (99 - 40);
+    bins[Math.max(0, Math.min(DENSITY_BINS - 1, Math.floor(t * DENSITY_BINS)))]++;
+  }
+  const max = Math.max(...bins, 1);
+  return bins.map((b) => Math.round((b / max) * 1000) / 1000);
+})();
+
 export function percentileVsCricketers(ovr: number): number {
   const n = CRICKETER_OVRS.length;
   if (n === 0) return 0;

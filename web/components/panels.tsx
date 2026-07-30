@@ -13,38 +13,74 @@ function PanelLabel({ children }: { children: React.ReactNode }) {
 
 function Bar({ fill }: { fill: number }) {
   return (
-    <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--color-hairline)]">
-      <div
-        className="h-full rounded-full bg-[var(--color-muted)]"
-        style={{ width: `${Math.round(Math.max(0, Math.min(1, fill)) * 100)}%` }}
-      />
+    <div className="gc-bar">
+      <i style={{ width: `${Math.round(Math.max(0, Math.min(1, fill)) * 100)}%` }} />
     </div>
   );
 }
 
 /**
- * Where the OVR sits on the 40..99 scale, one crimson marker. `percentile`
- * overrides the label when a real population stat is available (the YOU card
- * ranks against the cricketer distribution); the marker always tracks the OVR.
+ * DISTRIBUTION — the real shape of the cricketer population, not a bare axis.
+ *
+ * The area is the actual OVR density of every cricketer in the database
+ * (computed server-side and handed over as ~28 normalised numbers, so the
+ * player index itself never reaches the browser). The reader's own position is
+ * a crimson marker with the percentile labelled AT it rather than floating in
+ * the middle, and the 40/99 endpoints drop back to hairline captions.
  */
-function Distribution({ ovr, percentile }: { ovr: number; percentile?: number }) {
+function Distribution({
+  ovr, percentile, density,
+}: { ovr: number; percentile?: number; density: number[] }) {
   const pos = ovrToPercentile(ovr);
   const pct = percentile ?? pos;
+
+  // Area path across a 100x40 box. Midpoint quadratics smooth the histogram
+  // into a curve without pretending to more resolution than 28 bins carry.
+  const H = 40, TOP = 6;
+  const pts = density.map((d, i) => [
+    (i / (density.length - 1)) * 100,
+    H - d * (H - TOP),
+  ] as const);
+  let curve = `M ${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length; i++) {
+    const [px, py] = pts[i - 1];
+    const [cx, cy] = pts[i];
+    curve += ` Q ${px} ${py} ${(px + cx) / 2} ${(py + cy) / 2}`;
+  }
+  curve += ` L ${pts[pts.length - 1][0]} ${pts[pts.length - 1][1]}`;
+  const area = `${curve} L 100 ${H} L 0 ${H} Z`;
+
+  // Anchor the label on the marker but never let it leave the panel.
+  const anchor = pos < 12 ? "0" : pos > 88 ? "-100%" : "-50%";
+
   return (
     <div>
       <PanelLabel>Distribution</PanelLabel>
-      <div className="relative h-6">
-        <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[var(--color-hairline)]" />
-        <div
-          className="absolute top-1/2 h-3 w-[2px] -translate-y-1/2 bg-[var(--color-crimson)]"
-          style={{ left: `${pos}%` }}
-        />
+      <div className="gc-dist">
+        <svg viewBox={`0 0 100 ${H}`} preserveAspectRatio="none" aria-hidden className="gc-dist-svg">
+          <defs>
+            <linearGradient id="gc-dist-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="var(--color-muted)" stopOpacity="0.55" />
+              <stop offset="1" stopColor="var(--color-muted)" stopOpacity="0.07" />
+            </linearGradient>
+          </defs>
+          <path d={area} fill="url(#gc-dist-fill)" />
+          <path d={curve} fill="none" stroke="var(--color-muted)" strokeWidth="1.25"
+                strokeOpacity="0.75" vectorEffect="non-scaling-stroke" />
+        </svg>
+        {/* the reader's position */}
+        <span className="gc-dist-marker" style={{ left: `${pos}%` }} aria-hidden />
+        <span className="gc-dist-tag tabular" style={{ left: `${pos}%`, transform: `translateX(${anchor})` }}>
+          {ordinal(pct)}
+        </span>
       </div>
-      <div className="tabular mt-1 flex justify-between text-[10px] text-[var(--color-faint)]">
+      <div className="gc-dist-axis tabular">
         <span>40</span>
-        <span className="text-[var(--color-muted)]">{ordinal(pct)} percentile</span>
         <span>99</span>
       </div>
+      <p className="sr-only">
+        {ordinal(pct)} percentile of all cricketers in the database.
+      </p>
     </div>
   );
 }
@@ -84,14 +120,16 @@ export function RightPanel({ segment }: { segment: Segment }) {
     return (
       <div>
         <PanelLabel>Scout report</PanelLabel>
-        <div className="flex flex-col gap-3">
+        {/* gap-4 (was gap-3): the thinner 2px track needs the row to breathe or
+            the panel reads as one grey mass. */}
+        <div className="flex flex-col gap-4">
           {r.metrics.map((m) => (
             <div key={m.label}>
-              <div className="mb-1 flex items-baseline justify-between gap-2">
+              <div className="gc-metric">
                 <span className="text-[13px] text-[var(--color-text)]">{m.label}</span>
-                <span className="tabular text-xs text-[var(--color-muted)]">
+                <span className="gc-metric-val tabular text-xs text-[var(--color-muted)]">
                   {m.value}
-                  <span className="ml-1.5 text-[var(--color-faint)]">→ {m.axis}</span>
+                  <span className="text-[var(--color-faint)]">→ {m.axis}</span>
                 </span>
               </div>
               <Bar fill={m.fill} />
@@ -99,7 +137,7 @@ export function RightPanel({ segment }: { segment: Segment }) {
           ))}
         </div>
         <div className="mt-6 border-t border-[var(--color-hairline)] pt-5">
-          <Distribution ovr={r.ovr} percentile={r.percentile} />
+          <Distribution ovr={r.ovr} percentile={r.percentile} density={segment.density} />
         </div>
       </div>
     );
@@ -116,7 +154,7 @@ export function RightPanel({ segment }: { segment: Segment }) {
         ))}
       </dl>
       <div className="mt-6 border-t border-[var(--color-hairline)] pt-5">
-        <Distribution ovr={r.distribution} />
+        <Distribution ovr={r.distribution} density={segment.density} />
       </div>
     </div>
   );
