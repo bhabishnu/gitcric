@@ -2,28 +2,36 @@
 
 Your GitHub, rated out of 99 — as a cricket card.
 
-<!-- Fixed pixel widths, not percentages: GitHub's sanitizer strips width="%"
-     from <img>, which collapsed this grid to a single column. 260px × 3 fits
-     the ~830px README column; on narrow screens the images wrap to fewer per
-     row, which is the sane mobile degradation. -->
-<p align="center">
-  <img src="web/public/readme/torvalds.png" width="260" alt="torvalds — 96 OVR" />
-  <img src="web/public/readme/rauchg.png" width="260" alt="rauchg — 94 OVR" />
-  <img src="web/public/readme/sindresorhus.png" width="260" alt="sindresorhus — 96 OVR" />
-  <br />
-  <img src="web/public/readme/knadh.png" width="260" alt="knadh — 94 OVR" />
-  <img src="web/public/readme/soumith.png" width="260" alt="soumith — 94 OVR" />
-</p>
+<!-- A real <table>, one image per cell: github.com wraps README <img>s in
+     block-styled anchors, so images in a <p> stack one per line no matter what
+     width they carry. Table cells are the one layout GitHub's CSS can't
+     reflow. Only sanitizer-safe attributes here (table/tr/td, align, integer
+     img width — all verified surviving via the API's rendered-HTML endpoint).
+     On narrow mobile the table scrolls sideways; accepted trade-off. -->
+<table align="center">
+  <tr>
+    <td align="center"><img src="web/public/readme/torvalds.png" width="250" alt="torvalds — 96 OVR" /></td>
+    <td align="center"><img src="web/public/readme/rauchg.png" width="250" alt="rauchg — 94 OVR" /></td>
+    <td align="center"><img src="web/public/readme/sindresorhus.png" width="250" alt="sindresorhus — 96 OVR" /></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td align="center"><img src="web/public/readme/knadh.png" width="250" alt="knadh — 94 OVR" /></td>
+    <td align="center"><img src="web/public/readme/soumith.png" width="250" alt="soumith — 94 OVR" /></td>
+  </tr>
+</table>
 
 ## Scout your own
 
 ```
-gitcric.vercel.app/<your-username>
+gitcric.dev/<your-username>
 ```
 
 That's the whole product. You get a card, a scout report of the signals behind it,
 and the cricketer you'd be — toggle **Test · ODI · T20I · IPL** to meet a different
 twin in each format. Kohli in T20Is doesn't mean Kohli in Tests.
+
+The card also flies your flag, read from your GitHub location, and marks your top language — both pulled off the profile, same as the numbers.
 
 ## How the scouting works
 
