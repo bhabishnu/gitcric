@@ -2,13 +2,17 @@
 
 Your GitHub, rated out of 99 — as a cricket card.
 
+<!-- Fixed pixel widths, not percentages: GitHub's sanitizer strips width="%"
+     from <img>, which collapsed this grid to a single column. 260px × 3 fits
+     the ~830px README column; on narrow screens the images wrap to fewer per
+     row, which is the sane mobile degradation. -->
 <p align="center">
-  <img src="web/public/readme/torvalds.png" width="32%" alt="torvalds — 96 OVR" />
-  <img src="web/public/readme/rauchg.png" width="32%" alt="rauchg — 94 OVR" />
-  <img src="web/public/readme/sindresorhus.png" width="32%" alt="sindresorhus — 96 OVR" />
+  <img src="web/public/readme/torvalds.png" width="260" alt="torvalds — 96 OVR" />
+  <img src="web/public/readme/rauchg.png" width="260" alt="rauchg — 94 OVR" />
+  <img src="web/public/readme/sindresorhus.png" width="260" alt="sindresorhus — 96 OVR" />
   <br />
-  <img src="web/public/readme/knadh.png" width="32%" alt="knadh — 94 OVR" />
-  <img src="web/public/readme/soumith.png" width="32%" alt="soumith — 94 OVR" />
+  <img src="web/public/readme/knadh.png" width="260" alt="knadh — 94 OVR" />
+  <img src="web/public/readme/soumith.png" width="260" alt="soumith — 94 OVR" />
 </p>
 
 ## Scout your own
