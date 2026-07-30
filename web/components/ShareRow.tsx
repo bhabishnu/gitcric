@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toPng } from "html-to-image";
-import { XMark, LinkedInMark, RedditMark } from "./icons";
+import { XMark, LinkedInMark, RedditMark, DownloadMark } from "./icons";
 
 /**
  * Share row: download the card as a PNG (rendered from the live card node) plus
@@ -104,9 +104,10 @@ export function ShareRow({
       <button
         onClick={download}
         disabled={busy}
-        className="pressable ml-auto inline-flex h-9 items-center rounded-md border border-[var(--color-hairline)] bg-[var(--color-panel-2)] px-4 text-xs font-medium text-[var(--color-text)] transition-colors duration-150 hover:border-[color-mix(in_srgb,var(--color-crimson)_55%,transparent)] disabled:opacity-50"
+        className="pressable group ml-auto inline-flex h-9 items-center gap-2 rounded-md border border-[var(--color-hairline)] bg-[var(--color-panel-2)] px-5 text-sm font-semibold text-[var(--color-text)] transition-colors duration-150 hover:border-[color-mix(in_srgb,var(--color-crimson)_55%,transparent)] disabled:pointer-events-none disabled:opacity-50"
       >
-        {busy ? "Rendering…" : "Download PNG"}
+        <DownloadMark className="h-[17px] w-[17px] text-[var(--color-muted)] transition-colors duration-150 group-hover:text-[var(--color-crimson)]" />
+        {busy ? "Rendering…" : "Download"}
       </button>
     </div>
   );

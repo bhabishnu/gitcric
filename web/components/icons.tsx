@@ -50,3 +50,14 @@ export function StarMark({ className }: IconProps) {
     </svg>
   );
 }
+
+/** Download — a UI glyph (not a brand mark): a stroked arrow dropping into a tray. */
+export function DownloadMark({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden focusable="false" className={className}>
+      <path d="M12 3.5v11" />
+      <path d="M7.5 10l4.5 4.5 4.5-4.5" />
+      <path d="M4.5 17v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2" />
+    </svg>
+  );
+}

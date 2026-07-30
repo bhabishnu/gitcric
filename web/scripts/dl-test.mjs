@@ -12,7 +12,7 @@ console.log("torvalds tier:", await page.locator(".gc-card").getAttribute("data-
 // PNG download test
 const [dl] = await Promise.all([
   page.waitForEvent("download", { timeout: 15000 }).catch(() => null),
-  page.getByRole("button", { name: /Download PNG/i }).click(),
+  page.getByRole("button", { name: /Download/i }).click(),
 ]);
 if (dl) {
   const p = `${OUT}/card-download.png`;
