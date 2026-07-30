@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "GitCric — your GitHub, as a cricket card",
   description:
     "Enter your GitHub username and get a scouted cricket card — then meet the real cricketer of your equal in Tests, ODIs, T20Is and the IPL.",
-  metadataBase: new URL("https://gitcric.vercel.app"),
+  metadataBase: new URL("https://gitcric.dev"),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

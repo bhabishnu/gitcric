@@ -82,7 +82,7 @@ export default async function UserPage({ params }: { params: Promise<{ username:
   // headers() is still called deliberately — it is what keeps this route fully
   // dynamic (see the note above the revalidate export). Dropping it would flip
   // user pages onto page-level ISR, which is a caching change, not a UI one.
-  const CANONICAL_HOST = "gitcric.vercel.app";
+  const CANONICAL_HOST = "gitcric.dev";
   const h = await headers();
   const host = h.get("x-forwarded-host") ?? h.get("host") ?? CANONICAL_HOST;
   // A share intent has to publish a URL other people can open, so localhost and

@@ -22,7 +22,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           </Link>
         </div>
       </nav>
-      <CardExperience segments={segments} avatarUrl={null} shareUrl={`https://gitcric.vercel.app/player/${id}`} />
+      <CardExperience segments={segments} avatarUrl={null} shareUrl={`https://gitcric.dev/player/${id}`} />
     </main>
   );
 }
