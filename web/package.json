@@ -16,6 +16,7 @@
     "match-check": "tsx scripts/match-check.ts"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "html-to-image": "^1.11.13",
     "next": "^15.5.20",
     "react": "19.0.0",
