@@ -2,24 +2,9 @@
 
 Your GitHub, rated out of 99 — as a cricket card.
 
-<!-- A real <table>, one image per cell: github.com wraps README <img>s in
-     block-styled anchors, so images in a <p> stack one per line no matter what
-     width they carry. Table cells are the one layout GitHub's CSS can't
-     reflow. Only sanitizer-safe attributes here (table/tr/td, align, integer
-     img width — all verified surviving via the API's rendered-HTML endpoint).
-     On narrow mobile the table scrolls sideways; accepted trade-off. -->
-<table align="center">
-  <tr>
-    <td align="center"><img src="web/public/readme/torvalds.png" width="250" alt="torvalds — 96 OVR" /></td>
-    <td align="center"><img src="web/public/readme/rauchg.png" width="250" alt="rauchg — 94 OVR" /></td>
-    <td align="center"><img src="web/public/readme/sindresorhus.png" width="250" alt="sindresorhus — 96 OVR" /></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td align="center"><img src="web/public/readme/knadh.png" width="250" alt="knadh — 94 OVR" /></td>
-    <td align="center"><img src="web/public/readme/soumith.png" width="250" alt="soumith — 94 OVR" /></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="web/public/readme/showcase.png" width="880" alt="Torvalds, Rauchg, Sindresorhus, Knadh and Soumith as GitCric cricket cards" />
+</p>
 
 ## Scout your own
 
