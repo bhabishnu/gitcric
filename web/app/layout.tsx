@@ -22,6 +22,20 @@ export const metadata: Metadata = {
   description:
     "Enter your GitHub username and get a scouted cricket card — then meet the real cricketer of your equal in Tests, ODIs, T20Is and the IPL.",
   metadataBase: new URL("https://gitcric.dev"),
+  openGraph: {
+    title: "GitCric — your GitHub, as a cricket card",
+    description:
+      "Enter your GitHub username and get a scouted cricket card — then meet the real cricketer of your equal in Tests, ODIs, T20Is and the IPL.",
+    url: "https://gitcric.dev",
+    siteName: "GitCric",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GitCric — your GitHub, as a cricket card",
+    description:
+      "Enter your GitHub username and get a scouted cricket card — then meet the real cricketer of your equal in Tests, ODIs, T20Is and the IPL.",
+  },
 };
 
 export const viewport: Viewport = {
