@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
@@ -22,6 +22,11 @@ export const metadata: Metadata = {
   description:
     "Enter your GitHub username and get a scouted cricket card — then meet the real cricketer of your equal in Tests, ODIs, T20Is and the IPL.",
   metadataBase: new URL("https://gitcric.dev"),
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
